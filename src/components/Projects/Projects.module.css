@@ -43,18 +43,46 @@
 }
 
 .card {
-  flex: 0 0 280px;
+  flex: 0 0 320px;
+  cursor: pointer;
+}
+
+.imageWrap {
+  position: relative;
+  margin-bottom: 1.75rem;
+  padding-bottom: 0.75rem;
 }
 
 .image {
-  aspect-ratio: 3 / 4;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  margin-bottom: 1rem;
   transition: border-color 0.25s ease;
 }
 
 .card:hover .image {
+  border-color: var(--color-accent);
+}
+
+/* Mobile mockup — positioned bottom-right, overlapping the desktop screenshot */
+.mobile {
+  position: absolute;
+  bottom: -1rem;
+  right: -0.75rem;
+  width: 22%;
+  aspect-ratio: 9 / 19;
+  object-fit: cover;
+  object-position: top;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  transition: border-color 0.25s ease;
+}
+
+.card:hover .mobile {
   border-color: var(--color-accent);
 }
 
