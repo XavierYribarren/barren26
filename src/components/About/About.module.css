@@ -1,0 +1,66 @@
+.about {
+  padding: var(--spacing-section) 4rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-text-secondary);
+  margin-bottom: 4rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+}
+
+.body {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+}
+
+/* Clips the scale animation on the image placeholder */
+.imageWrapper {
+  overflow: hidden;
+}
+
+.imagePlaceholder {
+  aspect-ratio: 4 / 5;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transform-origin: center center;
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding: 5rem 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}

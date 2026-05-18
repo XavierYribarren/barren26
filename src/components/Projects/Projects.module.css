@@ -1,0 +1,125 @@
+.projects {
+  padding: var(--spacing-section) 4rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-text-secondary);
+  margin-bottom: 3rem;
+}
+
+/* Desktop: free scroll, no snap, grab cursor */
+.strip {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 1.5rem;
+  cursor: grab;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+  /* no scroll-snap on desktop — editorial free feel */
+}
+
+.strip:active {
+  cursor: grabbing;
+}
+
+.strip::-webkit-scrollbar {
+  height: 3px;
+}
+
+.strip::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.strip::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 2px;
+}
+
+.card {
+  flex: 0 0 280px;
+}
+
+.image {
+  aspect-ratio: 3 / 4;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  margin-bottom: 1rem;
+  transition: border-color 0.25s ease;
+}
+
+.card:hover .image {
+  border-color: var(--color-accent);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--color-text-primary);
+  margin-bottom: 0.4rem;
+}
+
+.category {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-secondary);
+}
+
+.viewAll {
+  margin-top: 2.5rem;
+  text-align: right;
+}
+
+.viewAllLink {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.viewAllLink::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-accent);
+  transition: width 0.3s ease;
+}
+
+.viewAllLink:hover {
+  color: var(--color-text-primary);
+}
+
+.viewAllLink:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .projects {
+    padding: 5rem 1.5rem;
+  }
+
+  .strip {
+    cursor: default;
+    scroll-snap-type: x mandatory;
+  }
+
+  .card {
+    flex: 0 0 220px;
+    scroll-snap-align: start;
+  }
+}
