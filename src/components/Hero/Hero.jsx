@@ -7,27 +7,26 @@ function Hero() {
 
   return (
     <section id="home" className={styles.hero}>
-      <video
-        className={styles.heroCanvas}
-        src="/202605181331 (1).mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
-
-      {/* key={lang} remounts this block on language change, triggering langSwap animation */}
-      <div key={lang} className={`${styles.content} langSwap`}>
-      <div >
-         <h1 className={styles.titleName}>
-          {/* <BComponent width={"20%"} height={"40%"}/> */}
-          <span>Barren</span></h1>
-        </div>
+      <div key={lang} className={`${styles.left} langSwap`}>
+        <h1 className={styles.titleName}>
+          <span>Barren</span>
+        </h1>
         <div className={styles.subtitles}>
-        <span className={styles.label} data-hero-label>{t('hero.label')}</span>
-        <h2 className={styles.headline} data-hero-headline>{t('hero.headline')}</h2>
-        <p className={styles.subline} data-hero-subline>{t('hero.subline')}</p>
+          <span className={styles.label} data-hero-label>{t('hero.label')}</span>
+          <h2 className={styles.headline} data-hero-headline>{t('hero.headline')}</h2>
+          <p className={styles.subline} data-hero-subline>{t('hero.subline')}</p>
         </div>
+      </div>
+
+      <div className={styles.right}>
+        <video
+          className={styles.heroVideo}
+          src="/202605181331 (1).mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
       </div>
 
       <div className={styles.scrollHint} data-hero-scroll>

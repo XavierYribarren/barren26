@@ -53,7 +53,12 @@ function About() {
           ))}
         </div>
         <div className={styles.imageWrapper}>
-          <div className={styles.imagePlaceholder} ref={imageRef} />
+          <img
+            src="/IMG_linkedin.png"
+            alt="Barren"
+            className={styles.image}
+            ref={imageRef}
+          />
         </div>
       </div>
     </section>
