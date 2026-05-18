@@ -7,8 +7,14 @@ function Hero() {
 
   return (
     <section id="home" className={styles.hero}>
-      {/* INTERACTIVE HERO — replace this div with your canvas/3D component */}
-      <div className={styles.heroCanvas} />
+      <video
+        className={styles.heroCanvas}
+        src="/202605181331 (1).mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
 
       {/* key={lang} remounts this block on language change, triggering langSwap animation */}
       <div key={lang} className={`${styles.content} langSwap`}>
@@ -17,7 +23,7 @@ function Hero() {
           {/* <BComponent width={"20%"} height={"40%"}/> */}
           <span>Barren</span></h1>
         </div>
-        <div>
+        <div className={styles.subtitles}>
         <span className={styles.label} data-hero-label>{t('hero.label')}</span>
         <h2 className={styles.headline} data-hero-headline>{t('hero.headline')}</h2>
         <p className={styles.subline} data-hero-subline>{t('hero.subline')}</p>
