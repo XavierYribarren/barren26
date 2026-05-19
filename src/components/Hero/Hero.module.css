@@ -2,34 +2,40 @@
   height: 100dvh;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
   padding: 4rem;
-  gap: 4rem;
+  gap: 2rem 4rem;
   overflow: clip;
 }
 
 .left {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 2rem 0;
+  justify-content: flex-start;
+  padding: 2rem 0 0;
 }
 
 .right {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .heroVideo {
-  width: 100%;
-  height: 70%;
-  object-fit: cover;
-  border-radius: 12px;
+  width: auto;
+  height: 55dvh;
+  max-height: 100%;
+  aspect-ratio: auto;
+  object-fit: contain;
+  transform: translate(2rem, 7rem);
 }
 
 .titleName {
   display: flex;
   align-items: flex-start;
+  flex-shrink: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .titleName > span {
@@ -38,9 +44,13 @@
 }
 
 .subtitles {
+  grid-column: 1 / -1;
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-top: -6rem;
 }
 
 .label {
@@ -73,7 +83,6 @@
   font-size: clamp(0.875rem, 1.1vw, 1rem);
   line-height: 1.7;
   color: var(--color-text-secondary);
-  max-width: 480px;
 }
 
 .scrollHint {
