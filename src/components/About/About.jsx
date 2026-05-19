@@ -47,10 +47,20 @@ function About() {
       </span>
       <div className={styles.grid}>
         <div className={styles.text} ref={textRef}>
-          <h2 className={styles.heading}>Craft, clarity,<br />and digital performance.</h2>
-          {paragraphs.map((para, i) => (
-            <p key={`${lang}-${i}`} className={`${styles.body} langSwap`}>{para}</p>
-          ))}
+          <h2 key={lang} className={`${styles.heading} langSwap`}>{t('about.heading')}</h2>
+          <div className={styles.paragraphs}>
+            {paragraphs.map((para, i) => (
+              <p key={`${lang}-${i}`} className={`${styles.body} langSwap`}>{para}</p>
+            ))}
+          </div>
+          <a
+            href="https://portfolio.barren.fr"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.portfolioBtn}
+          >
+            <span key={lang} className="langSwap">{t('about.portfolio')}</span>
+          </a>
         </div>
         <div className={styles.imageWrapper}>
           <img

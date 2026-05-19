@@ -1,43 +1,54 @@
 .hero {
+  position: relative;
   height: 100dvh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 4rem;
-  gap: 4rem;
-  overflow: clip;
-}
-
-.left {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2rem 0;
+  padding: 4rem;
+  overflow: clip;
+  background-color: rgb(1, 2, 2);
 }
 
-.right {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.heroVideo {
+.heroBg {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: 70%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 12px;
+  z-index: 0;
+  opacity: 0.58;
+  color: rgb(255, 255, 255);
+}
+
+.left {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .titleName {
   display: flex;
+  justify-content: center;
   align-items: flex-start;
+  width: 100%;
+  padding: 0 0.25em;
+  min-height: 0;
+  margin-top: 10%;
+  overflow: hidden;
+  text-shadow: 1px 1px 15px #111111b7;
+  mix-blend-mode: difference;
 }
 
 .titleName > span {
-  font-size: clamp(4rem, 14vw, 14rem);
+  font-size: clamp(4rem, 18vw, 18rem);
   line-height: 1;
 }
 
 .subtitles {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -61,6 +72,7 @@
   color: var(--color-text-primary);
   white-space: pre-line;
   margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 /* Word-split spans preserve line-height */
@@ -70,14 +82,15 @@
 
 .subline {
   font-family: var(--font-body);
-  font-size: clamp(0.875rem, 1.1vw, 1rem);
+  font-size: clamp(0.875rem, 1.5vw, 1.5rem);
   line-height: 1.7;
+  font-weight: 400;
   color: var(--color-text-secondary);
-  max-width: 480px;
 }
 
 .scrollHint {
   position: absolute;
+  z-index: 1;
   bottom: 2.5rem;
   right: 4rem;
   font-size: 0.65rem;
@@ -86,20 +99,35 @@
   color: var(--color-text-secondary);
 }
 
+.mobileVideo {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .hero {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    padding: 2rem;
-    gap: 2rem;
+    padding: 2rem 1.5rem;
   }
 
-  .heroVideo {
-    height: 100%;
+  .heroBg {
+    display: none;
+  }
+
+  .mobileVideo {
+    display: block;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    max-height: 40dvh;
+    object-fit: cover;
+  }
+
+  .headline {
+    white-space: normal;
   }
 
   .scrollHint {
-    right: 2rem;
-    bottom: 2rem;
+    right: 1.5rem;
+    bottom: 1.5rem;
   }
 }

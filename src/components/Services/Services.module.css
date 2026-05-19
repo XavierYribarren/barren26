@@ -1,6 +1,5 @@
 .services {
-  padding: var(--spacing-section) 4rem;
-  border-top: 1px solid var(--color-border);
+  padding: 8rem 4rem;
 }
 
 .label {
@@ -13,62 +12,86 @@
   margin-bottom: 4rem;
 }
 
-.grid {
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
+  grid-template-columns: 5rem 1fr 2fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--color-border);
+  cursor: default;
+  transition: padding 0.35s ease;
 }
 
-/* Offset second card down */
-.card:nth-child(2) {
-  margin-top: 6rem;
+.row:hover {
+  padding: 3.5rem 0;
 }
 
-.card {
-  padding: 2.5rem 2rem;
-  border: 1px solid var(--color-border);
-  background-color: var(--color-surface);
-  transition: border-color 0.25s ease;
-}
-
-.card:hover {
-  border-color: var(--color-accent);
+.row:last-child {
+  border-bottom: 1px solid var(--color-border);
 }
 
 .number {
-  display: block;
   font-family: var(--font-display);
-  font-size: 3.5rem;
-  line-height: 1;
+  font-size: 1rem;
   color: var(--color-text-secondary);
-  margin-bottom: 1.5rem;
+  opacity: 0.5;
+  transition: opacity 0.35s ease, color 0.35s ease;
 }
 
 .title {
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: clamp(2rem, 3.5vw, 3.25rem);
   font-weight: 400;
   color: var(--color-text-primary);
-  margin-bottom: 0.75rem;
+  transition: color 0.35s ease;
 }
 
 .description {
   font-family: var(--font-body);
-  font-size: 0.875rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.7;
   color: var(--color-text-secondary);
+  max-width: 480px;
 }
+
+.row:hover .number {
+  opacity: 1;
+  color: var(--color-accent);
+}
+
+.row:hover .title {
+  color: var(--color-accent);
+}
+
 
 @media (max-width: 768px) {
   .services {
     padding: 5rem 1.5rem;
   }
 
-  .grid {
-    grid-template-columns: 1fr;
+  .row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 2rem 0;
   }
 
-  .card:nth-child(2) {
-    margin-top: 0;
+  .row:hover {
+    padding: 2.5rem 0;
+  }
+
+  .title {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .description {
+    max-width: 100%;
   }
 }
