@@ -1,9 +1,9 @@
 .contact {
-  padding: var(--spacing-section) 4rem;
-  min-height: 60vh;
+  padding: var(--spacing-section) 4rem 1rem;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -14,7 +14,8 @@
   line-height: 1.15;
   color: var(--color-text-primary);
   margin-bottom: 3rem;
-  white-space: pre-line;
+  /* white-space: pre-line; */
+  /* width: 100%; */
 }
 
 .headline :global(span) {
@@ -29,10 +30,11 @@
 
 .subline {
   font-family: var(--font-body);
-  font-size: 0.9375rem;
+  font-size: 1.5rem;
   line-height: 1.7;
   color: var(--color-text-secondary);
-  max-width: 420px;
+  /* max-width: 420px; */
+  margin: auto;
 }
 
 .email {
@@ -51,11 +53,12 @@
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .socialLink {
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--color-text-secondary);
@@ -86,6 +89,7 @@
   font-size: 0.7rem;
   color: var(--color-text-secondary);
   opacity: 0.5;
+
 }
 
 @media (max-width: 768px) {

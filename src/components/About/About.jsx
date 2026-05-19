@@ -53,6 +53,14 @@ function About() {
               <p key={`${lang}-${i}`} className={`${styles.body} langSwap`}>{para}</p>
             ))}
           </div>
+          <a
+            href="https://portfolio.barren.fr"
+            target="_blank"
+            rel="noreferrer"
+            className={styles.portfolioBtn}
+          >
+            <span key={lang} className="langSwap">{t('about.portfolio')}</span>
+          </a>
         </div>
         <div className={styles.imageWrapper}>
           <img

@@ -7,22 +7,29 @@ function Hero() {
 
   return (
     <section id="home" className={styles.hero}>
+      <video
+        className={styles.heroBg}
+        src="/202605181331 (1).mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
+
       <div key={lang} className={`${styles.left} langSwap`}>
         <h1 className={styles.titleName}>
           <span>Barren</span>
         </h1>
       </div>
 
-      <div className={styles.right}>
-        <video
-          className={styles.heroVideo}
-          src="/202605181331 (1).mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-      </div>
+      <video
+        className={styles.mobileVideo}
+        src="/202605181331 (1).mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
 
       <div key={`${lang}-sub`} className={`${styles.subtitles} langSwap`}>
         <span className={styles.label} data-hero-label>{t('hero.label')}</span>

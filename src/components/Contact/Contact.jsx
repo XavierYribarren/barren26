@@ -42,18 +42,18 @@ function Contact() {
       <div className={styles.rest} ref={restRef}>
         <p key={lang} className={`${styles.subline} langSwap`}>{t('contact.subline')}</p>
 
-        <a href="mailto:hello@barren.fr" className={styles.email}>
-          hello@barren.fr
+        <a href="mailto:xavier.yribarren@gmail.com" className={styles.email}>
+          xavier.yribarren@gmail.com
         </a>
 
         <div className={styles.socials}>
-          <a href="#" className={styles.socialLink}>Instagram</a>
-          <a href="#" className={styles.socialLink}>LinkedIn</a>
-          <a href="#" className={styles.socialLink}>GitHub</a>
+          <a href="https://www.linkedin.com/in/xavier-yribarren" target="_blank" rel="noreferrer" className={styles.socialLink}>LinkedIn</a>
+          <a href="mailto:xavier.yribarren@gmail.com" className={styles.socialLink}>Mail</a>
+          <a href="https://www.malt.fr/profile/xavieryribarren" target="_blank" rel="noreferrer" className={styles.socialLink}>Malt</a>
         </div>
-
-        <p key={`footer-${lang}`} className={`${styles.copy} langSwap`}>{t('contact.footer')}</p>
       </div>
+
+      <p key={`footer-${lang}`} className={`${styles.copy} langSwap`}>{t('contact.footer')}</p>
     </section>
   )
 }

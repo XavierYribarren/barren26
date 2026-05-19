@@ -70,6 +70,7 @@ export const translations = {
     about: {
       sectionLabel: 'About',
       heading: 'Craft, clarity,\nand digital performance.',
+      portfolio: 'My portfolio →',
       paragraphs: [
         "I'm a freelance developer based in France. I work with startups, local businesses, artists, and brands, whoever has a project worth building.",
         'No account manager in the middle. You work directly with me, from the first call to the final delivery.',
@@ -149,6 +150,7 @@ export const translations = {
     about: {
       sectionLabel: 'À propos',
       heading: 'Craft, clarté,\net performance digitale.',
+      portfolio: 'Mon portfolio →',
       paragraphs: [
         'Je suis développeur freelance basé en France. Je travaille avec des startups, des commerces locaux, des artistes et des marques, quiconque a un projet qui mérite d\'être bien fait.',
         "Pas d'intermédiaire. Vous travaillez directement avec moi, du premier appel à la livraison finale.",

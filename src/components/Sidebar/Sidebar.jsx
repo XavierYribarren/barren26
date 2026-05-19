@@ -105,8 +105,8 @@ function Sidebar() {
               {label}
             </a>
           ))}
-          <a href="mailto:hello@barren.fr" className={styles.mobileEmail}>
-            hello@barren.fr
+          <a href="mailto:xavier.yribarren@gmail.com" className={styles.mobileEmail}>
+            xavier.yribarren@gmail.com
           </a>
         </div>
       )}
