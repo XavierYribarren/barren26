@@ -72,8 +72,8 @@ function Sidebar() {
         </div>
 
         <div className={styles.footer}>
-          <a href="mailto:hello@barren.fr" className={styles.email}>
-            hello@barren.fr
+          <a href="mailto:xavier.yribarren@gmail.com" className={styles.email}>
+            xavier.yribarren@gmail.com
           </a>
         </div>
       </aside>

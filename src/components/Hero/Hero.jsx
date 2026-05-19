@@ -31,7 +31,7 @@ function Hero() {
       </div>
 
       <div className={styles.scrollHint} data-hero-scroll>
-        <span key={lang} className="langSwap">{t('hero.cta')}</span>
+        {/* <span key={lang} className="langSwap">{t('hero.cta')}</span> */}
       </div>
     </section>
   )

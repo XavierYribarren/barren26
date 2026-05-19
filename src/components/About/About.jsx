@@ -47,10 +47,12 @@ function About() {
       </span>
       <div className={styles.grid}>
         <div className={styles.text} ref={textRef}>
-          <h2 className={styles.heading}>Craft, clarity,<br />and digital performance.</h2>
-          {paragraphs.map((para, i) => (
-            <p key={`${lang}-${i}`} className={`${styles.body} langSwap`}>{para}</p>
-          ))}
+          <h2 key={lang} className={`${styles.heading} langSwap`}>{t('about.heading')}</h2>
+          <div className={styles.paragraphs}>
+            {paragraphs.map((para, i) => (
+              <p key={`${lang}-${i}`} className={`${styles.body} langSwap`}>{para}</p>
+            ))}
+          </div>
         </div>
         <div className={styles.imageWrapper}>
           <img

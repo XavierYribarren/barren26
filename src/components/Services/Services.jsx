@@ -47,11 +47,11 @@ function Services() {
       <span className={styles.label} ref={labelRef}>
         <span key={lang} className="langSwap">{t('services.sectionLabel')}</span>
       </span>
-      <div className={styles.grid}>
+      <div className={styles.list}>
         {items.map((card, i) => (
           <div
             key={card.number}
-            className={styles.card}
+            className={styles.row}
             ref={(el) => (cardsRef.current[i] = el)}
           >
             <span className={styles.number}>{card.number}</span>

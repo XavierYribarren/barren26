@@ -9,6 +9,7 @@ import About from './components/About/About'
 import Contact from './components/Contact/Contact'
 import DevColorTweaker from './components/DevColorTweaker/DevColorTweaker'
 import ScrollProgress from './components/ScrollProgress/ScrollProgress'
+import TrustBanner from './components/TrustBanner/TrustBanner'
 import styles from './App.module.css'
 
 const isDev = import.meta.env.DEV
@@ -71,6 +72,7 @@ function App() {
       <Sidebar />
       <main className={styles.main}>
         <Hero />
+        <TrustBanner />
         <Services />
         <Projects />
         <About />

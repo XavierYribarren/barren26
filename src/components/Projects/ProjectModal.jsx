@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from '../../i18n'
 import styles from './ProjectModal.module.css'
 
 function ProjectModal({ project, onClose }) {
+  const { t } = useTranslation()
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
@@ -36,11 +38,11 @@ function ProjectModal({ project, onClose }) {
 
           <div className={styles.meta}>
             <div className={styles.metaItem}>
-              <span className={styles.metaLabel}>Role</span>
+              <span className={styles.metaLabel}>{t('projects.modal.role')}</span>
               <span className={styles.metaValue}>{project.role}</span>
             </div>
             <div className={styles.metaItem}>
-              <span className={styles.metaLabel}>Stack</span>
+              <span className={styles.metaLabel}>{t('projects.modal.stack')}</span>
               <div className={styles.stack}>
                 {project.stack.map((s) => (
                   <span key={s} className={styles.tag}>{s}</span>
@@ -51,7 +53,7 @@ function ProjectModal({ project, onClose }) {
 
           {project.url && (
             <a href={project.url} target="_blank" rel="noreferrer" className={styles.siteLink}>
-              Visit site →
+              {t('projects.modal.visit')}
             </a>
           )}
         </div>

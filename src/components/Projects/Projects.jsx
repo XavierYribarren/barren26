@@ -7,72 +7,18 @@ import styles from './Projects.module.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Project names are brand names — stay in English in both languages
-const projects = [
-  {
-    name: 'Pizza',
-    category: 'Web Design',
-    desk: '/projects/pizzdesk.png',
-    mob:  '/projects/pizzmob.png',
-    description: 'A full online presence for a local pizza restaurant — menu, ordering flow, and brand identity built from scratch.',
-    role: 'Designer & Developer',
-    stack: ['React', 'CSS Modules', 'Figma'],
-    url: null,
-  },
-  {
-    name: 'Tweakasix',
-    category: 'Development',
-    desk: '/projects/screen_tweakasixcol.webp',
-    mob:  null,
-    description: 'A customisation tool that lets users fine-tune interface colours in real time with a clean, minimal UI.',
-    role: 'Developer',
-    stack: ['React', 'CSS Custom Properties'],
-    url: null,
-  },
-  {
-    name: 'Jewelry',
-    category: 'Web Design',
-    desk: '/projects/heliasdesk.png',
-    mob:  '/projects/heliasmob.png',
-    description: 'Elegant e-commerce experience for a jewelry brand — product showcase, lookbook, and checkout flow.',
-    role: 'Designer & Developer',
-    stack: ['React', 'Figma'],
-    url: null,
-  },
-  {
-    name: 'Psychologis',
-    category: 'Web Design',
-    desk: '/projects/coradesk.png',
-    mob:  '/projects/coramob.png',
-    description: 'A calm, trust-building website for a psychologist practice — appointment booking and service overview.',
-    role: 'Designer & Developer',
-    stack: ['React', 'Figma'],
-    url: null,
-  },
-  {
-    name: 'Webamp',
-    category: 'Development',
-    desk: '/projects/screen_webamp.webp',
-    mob:  null,
-    description: 'A web-based recreation of the classic Winamp media player — faithful UI with functional audio playback.',
-    role: 'Developer',
-    stack: ['JavaScript', 'Web Audio API', 'CSS'],
-    url: null,
-  },
-  {
-    name: 'Musicroom',
-    category: 'Development',
-    desk: '/projects/screen_musicroom.webp',
-    mob:  null,
-    description: 'A collaborative music listening room where users can queue tracks and listen in sync with others.',
-    role: 'Developer',
-    stack: ['React', 'Node.js', 'WebSockets'],
-    url: null,
-  },
+const projectsStatic = [
+  { id: 'restaurant',    desk: '/projects/pizzdesk.png',            mob: '/projects/pizzmob.png',   stack: ['Next.js', 'React', 'Sanity'],                                        url: null },
+  { id: 'configurateur', desk: '/projects/screen_tweakasixcol.webp',mob: null,                      stack: ['Three.js', 'React', 'Redux', 'Node', 'MySQL'],                       url: null },
+  { id: 'boutique',      desk: '/projects/heliasdesk.png',          mob: '/projects/heliasmob.png', stack: ['React', 'GSAP', 'Shopify'],                                          url: null },
+  { id: 'psychologue',   desk: '/projects/coradesk.png',            mob: '/projects/coramob.png',   stack: ['React', 'GSAP', 'Leaflet'],                                          url: null },
+  { id: 'webamp',        desk: '/projects/screen_webamp.webp',      mob: null,                      stack: ['Three.js', 'Faust', 'WebAssembly', 'React'],                         url: null },
+  { id: 'musicroom',     desk: '/projects/screen_musicroom.webp',   mob: null,                      stack: ['React', 'Three.js', 'React Three Fiber', 'Web Audio API', 'Blender'], url: null },
 ]
 
 function Projects() {
   const { t, lang } = useTranslation()
+  const projects = (t('projects.items') || []).map((text, i) => ({ ...projectsStatic[i], ...text }))
   const sectionRef  = useRef(null)
   const labelRef    = useRef(null)
   const stripRef    = useRef(null)
@@ -115,7 +61,7 @@ function Projects() {
 
       <div className={styles.strip} ref={stripRef}>
         {projects.map((p) => (
-          <div key={p.name} className={styles.card} onClick={() => setActive(p)}>
+          <div key={p.id} className={styles.card} onClick={() => setActive(p)}>
             <div className={styles.imageWrap}>
               <img className={styles.image} src={p.desk} alt={p.name} />
               {p.mob && <img className={styles.mobile} src={p.mob} alt={`${p.name} mobile`} />}

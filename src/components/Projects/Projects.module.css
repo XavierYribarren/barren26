@@ -1,6 +1,5 @@
 .projects {
-  padding: var(--spacing-section) 4rem;
-  border-top: 1px solid var(--color-border);
+  padding: 4rem;
 }
 
 .label {

@@ -23,19 +23,24 @@
 
 .heroVideo {
   width: auto;
-  height: 55dvh;
+  height: 65dvh;
   max-height: 100%;
   aspect-ratio: auto;
+  opacity: .8;
   object-fit: contain;
-  transform: translate(2rem, 7rem);
+  transform: translate(-10rem, 7rem);
 }
 
 .titleName {
   display: flex;
   align-items: flex-start;
   flex-shrink: 1;
+  width: 100%;
+  padding: 0 1em ;
   min-height: 0;
   overflow: hidden;
+  z-index: 10;
+  text-shadow: 1px 1px 15px #111111;
 }
 
 .titleName > span {
@@ -98,17 +103,38 @@
 @media (max-width: 768px) {
   .hero {
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    padding: 2rem;
-    gap: 2rem;
+    grid-template-rows: auto auto auto;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .left {
+    padding: 1rem 0 0;
+  }
+
+  .right {
+    justify-content: center;
   }
 
   .heroVideo {
-    height: 100%;
+    width: 100%;
+    height: auto;
+    max-height: 45dvh;
+    object-fit: cover;
+    transform: none;
+  }
+
+  .subtitles {
+    grid-column: 1;
+    margin-top: 0;
+  }
+
+  .headline {
+    white-space: normal;
   }
 
   .scrollHint {
-    right: 2rem;
-    bottom: 2rem;
+    right: 1.5rem;
+    bottom: 1.5rem;
   }
 }
