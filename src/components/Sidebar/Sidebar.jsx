@@ -9,18 +9,33 @@ function Sidebar() {
   const router = useRouter()
   const pathname = usePathname()
   const locale = pathname.split('/')[1]
+  const subPath = pathname.split('/').slice(2).join('/')
+  const isMainPage = subPath === ''
+
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeId, setActiveId] = useState('home')
+  const [needsOpen, setNeedsOpen] = useState(false)
 
-  const navLinks = [
-    { label: t('sidebar.nav.home'),     href: '#home' },
-    { label: t('sidebar.nav.services'), href: '#services' },
-    { label: t('sidebar.nav.projects'), href: '#projects' },
-    { label: t('sidebar.nav.about'),    href: '#about' },
-    { label: t('sidebar.nav.contact'),  href: '#contact' },
+  const anchorsBefore = [
+    { id: 'home',     label: t('sidebar.nav.home') },
+    { id: 'services', label: t('sidebar.nav.services') },
+    { id: 'projects', label: t('sidebar.nav.projects') },
   ]
 
+  const anchorsAfter = [
+    { id: 'about',   label: t('sidebar.nav.about') },
+    { id: 'contact', label: t('sidebar.nav.contact') },
+  ]
+
+  const needsLinks = [
+    { label: t('sidebar.nav.siteWeb'), path: 'site-web' },
+    { label: t('sidebar.nav.webApp'),  path: 'web-app' },
+  ]
+
+  const isNeedsActive = subPath === 'site-web' || subPath === 'web-app'
+
   useEffect(() => {
+    if (!isMainPage) return
     const sections = document.querySelectorAll('section[id]')
     const observer = new IntersectionObserver(
       (entries) => {
@@ -32,36 +47,92 @@ function Sidebar() {
     )
     sections.forEach((s) => observer.observe(s))
     return () => observer.disconnect()
-  }, [])
+  }, [isMainPage])
 
-  const handleNavClick = (e, href) => {
+  function handleLogoClick() {
+    setMenuOpen(false)
+    if (isMainPage) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      router.push(`/${locale}`)
+    }
+  }
+
+  function handleAnchorClick(e, id) {
     e.preventDefault()
     setMenuOpen(false)
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    if (isMainPage) {
+      document.querySelector(`#${id}`)?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      router.push(`/${locale}#${id}`)
+    }
+  }
+
+  function handleNeedsClick(path) {
+    setMenuOpen(false)
+    router.push(`/${locale}/${path}`)
+  }
+
+  function switchLang(l) {
+    router.push(subPath ? `/${l}/${subPath}` : `/${l}`)
   }
 
   return (
     <>
       <aside className={styles.sidebar} data-sidebar>
         <div className={styles.top}>
-          <div className={styles.logo}>BARREN</div>
+          <button type="button" className={styles.logo} onClick={handleLogoClick}>BARREN</button>
           <p key={lang} className={`${styles.tagline} langSwap`}>{t('sidebar.tagline')}</p>
         </div>
 
         <nav className={styles.nav}>
-          {navLinks.map(({ label, href }) => {
-            const id = href.slice(1)
-            return (
-              <a
-                key={href}
-                href={href}
-                className={`${styles.navLink} ${activeId === id ? styles.active : ''}`}
-                onClick={(e) => handleNavClick(e, href)}
-              >
-                <span key={lang} className="langSwap">{label}</span>
-              </a>
-            )
-          })}
+          {anchorsBefore.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={`${styles.navLink} ${!isNeedsActive && activeId === id ? styles.active : ''}`}
+              onClick={(e) => handleAnchorClick(e, id)}
+            >
+              <span key={lang} className="langSwap">{label}</span>
+            </a>
+          ))}
+
+          {/* ── Votre besoin ── */}
+          <div className={styles.navGroup}>
+            <button
+              type="button"
+              className={`${styles.navLink} ${styles.navGroupBtn} ${isNeedsActive ? styles.active : ''}`}
+              onClick={() => setNeedsOpen(o => !o)}
+            >
+              <span key={lang} className="langSwap">{t('sidebar.nav.needs')}</span>
+              <span className={`${styles.navArrow} ${needsOpen ? styles.navArrowOpen : ''}`}>›</span>
+            </button>
+            {needsOpen && (
+              <div className={styles.navSub}>
+                {needsLinks.map(({ label, path }) => (
+                  <a
+                    key={path}
+                    href={`/${locale}/${path}`}
+                    className={`${styles.navSubLink} ${subPath === path ? styles.active : ''}`}
+                    onClick={(e) => { e.preventDefault(); handleNeedsClick(path) }}
+                  >
+                    <span key={lang} className="langSwap">{label}</span>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {anchorsAfter.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={`${styles.navLink} ${!isNeedsActive && activeId === id ? styles.active : ''}`}
+              onClick={(e) => handleAnchorClick(e, id)}
+            >
+              <span key={lang} className="langSwap">{label}</span>
+            </a>
+          ))}
         </nav>
 
         <div className={styles.langSwitcher}>
@@ -69,7 +140,7 @@ function Sidebar() {
             <button
               key={l}
               className={`${styles.langBtn} ${locale === l ? styles.langActive : ''}`}
-              onClick={() => router.push(`/${l}`)}
+              onClick={() => switchLang(l)}
             >
               {t(`sidebar.langSwitcher.${l}`)}
             </button>
@@ -85,7 +156,7 @@ function Sidebar() {
 
       {/* Mobile top bar */}
       <header className={styles.mobileBar}>
-        <span className={styles.mobileLogo}>BARREN</span>
+        <button type="button" className={styles.mobileLogo} onClick={handleLogoClick}>BARREN</button>
         <button
           className={styles.hamburger}
           onClick={() => setMenuOpen((o) => !o)}
@@ -100,16 +171,52 @@ function Sidebar() {
 
       {menuOpen && (
         <div className={styles.mobileMenu}>
-          {navLinks.map(({ label, href }) => (
+          {anchorsBefore.map(({ id, label }) => (
             <a
-              key={href}
-              href={href}
+              key={id}
+              href={`#${id}`}
               className={styles.mobileNavLink}
-              onClick={(e) => handleNavClick(e, href)}
+              onClick={(e) => handleAnchorClick(e, id)}
             >
               {label}
             </a>
           ))}
+
+          <div className={styles.mobileNeedsGroup}>
+            <button
+              type="button"
+              className={styles.mobileNavBtn}
+              onClick={() => setNeedsOpen(o => !o)}
+            >
+              {t('sidebar.nav.needs')} {needsOpen ? '↑' : '↓'}
+            </button>
+            {needsOpen && (
+              <div className={styles.mobileNeedsSub}>
+                {needsLinks.map(({ label, path }) => (
+                  <a
+                    key={path}
+                    href={`/${locale}/${path}`}
+                    className={styles.mobileNavSubLink}
+                    onClick={(e) => { e.preventDefault(); handleNeedsClick(path) }}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {anchorsAfter.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className={styles.mobileNavLink}
+              onClick={(e) => handleAnchorClick(e, id)}
+            >
+              {label}
+            </a>
+          ))}
+
           <a href="mailto:xavier.yribarren@gmail.com" className={styles.mobileEmail}>
             xavier.yribarren@gmail.com
           </a>

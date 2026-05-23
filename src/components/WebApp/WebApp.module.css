@@ -1,0 +1,258 @@
+/* ─── Page wrapper ─────────────────────────────────────────────────── */
+.page {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+/* ─── Hero ──────────────────────────────────────────────────────────── */
+.hero {
+  padding: 8rem 0 5rem;
+}
+
+.heroLabel {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 1.5rem;
+}
+
+.heroHeadline {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  white-space: pre-line;
+  margin-bottom: 1.5rem;
+}
+
+.heroSubline {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  opacity: 0.55;
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+/* ─── Section shared ────────────────────────────────────────────────── */
+.section {
+  padding: 5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.sectionLabel {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.35;
+  margin-bottom: 2.5rem;
+}
+
+.sectionHeading {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.sectionSubheading {
+  font-size: 1rem;
+  opacity: 0.5;
+  margin-bottom: 3.5rem;
+}
+
+/* ─── Intro ─────────────────────────────────────────────────────────── */
+.introParagraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 640px;
+}
+
+.introParagraphs p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  opacity: 0.7;
+}
+
+/* ─── Included items grid ───────────────────────────────────────────── */
+.itemsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.item {
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
+}
+
+.item:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.itemNumber {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.itemTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.itemDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  opacity: 0.55;
+}
+
+/* ─── Options ───────────────────────────────────────────────────────── */
+.optionsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionItem {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.optionItem:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.optionTitle {
+  font-size: 0.95rem;
+  font-weight: 500;
+  min-width: 200px;
+}
+
+.optionDescription {
+  font-size: 0.9rem;
+  opacity: 0.45;
+  line-height: 1.5;
+}
+
+/* ─── Examples ──────────────────────────────────────────────────────── */
+.examplesList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+
+.exampleItem {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.95rem;
+  opacity: 0.6;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.exampleItem::before {
+  content: '→';
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+/* ─── Why ───────────────────────────────────────────────────────────── */
+.whyParagraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-width: 640px;
+}
+
+.whyParagraphs p {
+  font-size: 1rem;
+  line-height: 1.75;
+  opacity: 0.65;
+}
+
+/* ─── CTA ───────────────────────────────────────────────────────────── */
+.cta {
+  padding: 5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.ctaHeading {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.ctaSubline {
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+.ctaButton {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.85;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.ctaButton:hover {
+  opacity: 1;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page {
+    padding: 0 1.25rem 4rem;
+  }
+
+  .hero {
+    padding: 5rem 0 3rem;
+  }
+
+  .itemsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .examplesList {
+    grid-template-columns: 1fr;
+  }
+
+  .optionItem {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .optionTitle {
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroHeadline {
+    font-size: 2.2rem;
+  }
+
+  .item {
+    padding: 1.5rem;
+  }
+}

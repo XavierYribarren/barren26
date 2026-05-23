@@ -1,4 +1,4 @@
-// File: /home/barren/Documents/devFold1/crashtsts/barren26/app/[locale]/layout.jsx
+// File: /home/barren/Documents/devtrash/barren26/app/[locale]/layout.jsx
 import * as entry from '../../../../app/[locale]/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

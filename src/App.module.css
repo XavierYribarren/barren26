@@ -6,7 +6,7 @@
 
 .main {
   margin-left: var(--sidebar-width);
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
   z-index: 5;
 }

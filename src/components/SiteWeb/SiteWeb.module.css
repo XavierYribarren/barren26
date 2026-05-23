@@ -1,6 +1,6 @@
 /* ─── Page wrapper ─────────────────────────────────────────────────── */
 .page {
-  max-width: 960px;
+  max-width: 80%;
   margin: 0 auto;
   padding: 0 2rem 6rem;
 }

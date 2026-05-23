@@ -1,11 +1,8 @@
 'use client'
 import { useTranslation } from '../../i18n'
 import { siteWebTranslations } from '../../lib/siteWeb'
+import ContactForm from '../ContactForm/ContactForm'
 import styles from './SiteWeb.module.css'
-
-function scrollToContact() {
-  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-}
 
 export default function SiteWeb() {
   const { lang } = useTranslation()
@@ -60,23 +57,11 @@ export default function SiteWeb() {
         </ul>
       </section>
 
-      {/* ── Why ── */}
+      {/* ── Contact ── */}
       <section className={styles.section}>
         <p className={styles.sectionLabel}>04</p>
-        <h2 className={styles.sectionHeading}>{d.why.heading}</h2>
-        <div className={styles.whyParagraphs}>
-          {d.why.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-        </div>
+        <ContactForm />
       </section>
-
-      {/* ── CTA ── */}
-      <div className={styles.cta}>
-        <h2 className={styles.ctaHeading}>{d.cta.heading}</h2>
-        <p className={styles.ctaSubline}>{d.cta.subline}</p>
-        <button className={styles.ctaButton} onClick={scrollToContact}>
-          {d.cta.button}
-        </button>
-      </div>
 
     </div>
   )
