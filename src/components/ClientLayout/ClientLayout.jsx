@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic'
 import Sidebar from '../Sidebar/Sidebar'
 import ScrollProgress from '../ScrollProgress/ScrollProgress'
-import AppInit from '../AppInit/AppInit'
+import Loader from '../Loader/Loader'
 import DevColorTweaker from '../DevColorTweaker/DevColorTweaker'
 import styles from '../../App.module.css'
 
@@ -16,7 +16,7 @@ export default function ClientLayout({ children }) {
       <Background />
       <ScrollProgress />
       <Sidebar />
-      <AppInit />
+      <Loader />
       <main className={styles.main}>
         {children}
       </main>
