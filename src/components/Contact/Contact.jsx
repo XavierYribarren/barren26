@@ -1,11 +1,10 @@
+'use client'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { splitWords } from '../../utils/splitWords'
 import { useTranslation } from '../../i18n'
 import styles from './Contact.module.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 function Contact() {
   const { t, lang } = useTranslation()
@@ -14,6 +13,7 @@ function Contact() {
   const restRef     = useRef(null)
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const ctx = gsap.context(() => {

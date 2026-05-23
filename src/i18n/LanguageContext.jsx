@@ -1,13 +1,11 @@
-import { createContext, useState } from 'react'
+'use client'
+import { createContext } from 'react'
 
-export const LanguageContext = createContext({ lang: 'en', setLang: () => {} })
+export const LanguageContext = createContext({ lang: 'fr', setLang: () => {} })
 
-export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(() =>
-    navigator.language.startsWith('fr') ? 'fr' : 'en'
-  )
+export function LanguageProvider({ children, initialLang = 'fr' }) {
   return (
-    <LanguageContext.Provider value={{ lang, setLang }}>
+    <LanguageContext.Provider value={{ lang: initialLang, setLang: () => {} }}>
       {children}
     </LanguageContext.Provider>
   )

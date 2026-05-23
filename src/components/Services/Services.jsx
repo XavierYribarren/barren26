@@ -1,10 +1,9 @@
+'use client'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTranslation } from '../../i18n'
 import styles from './Services.module.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 const cardMotion = [
   { x: -40, y: 0,  delay: 0 },
@@ -20,6 +19,7 @@ function Services() {
   const cardsRef   = useRef([])
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const ctx = gsap.context(() => {

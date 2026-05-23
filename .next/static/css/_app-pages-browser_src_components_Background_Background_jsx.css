@@ -1,0 +1,24 @@
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/Background/Background.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************/
+.Background_overlay__wA_Bs {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-color: rgba(13, 13, 13, 0.75);
+}
+
+.Background_bg__yTEPR {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.Background_bg__yTEPR canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+

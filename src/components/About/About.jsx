@@ -1,10 +1,9 @@
+'use client'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTranslation } from '../../i18n'
 import styles from './About.module.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 function About() {
   const { t, lang } = useTranslation()
@@ -14,6 +13,7 @@ function About() {
   const imageRef   = useRef(null)
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const ctx = gsap.context(() => {

@@ -1,11 +1,10 @@
+'use client'
 import { useEffect, useRef, useCallback, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTranslation } from '../../i18n'
 import ProjectModal from './ProjectModal'
 import styles from './Projects.module.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 const projectsStatic = [
   { id: 'restaurant',    desk: '/projects/pizzdesk.png',            mob: '/projects/pizzmob.png',   stack: ['Next.js', 'React', 'Sanity'],                                        url: null },
@@ -36,6 +35,7 @@ function Projects() {
   }, [handleWheel])
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const ctx = gsap.context(() => {

@@ -1,9 +1,14 @@
+'use client'
 import { useState, useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import { useTranslation } from '../../i18n'
 import styles from './Sidebar.module.css'
 
 function Sidebar() {
-  const { t, lang, setLang } = useTranslation()
+  const { t, lang } = useTranslation()
+  const router = useRouter()
+  const pathname = usePathname()
+  const locale = pathname.split('/')[1]
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeId, setActiveId] = useState('home')
 
@@ -63,8 +68,8 @@ function Sidebar() {
           {['en', 'fr'].map((l) => (
             <button
               key={l}
-              className={`${styles.langBtn} ${lang === l ? styles.langActive : ''}`}
-              onClick={() => setLang(l)}
+              className={`${styles.langBtn} ${locale === l ? styles.langActive : ''}`}
+              onClick={() => router.push(`/${l}`)}
             >
               {t(`sidebar.langSwitcher.${l}`)}
             </button>

@@ -156,7 +156,6 @@
 }
 
 .siteLink {
-  align-self: flex-start;
   font-family: var(--font-body);
   font-size: 0.8rem;
   text-transform: uppercase;

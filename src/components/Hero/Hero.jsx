@@ -1,5 +1,5 @@
+'use client'
 import { useTranslation } from '../../i18n'
-import BComponent from './BComponent'
 import styles from './Hero.module.css'
 
 function Hero() {

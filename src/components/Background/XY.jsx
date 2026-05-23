@@ -1,3 +1,4 @@
+'use client'
 import { useRef, useEffect } from 'react';
 import { useGLTF, MeshTransmissionMaterial } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';

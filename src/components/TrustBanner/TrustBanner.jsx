@@ -1,3 +1,4 @@
+'use client'
 import { useTranslation } from '../../i18n'
 import styles from './TrustBanner.module.css'
 

@@ -1,8 +1,9 @@
-import { useRef, useEffect } from 'react'
+'use client'
+import { useRef, useEffect, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Model } from './XY'
 import styles from './Background.module.css'
-import { Backdrop, Stage } from '@react-three/drei'
+import { Stage } from '@react-three/drei'
 
 function XYModel({ scroll }) {
   const groupRef = useRef()
@@ -41,7 +42,7 @@ export default function Background() {
       <Canvas
         camera={{ position: [0, 0, 18], fov: 55 }}
         gl={{ alpha: true, antialias: false }}
-        dpr={Math.min(window.devicePixelRatio, 1.5)}
+        dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 1.5)}
       >
        
         <ambientLight intensity={10}/>
@@ -57,8 +58,11 @@ export default function Background() {
   <planeGeometry args={[100,50]}/>
   <meshStandardMaterial color={"#111"}/>
 </mesh>
-        <Stage adjustCamera intensity={0.5} shadows="contact" environment="city">
-        <XYModel scroll={scroll} /></Stage>
+        <Suspense fallback={null}>
+          <Stage adjustCamera intensity={0.5} shadows="contact" environment="city">
+            <XYModel scroll={scroll} />
+          </Stage>
+        </Suspense>
       </Canvas>
     </div>
     </>

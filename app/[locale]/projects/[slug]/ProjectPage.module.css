@@ -1,0 +1,155 @@
+.page {
+  padding: 5rem 5rem 8rem;
+  max-width: 1100px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 4rem;
+  transition: color 0.2s ease;
+}
+
+.back:hover {
+  color: var(--color-text-primary);
+}
+
+.header {
+  margin-bottom: 3.5rem;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.category {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.images {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 4rem;
+}
+
+.desk {
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 6px;
+  object-fit: cover;
+  max-height: 520px;
+  width: 100%;
+  border: 1px solid var(--color-border);
+}
+
+.mob {
+  flex: 0 0 auto;
+  width: 180px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  align-self: flex-start;
+}
+
+.meta {
+  display: flex;
+  gap: 4rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.metaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.metaLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+}
+
+.metaValue {
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tag {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.78rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 100px;
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+  max-width: 62ch;
+  margin-bottom: 3rem;
+}
+
+.cta {
+  display: inline-block;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 0.8rem 2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.cta:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 1024px) {
+  .page {
+    padding: 4rem 2.5rem 6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .images {
+    flex-direction: column;
+  }
+
+  .mob {
+    width: 120px;
+  }
+
+  .meta {
+    gap: 2rem;
+  }
+}

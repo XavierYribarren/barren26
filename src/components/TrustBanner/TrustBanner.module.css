@@ -28,6 +28,7 @@
   overflow: hidden;
   width: 75%;
   max-width: 700px;
+  
 }
 
 .list {
@@ -40,6 +41,7 @@
   margin: 0;
   flex-shrink: 0;
   animation: marquee 22s linear infinite;
+  
 }
 
 .item {
@@ -77,12 +79,12 @@
   .label {
     display: none;
   }
-
+  
   .track {
     width: 100%;
     max-width: 100%;
   }
-
+  
   .logo {
     height: 1.5rem;
   }
