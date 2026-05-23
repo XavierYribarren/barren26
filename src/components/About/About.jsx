@@ -58,6 +58,7 @@ function About() {
             target="_blank"
             rel="noreferrer"
             className={styles.portfolioBtn}
+            aria-label={`${t('about.portfolio')} (${lang === 'en' ? 'opens in new tab' : 'nouvel onglet'})`}
           >
             <span key={lang} className="langSwap">{t('about.portfolio')}</span>
           </a>

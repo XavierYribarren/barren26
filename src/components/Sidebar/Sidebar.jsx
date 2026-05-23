@@ -85,13 +85,14 @@ function Sidebar() {
           <p key={lang} className={`${styles.tagline} langSwap`}>{t('sidebar.tagline')}</p>
         </div>
 
-        <nav className={styles.nav}>
+        <nav className={styles.nav} aria-label={lang === 'en' ? 'Main navigation' : 'Navigation principale'}>
           {anchorsBefore.map(({ id, label }) => (
             <a
               key={id}
               href={`#${id}`}
               className={`${styles.navLink} ${!isNeedsActive && activeId === id ? styles.active : ''}`}
               onClick={(e) => handleAnchorClick(e, id)}
+              aria-current={!isNeedsActive && activeId === id ? 'true' : undefined}
             >
               <span key={lang} className="langSwap">{label}</span>
             </a>
@@ -103,18 +104,21 @@ function Sidebar() {
               type="button"
               className={`${styles.navLink} ${styles.navGroupBtn} ${isNeedsActive ? styles.active : ''}`}
               onClick={() => setNeedsOpen(o => !o)}
+              aria-expanded={needsOpen}
+              aria-controls="needs-submenu"
             >
               <span key={lang} className="langSwap">{t('sidebar.nav.needs')}</span>
-              <span className={`${styles.navArrow} ${needsOpen ? styles.navArrowOpen : ''}`}>›</span>
+              <span className={`${styles.navArrow} ${needsOpen ? styles.navArrowOpen : ''}`} aria-hidden="true">›</span>
             </button>
             {needsOpen && (
-              <div className={styles.navSub}>
+              <div id="needs-submenu" className={styles.navSub}>
                 {needsLinks.map(({ label, path }) => (
                   <a
                     key={path}
                     href={`/${locale}/${path}`}
                     className={`${styles.navSubLink} ${subPath === path ? styles.active : ''}`}
                     onClick={(e) => { e.preventDefault(); handleNeedsClick(path) }}
+                    aria-current={subPath === path ? 'page' : undefined}
                   >
                     <span key={lang} className="langSwap">{label}</span>
                   </a>
@@ -129,6 +133,7 @@ function Sidebar() {
               href={`#${id}`}
               className={`${styles.navLink} ${!isNeedsActive && activeId === id ? styles.active : ''}`}
               onClick={(e) => handleAnchorClick(e, id)}
+              aria-current={!isNeedsActive && activeId === id ? 'true' : undefined}
             >
               <span key={lang} className="langSwap">{label}</span>
             </a>
@@ -141,6 +146,8 @@ function Sidebar() {
               key={l}
               className={`${styles.langBtn} ${locale === l ? styles.langActive : ''}`}
               onClick={() => switchLang(l)}
+              aria-label={l === 'en' ? 'Switch to English' : 'Passer en français'}
+              aria-pressed={locale === l}
             >
               {t(`sidebar.langSwitcher.${l}`)}
             </button>
@@ -187,17 +194,20 @@ function Sidebar() {
               type="button"
               className={styles.mobileNavBtn}
               onClick={() => setNeedsOpen(o => !o)}
+              aria-expanded={needsOpen}
+              aria-controls="mobile-needs-submenu"
             >
-              {t('sidebar.nav.needs')} {needsOpen ? '↑' : '↓'}
+              {t('sidebar.nav.needs')} <span aria-hidden="true">{needsOpen ? '↑' : '↓'}</span>
             </button>
             {needsOpen && (
-              <div className={styles.mobileNeedsSub}>
+              <div id="mobile-needs-submenu" className={styles.mobileNeedsSub}>
                 {needsLinks.map(({ label, path }) => (
                   <a
                     key={path}
                     href={`/${locale}/${path}`}
                     className={styles.mobileNavSubLink}
                     onClick={(e) => { e.preventDefault(); handleNeedsClick(path) }}
+                    aria-current={subPath === path ? 'page' : undefined}
                   >
                     {label}
                   </a>

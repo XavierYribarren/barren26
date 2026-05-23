@@ -20,6 +20,7 @@ export default function ContactForm() {
 
   const selectedActivity = d.activities.find(a => a.id === activityId)
   const nextLabel = lang === 'en' ? 'Continue →' : 'Continuer →'
+  const dontKnowLabel = lang === 'en' ? "I don't know yet" : "Je ne sais pas encore"
 
   function selectActivity(id) {
     setActivityId(id)
@@ -63,16 +64,24 @@ export default function ContactForm() {
 
   if (submitted) {
     return (
-      <div className={styles.success}>
+      <div className={styles.success} role="status">
         <p>{d.success}</p>
       </div>
     )
   }
 
+  const stepLabel = step === 1
+    ? d.stepActivity.question
+    : step === 2
+      ? d.stepNeeds.question
+      : d.stepContact.emailLabel
+
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>{d.title}</h2>
       <p className={styles.intro}>{d.intro}</p>
+
+      <p className="sr-only" aria-live="polite" aria-atomic="true">{stepLabel}</p>
 
       <div className={styles.progress} aria-hidden="true">
         {[1, 2, 3].map(n => (
@@ -94,6 +103,7 @@ export default function ContactForm() {
                 type="button"
                 className={`${styles.activityCard} ${activityId === a.id ? styles.activitySelected : ''}`}
                 onClick={() => selectActivity(a.id)}
+                aria-pressed={activityId === a.id}
               >
                 {a.label}
               </button>
@@ -108,7 +118,7 @@ export default function ContactForm() {
           <p className={styles.question}>{d.stepNeeds.question}</p>
           <p className={styles.hint}>{d.stepNeeds.hint}</p>
           <ul className={styles.needsList}>
-            {selectedActivity.needs.map(need => {
+            {[...selectedActivity.needs, dontKnowLabel].map(need => {
               const checked = needs.includes(need)
               return (
                 <li key={need} className={styles.needItem}>
@@ -144,6 +154,7 @@ export default function ContactForm() {
                 id="cf-name"
                 type="text"
                 required
+                aria-required="true"
                 className={styles.fieldInput}
                 value={name}
                 onChange={e => setName(e.target.value)}
@@ -158,6 +169,9 @@ export default function ContactForm() {
                 id="cf-email"
                 type="email"
                 required
+                aria-required="true"
+                aria-invalid={!!error || undefined}
+                aria-describedby={error ? 'cf-error' : undefined}
                 className={styles.fieldInput}
                 value={email}
                 onChange={e => setEmail(e.target.value)}
@@ -178,7 +192,7 @@ export default function ContactForm() {
               />
             </div>
           </div>
-          {error && <p className={styles.error}>{error}</p>}
+          {error && <p id="cf-error" role="alert" className={styles.error}>{error}</p>}
           <button type="submit" className={styles.submitBtn} disabled={loading}>
             {loading ? '…' : d.stepContact.submit}
           </button>

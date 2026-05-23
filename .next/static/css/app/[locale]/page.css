@@ -145,17 +145,18 @@
   gap: 2rem;
   padding: 1.5rem 2rem;
   overflow: hidden;
-  width: -moz-fit-content;
-  width: fit-content;
+  width: 80%;
+  opacity: .8;
   margin: 4rem auto 0;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
+  background: linear-gradient(90deg,rgba(245, 245, 245, 0) 0%, rgba(239, 239, 239, 0.79) 6%, rgba(235, 235, 235, 1) 12%, rgba(242, 242, 242, 1) 50%, rgba(235, 235, 232, 1) 88%, rgba(246, 246, 245, 0.85) 95%, rgba(255, 255, 255, 0) 100%);
 }
 
 .TrustBanner_label__2l_Qc {
   flex-shrink: 0;
   font-family: var(--font-body);
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
   color: var(--color-text-secondary);
@@ -196,7 +197,7 @@
   max-width: 140px;
   object-fit: contain;
   filter: grayscale(1);
-  opacity: 0.45;
+  opacity: 0.95;
   transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
@@ -701,10 +702,12 @@
   display: flex;
   gap: 1.2rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .NeedSection_btnWrapper__meQsw {
   position: relative;
+  isolation: isolate;
 }
 
 .NeedSection_btn__lea1m {
@@ -718,29 +721,49 @@
   font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.01em;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
   position: relative;
   z-index: 1;
+  background: transparent;
+}
+
+.NeedSection_btn__lea1m::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.87);
+  border-radius: inherit;
+  z-index: -1;
+  transition: background 0.2s ease;
 }
 
 .NeedSection_iconWeb__lnptz {
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 7.5rem;
+  height: 7.5rem;
   position: absolute;
-  z-index: 0;
+  z-index: 10;
+  left: -45%;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .NeedSection_iconGraph__yKLuH {
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 7.5rem;
+  height: 7.5rem;
   position: absolute;
-  z-index: 0;
+  z-index: 10;
+  top: 50%;
+  left: 80%;
+  transform: translateY(-50%);
 }
 
 .NeedSection_btn__lea1m:hover {
-  background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-bg);
+}
+
+.NeedSection_btn__lea1m:hover::before {
+  background: var(--color-accent);
 }
 
 @media (max-width: 768px) {
@@ -753,8 +776,15 @@
     width: 100%;
   }
 
-  .NeedSection_btn__lea1m {
-    text-align: center;
+  .NeedSection_iconWeb__lnptz,
+  .NeedSection_iconGraph__yKLuH {
+    position: absolute;
+    width: 2.5rem;
+    height: 2.5rem;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    left: auto;
   }
 }
 

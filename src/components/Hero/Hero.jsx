@@ -14,6 +14,7 @@ function Hero() {
         loop
         muted
         playsInline
+        aria-hidden="true"
       />
 
       <div key={lang} className={`${styles.left} langSwap`}>
@@ -29,6 +30,7 @@ function Hero() {
         loop
         muted
         playsInline
+        aria-hidden="true"
       />
 
       <div key={`${lang}-sub`} className={`${styles.subtitles} langSwap`}>

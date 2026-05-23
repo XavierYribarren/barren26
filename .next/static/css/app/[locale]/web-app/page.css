@@ -1,0 +1,531 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/ContactForm/ContactForm.module.css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************/
+/* ─── Wrapper ───────────────────────────────────────────────────────── */
+.ContactForm_wrapper__W_HTa {
+  /* max-width: 100%; */
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ─── Title ─────────────────────────────────────────────────────────── */
+.ContactForm_title__a2u_8 {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--color-text-primary);
+  margin-bottom: 1.5rem;
+}
+
+/* ─── Intro ─────────────────────────────────────────────────────────── */
+.ContactForm_intro__ernMo {
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+  margin-bottom: 3.5rem;
+}
+
+/* ─── Progress bar ───────────────────────────────────────────────────── */
+.ContactForm_progress__62pMc {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 3rem;
+}
+
+.ContactForm_progressSegment__FxfWQ {
+  flex: 1 1;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.3s ease;
+}
+
+.ContactForm_progressDone__AwkM2 {
+  background: var(--color-accent);
+}
+
+/* ─── Step shared ────────────────────────────────────────────────────── */
+.ContactForm_step__1Kwyz {
+  display: flex;
+  flex-direction: column;
+}
+
+.ContactForm_question__ug0ma {
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-text-primary);
+  margin-bottom: 2.5rem;
+}
+
+.ContactForm_hint__X5Vcx {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.35;
+  margin-top: -1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* ─── Activity cards ─────────────────────────────────────────────────── */
+.ContactForm_activityGrid__kaf9_ {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.75rem;
+  gap: 0.75rem;
+  
+}
+
+.ContactForm_activityCard__yVDdA {
+  padding: 1.3rem 1.1rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  background: rgba(24, 24, 24, 0.877);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.4;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.ContactForm_activityCard__yVDdA:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ContactForm_activitySelected__D_Cwn {
+  border-color: var(--color-accent);
+  background: rgba(200, 184, 154, 0.08);
+  color: var(--color-accent);
+}
+
+/* ─── Needs checkboxes ───────────────────────────────────────────────── */
+.ContactForm_needsList__eMhUO {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+}
+
+.ContactForm_needItem__eNwMM:first-child .ContactForm_needLabel__1mGtB {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ContactForm_needLabel__1mGtB {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  position: relative;
+}
+
+.ContactForm_needInput__AhwkC {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.ContactForm_needBox__Scys9 {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ContactForm_needInput__AhwkC:checked + .ContactForm_needBox__Scys9 {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+}
+
+.ContactForm_needInput__AhwkC:checked + .ContactForm_needBox__Scys9::after {
+  content: '';
+  display: block;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #16171d;
+  border-bottom: 2px solid #16171d;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.ContactForm_needText__hm8ax {
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--color-text-primary);
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.ContactForm_needLabel__1mGtB:hover .ContactForm_needText__hm8ax {
+  opacity: 1;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────── */
+.ContactForm_nextBtn__j4nAM,
+.ContactForm_submitBtn__HbVk5 {
+  align-self: flex-start;
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.ContactForm_nextBtn__j4nAM:hover,
+.ContactForm_submitBtn__HbVk5:hover {
+  opacity: 1;
+}
+
+.ContactForm_submitBtn__HbVk5:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.ContactForm_error__b0e35 {
+  font-size: 0.85rem;
+  color: #e07070;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+/* ─── Contact fields ─────────────────────────────────────────────────── */
+.ContactForm_fields__SCRYS {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.ContactForm_field__rYS9e {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ContactForm_fieldLabel__oC947 {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.35;
+}
+
+.ContactForm_fieldInput__Es5xF {
+  font-size: 1.25rem;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 0;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ContactForm_fieldInput__Es5xF::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.4;
+}
+
+.ContactForm_fieldInput__Es5xF:focus {
+  border-bottom-color: var(--color-accent);
+}
+
+/* ─── Success ────────────────────────────────────────────────────────── */
+.ContactForm_success__QdRGO {
+  padding: 3rem 0;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .ContactForm_activityGrid__kaf9_ {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 380px) {
+  .ContactForm_activityGrid__kaf9_ {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*!***********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/WebApp/WebApp.module.css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************/
+/* ─── Page wrapper ─────────────────────────────────────────────────── */
+.WebApp_page__JVnKA {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+/* ─── Hero ──────────────────────────────────────────────────────────── */
+.WebApp_hero__dl35d {
+  padding: 8rem 0 5rem;
+}
+
+.WebApp_heroLabel__FnvHq {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 1.5rem;
+}
+
+.WebApp_heroHeadline__7gEhL {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  white-space: pre-line;
+  margin-bottom: 1.5rem;
+}
+
+.WebApp_heroSubline__7ogfD {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  opacity: 0.55;
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+/* ─── Section shared ────────────────────────────────────────────────── */
+.WebApp_section__lMYCl {
+  padding: 5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.WebApp_sectionLabel__g7I4V {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.35;
+  margin-bottom: 2.5rem;
+}
+
+.WebApp_sectionHeading__PLMq6 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.WebApp_sectionSubheading__LAFpc {
+  font-size: 1rem;
+  opacity: 0.5;
+  margin-bottom: 3.5rem;
+}
+
+/* ─── Intro ─────────────────────────────────────────────────────────── */
+.WebApp_introParagraphs__h8qne {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 640px;
+}
+
+.WebApp_introParagraphs__h8qne p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  opacity: 0.7;
+}
+
+/* ─── Included items grid ───────────────────────────────────────────── */
+.WebApp_itemsGrid__M5Per {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1.5rem;
+  gap: 1.5rem;
+}
+
+.WebApp_item__4ymQB {
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
+}
+
+.WebApp_item__4ymQB:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.WebApp_itemNumber__hJdlC {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.WebApp_itemTitle__B0gXr {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.WebApp_itemDescription__iNJjP {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  opacity: 0.55;
+}
+
+/* ─── Options ───────────────────────────────────────────────────────── */
+.WebApp_optionsList__v12xF {
+  display: flex;
+  flex-direction: column;
+}
+
+.WebApp_optionItem__ewT7Z {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.WebApp_optionItem__ewT7Z:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.WebApp_optionTitle__B4ATK {
+  font-size: 1.1rem;
+  font-weight: 500;
+  min-width: 220px;
+}
+
+.WebApp_optionDescription__80dke {
+  font-size: 1rem;
+  opacity: 0.45;
+  line-height: 1.6;
+}
+
+/* ─── Examples ──────────────────────────────────────────────────────── */
+.WebApp_examplesList__oKWeF {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0;
+  gap: 0;
+}
+
+.WebApp_exampleItem__Hnmml {
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.95rem;
+  opacity: 0.6;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.WebApp_exampleItem__Hnmml::before {
+  content: '→';
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+/* ─── Why ───────────────────────────────────────────────────────────── */
+.WebApp_whyParagraphs__CQ6yU {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-width: 640px;
+}
+
+.WebApp_whyParagraphs__CQ6yU p {
+  font-size: 1rem;
+  line-height: 1.75;
+  opacity: 0.65;
+}
+
+/* ─── CTA ───────────────────────────────────────────────────────────── */
+.WebApp_cta__kfwBD {
+  padding: 5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.WebApp_ctaHeading__IMjKs {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.WebApp_ctaSubline__NbyCM {
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+.WebApp_ctaButton__pQpWu {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.85;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.WebApp_ctaButton__pQpWu:hover {
+  opacity: 1;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .WebApp_page__JVnKA {
+    padding: 0 1.25rem 4rem;
+  }
+
+  .WebApp_hero__dl35d {
+    padding: 5rem 0 3rem;
+  }
+
+  .WebApp_itemsGrid__M5Per {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .WebApp_examplesList__oKWeF {
+    grid-template-columns: 1fr;
+  }
+
+  .WebApp_optionItem__ewT7Z {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .WebApp_optionTitle__B4ATK {
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .WebApp_heroHeadline__7gEhL {
+    font-size: 2.2rem;
+  }
+
+  .WebApp_item__4ymQB {
+    padding: 1.5rem;
+  }
+}

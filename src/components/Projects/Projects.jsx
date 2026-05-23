@@ -61,7 +61,14 @@ function Projects() {
 
       <div className={styles.strip} ref={stripRef}>
         {projects.map((p) => (
-          <div key={p.id} className={styles.card} onClick={() => setActive(p)}>
+          <div
+            key={p.id}
+            className={styles.card}
+            role="button"
+            tabIndex={0}
+            onClick={() => setActive(p)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(p) } }}
+          >
             <div className={styles.imageWrap}>
               <img className={styles.image} src={p.desk} alt={p.name} />
               {p.mob && <img className={styles.mobile} src={p.mob} alt={`${p.name} mobile`} />}

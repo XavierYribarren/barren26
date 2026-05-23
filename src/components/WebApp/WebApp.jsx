@@ -71,7 +71,6 @@ export default function WebApp() {
 
       {/* ── Contact ── */}
       <section className={styles.section}>
-        <p className={styles.sectionLabel}>05</p>
         <ContactForm />
       </section>
 

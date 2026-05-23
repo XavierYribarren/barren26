@@ -18,10 +18,12 @@
   display: flex;
   gap: 1.2rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .btnWrapper {
   position: relative;
+  isolation: isolate;
 }
 
 .btn {
@@ -35,29 +37,49 @@
   font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.01em;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
   position: relative;
   z-index: 1;
+  background: transparent;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.87);
+  border-radius: inherit;
+  z-index: -1;
+  transition: background 0.2s ease;
 }
 
 .iconWeb {
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 7.5rem;
+  height: 7.5rem;
   position: absolute;
-  z-index: 0;
+  z-index: 10;
+  left: -45%;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .iconGraph {
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 7.5rem;
+  height: 7.5rem;
   position: absolute;
-  z-index: 0;
+  z-index: 10;
+  top: 50%;
+  left: 80%;
+  transform: translateY(-50%);
 }
 
 .btn:hover {
-  background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-bg);
+}
+
+.btn:hover::before {
+  background: var(--color-accent);
 }
 
 @media (max-width: 768px) {
@@ -70,7 +92,14 @@
     width: 100%;
   }
 
-  .btn {
-    text-align: center;
+  .iconWeb,
+  .iconGraph {
+    position: absolute;
+    width: 2.5rem;
+    height: 2.5rem;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    left: auto;
   }
 }

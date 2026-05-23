@@ -1,3 +1,6 @@
 {
-  "/[locale]/page": "app/[locale]/page.js"
+  "/api/contact/route": "app/api/contact/route.js",
+  "/[locale]/page": "app/[locale]/page.js",
+  "/[locale]/site-web/page": "app/[locale]/site-web/page.js",
+  "/[locale]/web-app/page": "app/[locale]/web-app/page.js"
 }
