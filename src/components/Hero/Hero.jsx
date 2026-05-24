@@ -34,12 +34,12 @@ function Hero() {
       />
 
       <div key={`${lang}-sub`} className={`${styles.subtitles} langSwap`}>
-        <span className={styles.label} data-hero-label>{t('hero.label')}</span>
-        <h2 className={styles.headline} data-hero-headline>{t('hero.headline')}</h2>
-        <p className={styles.subline} data-hero-subline>{t('hero.subline')}</p>
+        <span className={styles.label} data-hero-label suppressHydrationWarning>{t('hero.label')}</span>
+        <h2 className={styles.headline} data-hero-headline suppressHydrationWarning>{t('hero.headline')}</h2>
+        <p className={styles.subline} data-hero-subline suppressHydrationWarning>{t('hero.subline')}</p>
       </div>
 
-      <div className={styles.scrollHint} data-hero-scroll>
+      <div className={styles.scrollHint} data-hero-scroll suppressHydrationWarning>
         {/* <span key={lang} className="langSwap">{t('hero.cta')}</span> */}
       </div>
     </section>

@@ -16,6 +16,12 @@
       "static/css/app/[locale]/layout.css",
       "static/chunks/app/[locale]/layout.js"
     ],
+    "/[locale]/loading": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/[locale]/loading.css",
+      "static/chunks/app/[locale]/loading.js"
+    ],
     "/[locale]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -33,11 +39,6 @@
       "static/chunks/main-app.js",
       "static/css/app/[locale]/web-app/page.css",
       "static/chunks/app/[locale]/web-app/page.js"
-    ],
-    "/api/contact/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/contact/route.js"
     ]
   }
 }

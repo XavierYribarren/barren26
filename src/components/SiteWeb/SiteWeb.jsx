@@ -59,7 +59,7 @@ export default function SiteWeb() {
 
       {/* ── Contact ── */}
       <section className={styles.section}>
-        <ContactForm />
+        <ContactForm type="site" />
       </section>
 
     </div>

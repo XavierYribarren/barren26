@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { useTranslation } from '../../i18n'
 import styles from './Sidebar.module.css'
 
@@ -68,11 +69,6 @@ function Sidebar() {
     }
   }
 
-  function handleNeedsClick(path) {
-    setMenuOpen(false)
-    router.push(`/${locale}/${path}`)
-  }
-
   function switchLang(l) {
     router.push(subPath ? `/${l}/${subPath}` : `/${l}`)
   }
@@ -113,15 +109,14 @@ function Sidebar() {
             {needsOpen && (
               <div id="needs-submenu" className={styles.navSub}>
                 {needsLinks.map(({ label, path }) => (
-                  <a
+                  <Link
                     key={path}
                     href={`/${locale}/${path}`}
                     className={`${styles.navSubLink} ${subPath === path ? styles.active : ''}`}
-                    onClick={(e) => { e.preventDefault(); handleNeedsClick(path) }}
                     aria-current={subPath === path ? 'page' : undefined}
                   >
                     <span key={lang} className="langSwap">{label}</span>
-                  </a>
+                  </Link>
                 ))}
               </div>
             )}
@@ -202,15 +197,15 @@ function Sidebar() {
             {needsOpen && (
               <div id="mobile-needs-submenu" className={styles.mobileNeedsSub}>
                 {needsLinks.map(({ label, path }) => (
-                  <a
+                  <Link
                     key={path}
                     href={`/${locale}/${path}`}
                     className={styles.mobileNavSubLink}
-                    onClick={(e) => { e.preventDefault(); handleNeedsClick(path) }}
+                    onClick={() => setMenuOpen(false)}
                     aria-current={subPath === path ? 'page' : undefined}
                   >
                     {label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             )}

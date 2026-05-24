@@ -71,7 +71,7 @@ export default function WebApp() {
 
       {/* ── Contact ── */}
       <section className={styles.section}>
-        <ContactForm />
+        <ContactForm type="app" />
       </section>
 
     </div>

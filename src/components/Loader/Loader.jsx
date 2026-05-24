@@ -28,10 +28,7 @@ export default function Loader() {
   }, [])
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setHidden(true)
-      return
-    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const sidebar = document.querySelector('[data-sidebar]')
 

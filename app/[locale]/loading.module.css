@@ -1,0 +1,20 @@
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  pointer-events: none;
+}
+
+.bar {
+  height: 2px;
+  background: var(--color-accent);
+  animation: progress 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes progress {
+  0%   { width: 0%; opacity: 1; }
+  70%  { width: 85%; opacity: 1; }
+  100% { width: 95%; opacity: 1; }
+}

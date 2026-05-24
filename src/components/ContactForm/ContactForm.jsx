@@ -4,9 +4,9 @@ import { useTranslation } from '../../i18n'
 import { contactFormTranslations } from '../../lib/contactForm'
 import styles from './ContactForm.module.css'
 
-export default function ContactForm() {
+export default function ContactForm({ type = 'site' }) {
   const { lang } = useTranslation()
-  const d = contactFormTranslations[lang] ?? contactFormTranslations.fr
+  const d = (contactFormTranslations[lang] ?? contactFormTranslations.fr)[type]
 
   const [step, setStep] = useState(1)
   const [activityId, setActivityId] = useState(null)
