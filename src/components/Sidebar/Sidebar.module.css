@@ -285,6 +285,9 @@
   cursor: pointer;
   padding: 0;
   transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .mobileNavBtn:hover { color: var(--color-accent); }
@@ -293,7 +296,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
 }
 
 .mobileNeedsSub {
@@ -301,6 +303,17 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+.mobileNeedsSubOpen {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 .mobileNavSubLink {
@@ -312,6 +325,25 @@
 
 .mobileNavSubLink:hover {
   color: var(--color-accent);
+}
+
+.mobileLangSwitcher {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.mobileNavArrow {
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--color-text-secondary);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease;
+  margin-left: 0.4rem;
+  transform: translateY(0.12em) rotate(0deg);
+}
+
+.mobileNavArrowOpen {
+  transform: translateY(0.12em) rotate(90deg);
 }
 
 @media (max-width: 768px) {

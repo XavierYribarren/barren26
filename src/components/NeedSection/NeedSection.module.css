@@ -24,6 +24,10 @@
 .btnWrapper {
   position: relative;
   isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .btn {
@@ -60,7 +64,9 @@
   z-index: 10;
   left: -45%;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) scale(1);
+  opacity: .7;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .iconGraph {
@@ -70,16 +76,27 @@
   z-index: 10;
   top: 50%;
   left: 80%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) scale(1);
+  opacity: .7;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.btn:hover {
+@media (hover: hover) {
+  .btnWrapper:hover .iconWeb,
+  .btnWrapper:hover .iconGraph {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.12);
+  mix-blend-mode: multiply;
+  }
+}
+
+.btnWrapper:hover .btn {
   border-color: var(--color-accent);
   color: var(--color-bg);
 }
 
-.btn:hover::before {
-  background: var(--color-accent);
+.btnWrapper:hover .btn::before {
+  background: var(--color-text-primary);
 }
 
 @media (max-width: 768px) {
@@ -91,7 +108,10 @@
     flex-direction: column;
     width: 100%;
   }
-
+  .btnWrapper {
+    width: 80%;
+    display: flex;
+  }
   .iconWeb,
   .iconGraph {
     position: absolute;

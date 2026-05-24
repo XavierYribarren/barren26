@@ -94,6 +94,23 @@
 
 @media (max-width: 768px) {
   .contact {
-    padding: 5rem 1.5rem;
+    padding: 5rem 1.5rem 3rem;
+  }
+
+  .headline {
+    text-align: center;
+  }
+
+  .subline {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .socialLink {
+    font-size: 0.85rem;
+  }
+
+  .copy {
+    margin-top: 3rem;
   }
 }

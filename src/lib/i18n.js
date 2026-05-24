@@ -22,7 +22,7 @@ export const translations = {
     },
     hero: {
       label: 'FREELANCE — WEB DEVELOPMENT',
-      headline: 'Good work\nspeaks for itself.',
+      headline: 'Every project\ndeserves the real thing.',
       subline: 'I design and build digital products that are clear, fast, and built to last.',
       cta: 'Scroll to explore ↓',
     },
@@ -114,7 +114,7 @@ export const translations = {
     },
     hero: {
       label: 'FREELANCE — WEB DÉVELOPPEMENT',
-      headline: 'Le bon travail\nparle de lui-même.',
+      headline: "Chaque projet\nmérite d'être bien fait.",
       subline: 'Je conçois et développe des produits digitaux clairs, rapides et faits pour durer.',
       cta: 'Défiler pour explorer ↓',
     },

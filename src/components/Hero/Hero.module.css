@@ -106,10 +106,17 @@
 @media (max-width: 768px) {
   .hero {
     padding: 2rem 1.5rem;
+    justify-content: space-evenly;
+    
   }
-
+.titleName{
+  margin: 0;
+}
   .heroBg {
     display: none;
+  }
+  .subtitles{
+    margin-top: -2vh;
   }
 
   .mobileVideo {

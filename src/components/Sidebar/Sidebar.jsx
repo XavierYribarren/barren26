@@ -192,10 +192,13 @@ function Sidebar() {
               aria-expanded={needsOpen}
               aria-controls="mobile-needs-submenu"
             >
-              {t('sidebar.nav.needs')} <span aria-hidden="true">{needsOpen ? '↑' : '↓'}</span>
+              {t('sidebar.nav.needs')}
+              <span className={`${styles.mobileNavArrow} ${needsOpen ? styles.mobileNavArrowOpen : ''}`} aria-hidden="true">›</span>
             </button>
-            {needsOpen && (
-              <div id="mobile-needs-submenu" className={styles.mobileNeedsSub}>
+                <div
+                id="mobile-needs-submenu"
+                className={`${styles.mobileNeedsSub} ${needsOpen ? styles.mobileNeedsSubOpen : ''}`}
+              >
                 {needsLinks.map(({ label, path }) => (
                   <Link
                     key={path}
@@ -208,7 +211,6 @@ function Sidebar() {
                   </Link>
                 ))}
               </div>
-            )}
           </div>
 
           {anchorsAfter.map(({ id, label }) => (
@@ -221,6 +223,20 @@ function Sidebar() {
               {label}
             </a>
           ))}
+
+          <div className={styles.mobileLangSwitcher}>
+            {['en', 'fr'].map((l) => (
+              <button
+                key={l}
+                className={`${styles.langBtn} ${locale === l ? styles.langActive : ''}`}
+                onClick={() => { switchLang(l); setMenuOpen(false) }}
+                aria-label={l === 'en' ? 'Switch to English' : 'Passer en français'}
+                aria-pressed={locale === l}
+              >
+                {t(`sidebar.langSwitcher.${l}`)}
+              </button>
+            ))}
+          </div>
 
           <a href="mailto:xavier.yribarren@gmail.com" className={styles.mobileEmail}>
             xavier.yribarren@gmail.com
