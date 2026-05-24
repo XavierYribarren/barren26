@@ -25,14 +25,14 @@ export default function NeedSection() {
     <section className={styles.section} id="need">
       <p className={styles.heading}>{t('need.heading')}</p>
       <div className={styles.buttons}>
-        <Link href={`/${lang}/site-web`} className={styles.btnWrapper}>
+        <div className={styles.btnWrapper}>
           <WebIcon />
-          <span className={styles.btn}>{t('need.siteWeb')}</span>
-        </Link>
-        <Link href={`/${lang}/web-app`} className={styles.btnWrapper}>
-          <span className={styles.btn}>{t('need.webApp')}</span>
+          <Link href={`/${lang}/site-web`} className={styles.btn}>{t('need.siteWeb')}</Link>
+        </div>
+        <div className={styles.btnWrapper}>
+          <Link href={`/${lang}/web-app`} className={styles.btn}>{t('need.webApp')}</Link>
           <GraphIcon />
-        </Link>
+        </div>
       </div>
     </section>
   )

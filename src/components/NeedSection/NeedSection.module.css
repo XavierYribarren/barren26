@@ -24,10 +24,6 @@
 .btnWrapper {
   position: relative;
   isolation: isolate;
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-  cursor: pointer;
 }
 
 .btn {
@@ -111,6 +107,10 @@
   .btnWrapper {
     width: 80%;
     display: flex;
+  }
+
+  .btn {
+    flex: 1;
   }
   .iconWeb,
   .iconGraph {
