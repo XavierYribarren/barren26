@@ -1,13 +1,13 @@
 export const siteWebTranslations = {
   fr: {
     meta: {
-      title: 'Création de site internet sur mesure — Barren, développeur web à Lyon',
+      title: 'Création de site internet sur mesure · Barren, développeur web à Lyon',
       description:
         'Création de sites internet et web apps sur mesure à Lyon et Villeurbanne. Un site qui vous ressemble, pour les professionnels en France et à l\'étranger.',
     },
 
     hero: {
-      label: 'SERVICE — SITE INTERNET',
+      label: 'SERVICE / SITE INTERNET',
       headline: 'Un site internet\nfait pour vous.',
       subline:
         'Pas un template. Pas un site générique. Un outil pensé pour votre activité, votre image et vos clients.',
@@ -17,7 +17,7 @@ export const siteWebTranslations = {
       heading: 'Pourquoi votre site internet compte vraiment',
       paragraphs: [
         'Votre site, c\'est souvent le premier endroit où un client potentiel vous découvre. En quelques secondes, il décide s\'il reste ou s\'il repart. Un site lent, mal présenté ou difficile à naviguer, et c\'est une opportunité perdue.',
-        'Je conçois des sites internet sur mesure, pensés pour votre activité et optimisés pour convertir vos visiteurs en clients — pas juste pour être beaux.',
+        'Je conçois des sites internet sur mesure, pensés pour votre activité et optimisés pour convertir vos visiteurs en clients, pas juste pour être beaux.',
       ],
     },
 
@@ -41,7 +41,7 @@ export const siteWebTranslations = {
           number: '03',
           title: 'Les fonctionnalités dont vous avez besoin',
           description:
-            'Formulaire de contact, galerie, blog, réservation en ligne, prise de rendez-vous, boutique, paiement, devis en ligne, carte Google Maps, multilingue — on choisit ensemble ce qui a du sens pour vous.',
+            'Formulaire de contact, galerie, blog, réservation en ligne, prise de rendez-vous, boutique, paiement, devis en ligne, carte Google Maps, multilingue : on choisit ensemble ce qui a du sens pour vous.',
         },
         {
           number: '04',
@@ -85,20 +85,20 @@ export const siteWebTranslations = {
 
     cta: {
       heading: 'Parlons de votre projet',
-      subline: 'Décrivez-moi votre projet et je vous réponds sous 24h.',
+      subline: 'Décrivez-moi votre projet et je vous réponds rapidement.',
       button: 'Prendre contact →',
     },
   },
 
   en: {
     meta: {
-      title: 'Custom Website Design & Development — Barren, Freelance Web Developer',
+      title: 'Custom Website Design & Development · Barren, Freelance Web Developer',
       description:
         'Custom websites and web apps designed and built in Lyon. A site that looks and works like you, for businesses and individuals across France and abroad.',
     },
 
     hero: {
-      label: 'SERVICE — WEBSITE',
+      label: 'SERVICE / WEBSITE',
       headline: 'A website\nbuilt for you.',
       subline:
         'Not a template. Not something generic. A tool designed around your business, your brand, and your clients.',
@@ -108,7 +108,7 @@ export const siteWebTranslations = {
       heading: 'Why your website actually matters',
       paragraphs: [
         'Your website is often the first place a potential client encounters you. Within seconds, they decide whether to stay or leave. A slow, poorly presented, or hard-to-navigate site means a lost opportunity.',
-        'I build custom websites designed around your activity and optimized to turn visitors into clients — not just to look good.',
+        'I build custom websites designed around your activity and optimized to turn visitors into clients, not just to look good.',
       ],
     },
 
@@ -132,7 +132,7 @@ export const siteWebTranslations = {
           number: '03',
           title: 'The features you actually need',
           description:
-            'Contact form, gallery, blog, online booking, appointment scheduling, e-shop, payment, quote forms, Google Maps, multilingual — we pick together what makes sense for you.',
+            'Contact form, gallery, blog, online booking, appointment scheduling, e-shop, payment, quote forms, Google Maps, multilingual: we pick together what makes sense for you.',
         },
         {
           number: '04',
@@ -176,7 +176,7 @@ export const siteWebTranslations = {
 
     cta: {
       heading: "Let's talk about your project",
-      subline: "Tell me what you need and I'll get back to you within 24h.",
+      subline: "Tell me what you need and I'll get back to you shortly.",
       button: 'Get in touch →',
     },
   },

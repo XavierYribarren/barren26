@@ -1,23 +1,23 @@
 export const webAppTranslations = {
   fr: {
     meta: {
-      title: "Création de web app sur mesure — Barren, développeur web à Lyon",
+      title: "Création de web app sur mesure · Barren, développeur web à Lyon",
       description:
         `Vous avez besoin de plus qu'un site vitrine ? Je conçois et développe des applications web sur mesure à Lyon : espace client, dashboard, outil métier, SaaS.`,
     },
 
     hero: {
-      label: "SERVICE — WEB APP",
+      label: "SERVICE / WEB APP",
       headline: "Votre outil digital,\nfait sur mesure.",
       subline:
-        `Une web app, c'est plus qu'un site. C'est un outil que vos utilisateurs utilisent vraiment — pour gérer, suivre, interagir, produire.`,
+        `Une web app, c'est plus qu'un site. C'est un outil que vos utilisateurs utilisent vraiment : pour gérer, suivre, interagir, produire.`,
     },
 
     intro: {
       heading: "Site internet ou web app : quelle différence ?",
       paragraphs: [
         `Un site internet, c'est une vitrine. Les visiteurs lisent, regardent, et vous contactent. Une web app, c'est un outil : vos utilisateurs se connectent, font des actions, gèrent des données, et reviennent régulièrement.`,
-        `Si votre activité nécessite de gérer des clients, des commandes, des contenus, des équipes ou des données — vous avez probablement besoin d'une web app plutôt que d'un site.`,
+        `Si votre activité nécessite de gérer des clients, des commandes, des contenus, des équipes ou des données, vous avez probablement besoin d'une web app plutôt que d'un site.`,
       ],
     },
 
@@ -35,13 +35,13 @@ export const webAppTranslations = {
           number: "02",
           title: "Dashboard & tableaux de bord",
           description:
-            "Visualisez vos données en temps réel. Graphiques, indicateurs clés, rapports — une interface claire pour piloter votre activité.",
+            "Visualisez vos données en temps réel. Graphiques, indicateurs clés, rapports : une interface claire pour piloter votre activité.",
         },
         {
           number: "03",
           title: "Base de données & gestion des données",
           description:
-            "Stockage, organisation et manipulation de vos données métier. Formulaires, listes, filtres, exports — tout ce dont vous avez besoin pour gérer votre contenu.",
+            "Stockage, organisation et manipulation de vos données métier. Formulaires, listes, filtres, exports : tout ce dont vous avez besoin pour gérer votre contenu.",
         },
         {
           number: "04",
@@ -106,7 +106,7 @@ export const webAppTranslations = {
       heading: "Pourquoi travailler avec Barren ?",
       paragraphs: [
         `Développeur freelance basé à Lyon, je conçois des web apps pour des professionnels et des entreprises partout en France et à l'étranger.`,
-        `Pas d'agence, pas d'intermédiaire. Vous travaillez directement avec moi, du cadrage initial au déploiement. Je m'assure que l'outil livré correspond exactement à ce dont vous avez besoin — pas plus, pas moins.`,
+        `Pas d'agence, pas d'intermédiaire. Vous travaillez directement avec moi, du cadrage initial au déploiement. Je m'assure que l'outil livré correspond exactement à ce dont vous avez besoin, pas plus, pas moins.`,
         `Chaque projet commence par une discussion pour bien comprendre votre activité avant d'écrire la première ligne de code. Devis gratuit, sans engagement.`,
       ],
     },
@@ -114,30 +114,30 @@ export const webAppTranslations = {
     cta: {
       heading: "Parlons de votre projet",
       subline:
-        "Vous avez une idée ou un besoin précis ? Décrivez-le moi et je vous réponds sous 24h.",
+        "Vous avez une idée ou un besoin précis ? Décrivez-le moi et je vous réponds rapidement.",
       button: "Prendre contact →",
     },
   },
 
   en: {
     meta: {
-      title: "Custom Web App Development — Barren, Freelance Web Developer",
+      title: "Custom Web App Development · Barren, Freelance Web Developer",
       description:
         "Need more than a website? I design and build custom web apps in Lyon: client portals, dashboards, internal tools, SaaS platforms.",
     },
 
     hero: {
-      label: "SERVICE — WEB APP",
+      label: "SERVICE / WEB APP",
       headline: "Your digital tool,\nbuilt from scratch.",
       subline:
-        `A web app is more than a website. It's a tool your users actually use — to manage, track, interact, and get things done.`,
+        `A web app is more than a website. It's a tool your users actually use: to manage, track, interact, and get things done.`,
     },
 
     intro: {
       heading: "Website or web app: what's the difference?",
       paragraphs: [
         "A website is a storefront. Visitors read, browse, and contact you. A web app is a tool: users log in, take actions, manage data, and come back regularly.",
-        "If your business involves managing clients, orders, content, teams, or data — you probably need a web app, not just a website.",
+        "If your business involves managing clients, orders, content, teams, or data, you probably need a web app, not just a website.",
       ],
     },
 
@@ -155,13 +155,13 @@ export const webAppTranslations = {
           number: "02",
           title: "Dashboards & data visualization",
           description:
-            "See your data in real time. Charts, KPIs, reports — a clear interface to run your business.",
+            "See your data in real time. Charts, KPIs, reports: a clear interface to run your business.",
         },
         {
           number: "03",
           title: "Database & data management",
           description:
-            "Storage, organization, and manipulation of your business data. Forms, lists, filters, exports — everything you need to manage your content.",
+            "Storage, organization, and manipulation of your business data. Forms, lists, filters, exports: everything you need to manage your content.",
         },
         {
           number: "04",
@@ -226,14 +226,14 @@ export const webAppTranslations = {
       heading: "Why work with Barren?",
       paragraphs: [
         "Freelance developer based in Lyon, I build web apps for businesses and individuals across France and internationally.",
-        "No agency, no middleman. You work directly with me, from initial scoping to deployment. I make sure the tool I deliver matches exactly what you need — nothing more, nothing less.",
+        "No agency, no middleman. You work directly with me, from initial scoping to deployment. I make sure the tool I deliver matches exactly what you need, nothing more, nothing less.",
         "Every project starts with a conversation to understand your business before writing a single line of code. Free quote, no commitment.",
       ],
     },
 
     cta: {
       heading: "Let's talk about your project",
-      subline: "Have an idea or a specific need? Tell me about it and I'll get back to you within 24h.",
+      subline: "Have an idea or a specific need? Tell me about it and I'll get back to you shortly.",
       button: "Get in touch →",
     },
   },

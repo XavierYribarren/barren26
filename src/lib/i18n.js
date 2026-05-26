@@ -21,7 +21,7 @@ export const translations = {
       label: 'They trust me',
     },
     hero: {
-      label: 'FREELANCE — WEB DEVELOPMENT',
+      label: 'FREELANCE / WEB DEVELOPMENT',
       headline: 'Every project\ndeserves the real thing.',
       subline: 'I design and build digital products that are clear, fast, and built to last.',
       cta: 'Scroll to explore ↓',
@@ -33,7 +33,7 @@ export const translations = {
           number: '01',
           title: 'Interface Design',
           description:
-            'From wireframe to pixel-perfect UI. Clean, functional design that works for everyone — from a local shop owner to a Series A startup.',
+            'From wireframe to pixel-perfect UI. Clean, functional design that works for everyone, from a local shop owner to a Series A startup.',
         },
         {
           number: '02',
@@ -63,7 +63,7 @@ export const translations = {
         { name: 'Restaurant',      category: 'Web Development', description: 'A pilot website for a pizzeria with a CMS to update the menu quickly and easily.',                                                                                                 role: 'Designer & Developer' },
         { name: '3D Configurator', category: 'Development',     description: 'A photorealistic 3D guitar configurator letting users build their dream guitar from scratch.',                                                                                     role: 'Developer' },
         { name: 'Shop',            category: 'Web Design',      description: 'A classic e-shop with personality, built simple and intuitive on Shopify.',                                                                                                        role: 'Designer & Developer' },
-        { name: 'Psychologist',    category: 'Web Design',      description: 'A multi-page site for a psychologist — her practice, vision, and approach, designed to reassure patients alongside contact and appointment booking.',                               role: 'Designer & Developer' },
+        { name: 'Psychologist',    category: 'Web Design',      description: 'A multi-page site for a psychologist presenting her practice, vision, and approach, designed to reassure patients alongside contact and appointment booking.',                  role: 'Designer & Developer' },
         { name: 'Amp Simulator',   category: 'Development',     description: "Web-based guitar amp simulations so you can hear exactly what you're buying before you buy it.",                                                                                   role: 'Developer' },
         { name: 'Music Room',      category: 'Development',     description: 'An interactive 3D music room where you can move around, reposition instruments, and assign tracks directly from your computer.',                                                   role: 'Developer' },
       ],
@@ -80,8 +80,8 @@ export const translations = {
     },
     contact: {
       headline: "Let's work\ntogether.",
-      subline: "Tell me about your project. I'll get back to you within 24h.",
-      footer: '© 2026 Barren — Design & Development',
+      subline: "Tell me about your project. I'll get back to you shortly.",
+      footer: '© 2026 Barren · Design & Development',
     },
     need: {
       heading: 'You need:',
@@ -89,7 +89,7 @@ export const translations = {
       webApp: 'A web app',
     },
     meta: {
-      title: 'Barren — Freelance Web Developer',
+      title: 'Barren · Freelance Web Developer',
       description: 'I design and build digital products that are clear, fast, and built to last.',
     },
   },
@@ -113,7 +113,7 @@ export const translations = {
       label: 'Ils me font confiance',
     },
     hero: {
-      label: 'FREELANCE — WEB DÉVELOPPEMENT',
+      label: 'FREELANCE / WEB DÉVELOPPEMENT',
       headline: "Chaque projet\nmérite d'être bien fait.",
       subline: 'Je conçois et développe des produits digitaux clairs, rapides et faits pour durer.',
       cta: 'Défiler pour explorer ↓',
@@ -172,8 +172,8 @@ export const translations = {
     },
     contact: {
       headline: 'Travaillons ensemble.',
-      subline: 'Parlez-moi de votre projet. Je réponds sous 24h.',
-      footer: '© 2026 Barren — Design & Développement',
+      subline: 'Parlez-moi de votre projet. Je réponds rapidement.',
+      footer: '© 2026 Barren · Design & Développement',
     },
     need: {
       heading: 'Votre besoin :',
@@ -181,7 +181,7 @@ export const translations = {
       webApp: 'Web App',
     },
     meta: {
-      title: 'Barren — Développeur Web Freelance',
+      title: 'Barren · Développeur Web Freelance',
       description: 'Je conçois et développe des produits digitaux clairs, rapides et faits pour durer.',
     },
   },

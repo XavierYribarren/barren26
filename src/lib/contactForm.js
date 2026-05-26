@@ -23,7 +23,7 @@ export const contactFormTranslations = {
   fr: {
     site: {
       title: "Décrivez-moi votre projet",
-      intro: "Deux questions et vos coordonnées — je vous recontacte rapidement pour discuter de votre projet et vous envoyer un devis.",
+      intro: "Deux questions et vos coordonnées, je vous recontacte rapidement pour discuter de votre projet et vous envoyer un devis.",
       stepActivity: { question: "Quelle est votre activité ?" },
       stepNeeds: {
         question: "De quoi avez-vous besoin ?",
@@ -171,7 +171,7 @@ export const contactFormTranslations = {
 
     app: {
       title: "Décrivez-moi votre projet",
-      intro: "Quelques questions pour cerner votre besoin — je vous recontacte rapidement avec une approche et un devis sur mesure.",
+      intro: "Quelques questions pour cerner votre besoin, je vous recontacte rapidement avec une approche et un devis sur mesure.",
       stepActivity: { question: "Quel type d'application ?" },
       stepNeeds: {
         question: "Quelles fonctionnalités vous faut-il ?",
@@ -279,7 +279,7 @@ export const contactFormTranslations = {
   en: {
     site: {
       title: "Tell me about your project",
-      intro: "Two questions and your contact details — I'll get back to you shortly to discuss your project and send you a quote.",
+      intro: "Two questions and your contact details, I'll get back to you shortly to discuss your project and send you a quote.",
       stepActivity: { question: "What is your activity?" },
       stepNeeds: {
         question: "What do you need?",
@@ -427,7 +427,7 @@ export const contactFormTranslations = {
 
     app: {
       title: "Tell me about your project",
-      intro: "A few questions to understand your needs — I'll get back to you with a tailored approach and quote.",
+      intro: "A few questions to understand your needs, I'll get back to you with a tailored approach and quote.",
       stepActivity: { question: "What type of application?" },
       stepNeeds: {
         question: "What features do you need?",
