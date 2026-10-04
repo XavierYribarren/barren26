@@ -4,20 +4,11 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTranslation } from '../../i18n'
 import ProjectModal from './ProjectModal'
+import SanityImage from '../SanityImage/SanityImage'
 import styles from './Projects.module.css'
 
-const projectsStatic = [
-  { id: 'restaurant',    desk: '/projects/pizzdesk.png',            mob: '/projects/pizzmob.png',   stack: ['Next.js', 'React', 'Sanity'],                                        url: null },
-  { id: 'configurateur', desk: '/projects/screen_tweakasixcol.webp',mob: null,                      stack: ['Three.js', 'React', 'Redux', 'Node', 'MySQL'],                       url: null },
-  { id: 'boutique',      desk: '/projects/heliasdesk.png',          mob: '/projects/heliasmob.png', stack: ['React', 'GSAP', 'Shopify'],                                          url: null },
-  { id: 'psychologue',   desk: '/projects/coradesk.png',            mob: '/projects/coramob.png',   stack: ['React', 'GSAP', 'Leaflet'],                                          url: null },
-  { id: 'webamp',        desk: '/projects/screen_webamp.webp',      mob: null,                      stack: ['Three.js', 'Faust', 'WebAssembly', 'React'],                         url: null },
-  { id: 'musicroom',     desk: '/projects/screen_musicroom.webp',   mob: null,                      stack: ['React', 'Three.js', 'React Three Fiber', 'Web Audio API', 'Blender'], url: null },
-]
-
-function Projects() {
+function Projects({ projects = [] }) {
   const { t, lang } = useTranslation()
-  const projects = (t('projects.items') || []).map((text, i) => ({ ...projectsStatic[i], ...text }))
   const sectionRef  = useRef(null)
   const labelRef    = useRef(null)
   const stripRef    = useRef(null)
@@ -70,8 +61,8 @@ function Projects() {
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(p) } }}
           >
             <div className={styles.imageWrap}>
-              <img className={styles.image} src={p.desk} alt={p.name} />
-              {p.mob && <img className={styles.mobile} src={p.mob} alt={`${p.name} mobile`} />}
+              <SanityImage className={styles.image} image={p.deskImage} alt={p.name} sizes="(max-width: 768px) 220px, 320px" />
+              {p.mobImage && <SanityImage className={styles.mobile} image={p.mobImage} alt={`${p.name} mobile`} sizes="(max-width: 768px) 50px, 72px" />}
             </div>
             <h3 className={styles.name}>{p.name}</h3>
             <span className={styles.category}>{p.category}</span>

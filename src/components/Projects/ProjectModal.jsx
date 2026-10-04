@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from '../../i18n'
+import SanityImage from '../SanityImage/SanityImage'
 import styles from './ProjectModal.module.css'
 
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])'
@@ -53,9 +54,9 @@ function ProjectModal({ project, onClose }) {
         <button className={styles.close} onClick={onClose} aria-label={closeLabel}>✕</button>
 
         <div className={styles.images}>
-          <img className={styles.desk} src={project.desk} alt={project.name} />
-          {project.mob && (
-            <img className={styles.mob} src={project.mob} alt={`${project.name} mobile`} />
+          <SanityImage className={styles.desk} image={project.deskImage} alt={project.name} sizes="(max-width: 780px) 100vw, 700px" />
+          {project.mobImage && (
+            <SanityImage className={styles.mob} image={project.mobImage} alt={`${project.name} mobile`} sizes="(max-width: 768px) 18vw, 112px" />
           )}
         </div>
 

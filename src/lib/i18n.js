@@ -59,14 +59,6 @@ export const translations = {
       sectionLabel: 'Selected work',
       cta: 'More work available on request →',
       modal: { role: 'Role', stack: 'Stack', visit: 'Visit site →' },
-      items: [
-        { name: 'Restaurant',      category: 'Web Development', description: 'A pilot website for a pizzeria with a CMS to update the menu quickly and easily.',                                                                                                 role: 'Designer & Developer' },
-        { name: '3D Configurator', category: 'Development',     description: 'A photorealistic 3D guitar configurator letting users build their dream guitar from scratch.',                                                                                     role: 'Developer' },
-        { name: 'Shop',            category: 'Web Design',      description: 'A classic e-shop with personality, built simple and intuitive on Shopify.',                                                                                                        role: 'Designer & Developer' },
-        { name: 'Psychologist',    category: 'Web Design',      description: 'A multi-page site for a psychologist presenting her practice, vision, and approach, designed to reassure patients alongside contact and appointment booking.',                  role: 'Designer & Developer' },
-        { name: 'Amp Simulator',   category: 'Development',     description: "Web-based guitar amp simulations so you can hear exactly what you're buying before you buy it.",                                                                                   role: 'Developer' },
-        { name: 'Music Room',      category: 'Development',     description: 'An interactive 3D music room where you can move around, reposition instruments, and assign tracks directly from your computer.',                                                   role: 'Developer' },
-      ],
     },
     about: {
       sectionLabel: 'About',
@@ -151,14 +143,6 @@ export const translations = {
       sectionLabel: 'Projets sélectionnés',
       cta: "D'autres projets disponibles sur demande →",
       modal: { role: 'Rôle', stack: 'Stack', visit: 'Voir le site →' },
-      items: [
-        { name: 'Restaurant',           category: 'Développement Web', description: 'Un site pilote pour pizzeria avec un CMS pour changer la carte facilement et rapidement.',                                                                                                                                                                    role: 'Designer & Développeur' },
-        { name: 'Configurateur 3D',     category: 'Développement',     description: "Configurateur de guitare en 3D photoréaliste pour que l'utilisateur se crée la guitare qu'il veut.",                                                                                                                                                          role: 'Développeur' },
-        { name: 'Boutique',             category: 'Design Web',        description: "E Shop classique mais avec une personnalité, et simple d'utilisation pour Shopify.",                                                                                                                                                                           role: 'Designer & Développeur' },
-        { name: 'Psychologue',          category: 'Design Web',        description: "Site multi page pour une psychologue, dans lequel elle y explique sa pratique, sa vision et rassure les patients en plus de la prise de contact et RDV.",                                                                                                     role: 'Designer & Développeur' },
-        { name: "Simulation d'ampli",   category: 'Développement',     description: "Implémentation de simulations d'amplis de guitare dans le web pour pouvoir tester avant d'acheter.",                                                                                                                                                          role: 'Développeur' },
-        { name: 'Music Room',           category: 'Développement',     description: "Salle de musique interactive en 3D, dans laquelle il est possible de se déplacer, de déplacer les instruments et d'ajouter et assigner des pistes depuis l'ordinateur de l'utilisateur.",                                                                    role: 'Développeur' },
-      ],
     },
     about: {
       sectionLabel: 'À propos',

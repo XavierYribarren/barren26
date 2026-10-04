@@ -1,23 +1,33 @@
 import Link from 'next/link'
-import { projects } from '../../../../src/lib/projects'
+import { notFound } from 'next/navigation'
 import { getTranslations, locales } from '../../../../src/lib/i18n'
+import { sanityFetch } from '../../../../src/lib/sanity/client'
+import { PROJECT_BY_SLUG_QUERY, PROJECT_SLUGS_QUERY } from '../../../../src/lib/sanity/queries'
+import { toLegacyProject } from '../../../../src/lib/sanity/adapters'
+import SanityImage from '../../../../src/components/SanityImage/SanityImage'
 import styles from './ProjectPage.module.css'
 
-export function generateStaticParams() {
+// Un projet ajouté dans Sanity après le build est rendu à la demande puis mis en cache
+export const dynamicParams = true
+
+async function getProject(slug, locale) {
+  const project = await sanityFetch(PROJECT_BY_SLUG_QUERY, { slug, locale })
+  return project ? toLegacyProject(project) : null
+}
+
+export async function generateStaticParams() {
+  const slugs = await sanityFetch(PROJECT_SLUGS_QUERY)
   return locales.flatMap(locale =>
-    projects.map(p => ({ locale, slug: p.slug }))
+    slugs.map(({ slug }) => ({ locale, slug }))
   )
 }
 
 export async function generateMetadata({ params }) {
   const { locale, slug } = await params
-  const t = getTranslations(locale)
-  const idx = projects.findIndex(p => p.slug === slug)
-  if (idx === -1) return { title: 'Barren' }
-  const item = t.projects.items[idx]
-  const p = projects[idx]
-  const title = `${item.name} — Barren`
-  const description = item.description
+  const p = await getProject(slug, locale)
+  if (!p) return { title: 'Barren' }
+  const title = `${p.name} — Barren`
+  const description = p.description
   return {
     title,
     description,
@@ -48,11 +58,10 @@ export async function generateMetadata({ params }) {
 export default async function ProjectPage({ params }) {
   const { locale, slug } = await params
   const t = getTranslations(locale)
-  const idx = projects.findIndex(p => p.slug === slug)
+  const p = await getProject(slug, locale)
 
-  if (idx === -1) return <p>Projet introuvable</p>
+  if (!p) notFound()
 
-  const p = { ...projects[idx], ...t.projects.items[idx] }
   const backLabel = locale === 'fr' ? '← Retour' : '← Back'
   const visitLabel = locale === 'fr' ? 'Voir le site →' : 'Visit site →'
 
@@ -68,9 +77,9 @@ export default async function ProjectPage({ params }) {
       </header>
 
       <div className={styles.images}>
-        <img className={styles.desk} src={p.desk} alt={p.name} />
-        {p.mob && (
-          <img className={styles.mob} src={p.mob} alt={`${p.name} mobile`} />
+        <SanityImage className={styles.desk} image={p.deskImage} alt={p.name} sizes="(max-width: 1100px) 100vw, 900px" />
+        {p.mobImage && (
+          <SanityImage className={styles.mob} image={p.mobImage} alt={`${p.name} mobile`} sizes="180px" />
         )}
       </div>
 

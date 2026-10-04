@@ -7,13 +7,13 @@ import NeedSection from '../NeedSection/NeedSection'
 import About from '../About/About'
 import Contact from '../Contact/Contact'
 
-export default function MainContent() {
+export default function MainContent({ projects }) {
   return (
     <>
       <Hero />
       <TrustBanner />
       <Services />
-      <Projects />
+      <Projects projects={projects} />
       <NeedSection />
       <About />
       <Contact />
