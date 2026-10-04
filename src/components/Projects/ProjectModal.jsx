@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from '../../i18n'
 import SanityImage from '../SanityImage/SanityImage'
+import { modalThemeVars } from '../../lib/theme'
 import styles from './ProjectModal.module.css'
 
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])'
@@ -40,6 +41,15 @@ function ProjectModal({ project, onClose }) {
   }, [onClose])
 
   const closeLabel = lang === 'en' ? 'Close dialog' : 'Fermer'
+  const themeVars = modalThemeVars(project.theme)
+
+  const desk = project.deskImage
+  const mob = project.mobImage
+  // Largeurs proportionnelles aux ratios : le mobile fait ~70 % de la hauteur du desktop
+  const ratio = (img) => (img?.width && img?.height ? img.width / img.height : null)
+  const stageStyle = mob && ratio(desk) && ratio(mob)
+    ? { '--desk-ratio': ratio(desk), '--mob-ratio': ratio(mob) }
+    : undefined
 
   return createPortal(
     <div className={styles.overlay} onClick={onClose} role="presentation">
@@ -49,48 +59,84 @@ function ProjectModal({ project, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
+        style={themeVars}
         onClick={(e) => e.stopPropagation()}
       >
         <button className={styles.close} onClick={onClose} aria-label={closeLabel}>✕</button>
 
-        <div className={styles.images}>
-          <SanityImage className={styles.desk} image={project.deskImage} alt={project.name} sizes="(max-width: 780px) 100vw, 700px" />
-          {project.mobImage && (
-            <SanityImage className={styles.mob} image={project.mobImage} alt={`${project.name} mobile`} sizes="(max-width: 768px) 18vw, 112px" />
+        <div className={`${styles.stage} ${mob ? styles.withMobile : ''}`} style={stageStyle}>
+          <SanityImage
+            className={styles.shot}
+            image={desk}
+            alt={project.name}
+            sizes={mob ? '(max-width: 640px) 100vw, 620px' : '(max-width: 780px) 100vw, 740px'}
+            fit="contain"
+          />
+          {mob && (
+            <SanityImage
+              className={`${styles.shot} ${styles.mobShot}`}
+              image={mob}
+              alt={`${project.name} mobile`}
+              sizes="(max-width: 640px) 40vw, 110px"
+              fit="contain"
+            />
           )}
         </div>
 
         <div className={styles.info}>
-          <h2 id="modal-title" className={styles.name}>{project.name}</h2>
-          <span className={styles.category}>{project.category}</span>
-
-          <p className={styles.description}>{project.description}</p>
-
-          <div className={styles.meta}>
-            <div className={styles.metaItem}>
-              <span className={styles.metaLabel}>{t('projects.modal.role')}</span>
-              <span className={styles.metaValue}>{project.role}</span>
+          <header className={styles.header}>
+            <div className={styles.titleGroup}>
+              <h2 id="modal-title" className={styles.name}>{project.name}</h2>
+              {project.category && <span className={styles.category}>{project.category}</span>}
             </div>
-            <div className={styles.metaItem}>
-              <span className={styles.metaLabel}>{t('projects.modal.stack')}</span>
-              <div className={styles.stack}>
-                {project.stack.map((s) => (
-                  <span key={s} className={styles.tag}>{s}</span>
+            {project.url && (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.visit}
+                aria-label={`${t('projects.modal.visit')} (${lang === 'en' ? 'opens in new tab' : 'nouvel onglet'})`}
+              >
+                {t('projects.modal.visit')}
+              </a>
+            )}
+          </header>
+
+          {project.description && <p className={styles.lead}>{project.description}</p>}
+
+          {project.highlights?.length > 0 && (
+            <section className={styles.highlights} aria-labelledby="modal-highlights">
+              <h3 id="modal-highlights" className={styles.sectionLabel}>{t('projects.modal.highlights')}</h3>
+              <ul className={styles.highlightGrid}>
+                {project.highlights.map((h, i) => (
+                  <li key={i} className={styles.highlight}>
+                    <strong className={styles.highlightTitle}>{h.title}</strong>
+                    {h.benefit && <span className={styles.highlightBenefit}>{h.benefit}</span>}
+                  </li>
                 ))}
-              </div>
-            </div>
-          </div>
+              </ul>
+            </section>
+          )}
 
-          {project.url && (
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.siteLink}
-              aria-label={`${t('projects.modal.visit')} (${lang === 'en' ? 'opens in new tab' : 'nouvel onglet'})`}
-            >
-              {t('projects.modal.visit')}
-            </a>
+          {(project.role || project.stack?.length > 0) && (
+            <footer className={styles.meta}>
+              {project.role && (
+                <div className={styles.metaItem}>
+                  <span className={styles.metaLabel}>{t('projects.modal.role')}</span>
+                  <span className={styles.metaValue}>{project.role}</span>
+                </div>
+              )}
+              {project.stack?.length > 0 && (
+                <div className={styles.metaItem}>
+                  <span className={styles.metaLabel}>{t('projects.modal.stack')}</span>
+                  <div className={styles.stack}>
+                    {project.stack.map((s) => (
+                      <span key={s} className={styles.tag}>{s}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </footer>
           )}
         </div>
       </div>

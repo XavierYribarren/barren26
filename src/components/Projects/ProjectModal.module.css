@@ -21,6 +21,14 @@
 }
 
 .box {
+  /* Échelle d'espacement unique de la modale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1.25rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
   position: relative;
   background-color: var(--color-bg);
   border: 1px solid var(--color-border);
@@ -28,68 +36,96 @@
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  padding: 2.5rem;
   animation: slideUp 0.35s ease forwards;
 }
 
+/* Sur la scène : couleurs de la scène, lisible quelle que soit la capture dessous */
 .close {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  background: none;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 1;
+  background: var(--stage-bg, var(--color-bg));
   border: none;
-  color: var(--color-text-secondary);
+  border-radius: 2px;
+  color: var(--stage-ink, var(--color-text-secondary));
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0.25rem;
+  padding: var(--space-1);
   line-height: 1;
   transition: color 0.2s ease;
 }
 
 .close:hover {
-  color: var(--color-text-primary);
+  color: var(--stage-ink, var(--color-text-primary));
 }
 
-/* Images row */
-.images {
-  position: relative;
-  width: 100%;
+/* Focus : la règle globale utilise --color-accent, qui peut manquer de contraste avec un thème projet */
+.box :focus-visible {
+  outline-color: var(--modal-focus, var(--color-accent));
 }
 
-.desk {
+/* Scène : bande pleine largeur derrière les captures */
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background-color: var(--stage-bg, var(--color-bg));
+}
+
+/* Captures entières à leur ratio d'origine (attributs width/height issus de Sanity) */
+.shot {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-}
-
-.mob {
-  position: absolute;
-  bottom: -1.25rem;
-  right: -0.75rem;
-  width: 16%;
-  aspect-ratio: 9 / 19;
-  object-fit: cover;
-  object-position: top;
+  object-fit: contain;
   border-radius: 6px;
-  background-color: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
-/* Info */
+/* Desktop et mobile côte à côte, alignés en bas ; mobile à ~70 % de la hauteur du desktop */
+.withMobile {
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.withMobile .shot {
+  flex: var(--desk-ratio, 4) 1 0%;
+  min-width: 0;
+}
+
+.withMobile .mobShot {
+  flex: calc(var(--mob-ratio, 1) * 0.7) 1 0%;
+}
+
+/* Texte */
 .info {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding-top: 0.5rem;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6) var(--space-5);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .name {
   font-family: var(--font-display);
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   font-weight: 400;
+  line-height: 1.1;
   color: var(--color-text-primary);
   margin: 0;
 }
@@ -102,81 +138,181 @@
   color: var(--color-text-secondary);
 }
 
-.description {
+/* Bouton plein : couleurs calculées pour un contraste ≥ 4.5:1 (voir lib/theme.js) */
+.visit {
+  flex-shrink: 0;
   font-family: var(--font-body);
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--btn-ink, var(--color-bg));
+  background-color: var(--btn-bg, var(--color-accent));
+  padding: var(--space-3) var(--space-4);
+  white-space: nowrap;
+}
+
+.visit:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Chapeau : un cran au-dessus du corps, police du corps */
+.lead {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--color-text-primary);
+  max-width: 60ch;
   margin: 0;
 }
 
-.meta {
+.highlights {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 0.25rem;
+  gap: var(--space-3);
+}
+
+.sectionLabel {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--modal-accent-ink, var(--color-text-secondary));
+  margin: 0;
+}
+
+.highlightGrid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3) var(--space-5);
+  margin: 0;
+  padding: 0;
+}
+
+.highlight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 2px solid var(--color-accent);
+}
+
+.highlightTitle {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+}
+
+.highlightBenefit {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  /* Texte du thème à ~85 % (calculé avec contrôle de contraste pour un thème propre) */
+  color: var(--modal-soft, color-mix(in srgb, var(--color-text-primary) 85%, var(--color-bg)));
+}
+
+/* Pied discret */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+  padding-top: var(--space-3);
   border-top: 1px solid var(--color-border);
 }
 
 .metaItem {
   display: flex;
   align-items: baseline;
-  gap: 1.25rem;
+  gap: var(--space-3);
 }
 
 .metaLabel {
   font-family: var(--font-body);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--color-text-secondary);
-  min-width: 3.5rem;
 }
 
 .metaValue {
   font-family: var(--font-body);
-  font-size: 0.85rem;
-  color: var(--color-text-primary);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
 }
 
 .stack {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: var(--space-1);
 }
 
 .tag {
   font-family: var(--font-body);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
-  padding: 0.2rem 0.6rem;
-}
-
-.siteLink {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-text-secondary);
-  transition: color 0.2s ease;
-}
-
-.siteLink:hover {
-  color: var(--color-accent);
+  padding: 0.15rem 0.5rem;
 }
 
 @media (max-width: 768px) {
   .box {
-    padding: 1.5rem;
     max-height: 95vh;
   }
 
-  .mob {
-    width: 18%;
-    bottom: -1rem;
-    right: -0.5rem;
+  .stage {
+    padding: var(--space-4);
+  }
+
+  .info {
+    padding: var(--space-4) var(--space-4) var(--space-5);
+  }
+
+  .header {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .name {
+    font-size: 1.8rem;
+  }
+}
+
+/* Écran étroit : mobile sous le desktop, points forts sur une colonne */
+@media (max-width: 640px) {
+  .withMobile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .withMobile .shot {
+    flex: none;
+  }
+
+  .withMobile .mobShot {
+    flex: none;
+    width: 40%;
+  }
+
+  .highlightGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .box {
+    animation: none;
+  }
+
+  .close {
+    transition: none;
   }
 }

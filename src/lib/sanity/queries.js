@@ -21,11 +21,21 @@ const projectFields = `
   ${loc('description')},
   ${loc('role')},
   ${loc('context')},
-  "highlights": coalesce(highlights[]{ "text": coalesce(@[$locale], fr) }.text, []),
+  // Format actuel { title, benefit } ; ancien format (texte localisé) lu comme title seul
+  "highlights": coalesce(highlights[]{
+    "title": select(
+      _type == "highlight" => coalesce(title[$locale], title.fr),
+      coalesce(@[$locale], fr)
+    ),
+    "benefit": select(_type == "highlight" => coalesce(benefit[$locale], benefit.fr))
+  }, []),
+  // Entrées en simple chaîne (très ancien format) : la projection ci-dessus les rend null
+  "highlightStrings": coalesce(highlights[string::startsWith(@, "")], []),
+  ${loc('clientControl')},
   "tags": coalesce(tags, []),
   "stack": coalesce(stack, []),
   url,
-  theme { bg, text, accent, fontDisplay },
+  theme { bg, text, accent, stage, fontDisplay },
   publishedAt,
   coverDesktop ${image},
   coverMobile ${image},

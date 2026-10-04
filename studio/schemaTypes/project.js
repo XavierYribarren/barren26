@@ -65,6 +65,7 @@ export const project = defineType({
         hexField('bg', 'Fond'),
         hexField('text', 'Texte'),
         hexField('accent', 'Accent'),
+        hexField('stage', 'Fond derrière les captures'),
         defineField({
           name: 'fontDisplay',
           title: 'Police titre',
@@ -80,8 +81,13 @@ export const project = defineType({
       name: 'highlights',
       title: 'Points forts',
       type: 'array',
-      of: [defineArrayMember({type: 'localizedString'})],
+      of: [defineArrayMember({type: 'highlight'})],
       validation: (rule) => rule.max(4),
+    }),
+    defineField({
+      name: 'clientControl',
+      title: 'Côté salon : ce que le client peut modifier',
+      type: 'localizedText',
     }),
     defineField({
       name: 'stack',

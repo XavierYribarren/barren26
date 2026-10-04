@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { sanityLoader } from '../../lib/sanity/image'
 
 // Client component : le loader (une fonction) ne peut pas être passé depuis un Server Component
-export default function SanityImage({ image, alt, className, sizes }) {
+export default function SanityImage({ image, alt, className, sizes, fit }) {
   if (!image?.src) return null
   return (
     <Image
@@ -16,8 +16,9 @@ export default function SanityImage({ image, alt, className, sizes }) {
       sizes={sizes}
       placeholder={image.lqip ? 'blur' : 'empty'}
       blurDataURL={image.lqip}
-      // La hauteur suit l'aspect-ratio du CSS existant, comme avec l'ancien <img>
-      style={{ height: 'auto' }}
+      // La hauteur suit l'aspect-ratio du CSS existant, comme avec l'ancien <img>.
+      // fit est aussi lu par next/image pour caler le flou LQIP sur le même cadrage.
+      style={fit ? { height: 'auto', objectFit: fit } : { height: 'auto' }}
     />
   )
 }

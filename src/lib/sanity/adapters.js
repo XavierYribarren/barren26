@@ -6,6 +6,15 @@ function toImage(img) {
   return { src: url, width, height, lqip: img.asset.metadata?.lqip, alt: img.alt }
 }
 
+// { title, benefit } ; les entrées sans titre sont ignorées, les simples chaînes deviennent un titre seul
+function toHighlights(p) {
+  const objects = (p.highlights ?? [])
+    .filter(h => h?.title)
+    .map(h => ({ title: h.title, benefit: h.benefit || null }))
+  const strings = (p.highlightStrings ?? []).map(title => ({ title, benefit: null }))
+  return [...objects, ...strings]
+}
+
 export function toLegacyProject(p) {
   const deskImage = toImage(p.coverDesktop)
   const mobImage = toImage(p.coverMobile)
@@ -19,6 +28,11 @@ export function toLegacyProject(p) {
     stack: p.stack,
     url: p.url ?? null,
     tags: p.tags,
+    tagline: p.tagline || null,
+    context: p.context || null,
+    highlights: toHighlights(p),
+    clientControl: p.clientControl || null,
+    theme: p.theme ?? null,
     desk: deskImage?.src ?? null,
     mob: mobImage?.src ?? null,
     deskImage,
