@@ -1,23 +1,32 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { splitWords } from '../../utils/splitWords'
 import { useTranslation } from '../../i18n'
 import styles from './Contact.module.css'
 
+// Retour du X en 3D (Three.js chargé à part)
+const ContactX = dynamic(() => import('./ContactX'), { ssr: false })
+
 function Contact() {
   const { t, lang } = useTranslation()
   const sectionRef  = useRef(null)
   const headlineRef = useRef(null)
   const restRef     = useRef(null)
+  const slotRef     = useRef(null)
+  const floodRef    = useRef(null)
+  const [xReady, setXReady] = useState(false)
+  const onXReady = useCallback(() => setXReady(true), [])
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const ctx = gsap.context(() => {
-      const trigger = { trigger: sectionRef.current, start: 'top 85%', once: true }
+      // Une fois le papier découvert par le X qui rétrécit (voir ContactX)
+      const trigger = { trigger: sectionRef.current, start: 'top 30%', once: true }
 
       const words = splitWords(headlineRef.current)
       gsap.from(words, {
@@ -35,23 +44,31 @@ function Contact() {
   }, [])
 
   return (
-    <section id="contact" className={styles.contact} ref={sectionRef}>
-      {/* headline kept outside key wrapper so the headlineRef stays stable for splitWords */}
-      <h2 className={styles.headline} ref={headlineRef}>{t('contact.headline')}</h2>
+    <section id="contact" className={styles.contact} ref={sectionRef} data-x-ready={xReady || undefined}>
+      <div className={styles.flood} ref={floodRef} />
+      <ContactX sectionRef={sectionRef} slotRef={slotRef} floodRef={floodRef} onReady={onXReady} />
 
-      <div className={styles.rest} ref={restRef}>
-        <p key={lang} className={`${styles.subline} langSwap`}>{t('contact.subline')}</p>
+      <div className={styles.text}>
+        {/* headline kept outside key wrapper so the headlineRef stays stable for splitWords */}
+        <h2 className={styles.headline} ref={headlineRef}>{t('contact.headline')}</h2>
 
-        <a href="mailto:xavier.yribarren@gmail.com" className={styles.email}>
-          xavier.yribarren@gmail.com
-        </a>
+        <div className={styles.rest} ref={restRef}>
+          <p key={lang} className={`${styles.subline} langSwap`}>{t('contact.subline')}</p>
 
-        <div className={styles.socials}>
-          <a href="https://www.linkedin.com/in/xavier-yribarren" target="_blank" rel="noreferrer" className={styles.socialLink}>LinkedIn</a>
-          <a href="mailto:xavier.yribarren@gmail.com" className={styles.socialLink}>Mail</a>
-          <a href="https://www.malt.fr/profile/xavieryribarren" target="_blank" rel="noreferrer" className={styles.socialLink}>Malt</a>
+          <a href="mailto:xavier.yribarren@gmail.com" className={styles.email}>
+            xavier.yribarren@gmail.com
+          </a>
+
+          <div className={styles.socials}>
+            <a href="https://www.linkedin.com/in/xavier-yribarren" target="_blank" rel="noreferrer" className={styles.socialLink}>LinkedIn</a>
+            <a href="mailto:xavier.yribarren@gmail.com" className={styles.socialLink}>Mail</a>
+            <a href="https://www.malt.fr/profile/xavieryribarren" target="_blank" rel="noreferrer" className={styles.socialLink}>Malt</a>
+          </div>
         </div>
       </div>
+
+      {/* Place du X une fois revenu à sa taille (dessiné par ContactX) */}
+      <div className={styles.slot} ref={slotRef} aria-hidden="true" />
 
       <p key={`footer-${lang}`} className={`${styles.copy} langSwap`}>{t('contact.footer')}</p>
     </section>
