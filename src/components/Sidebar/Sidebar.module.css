@@ -11,7 +11,9 @@
   align-items: center;
   gap: 32px;
   padding: 0 40px;
-  color: var(--color-text-primary);
+  /* Encre de la barre : couleur du texte et du contour de focus */
+  --nav-ink: var(--color-text-primary);
+  color: var(--nav-ink);
   border-bottom: 1px solid transparent;
   /* La barre transparente ne bloque pas les clics dessous, seuls ses éléments sont cliquables */
   pointer-events: none;
@@ -24,7 +26,7 @@
 
 /* Sur le papier du hero (p ≤ .12) */
 .topBar.onPaper {
-  color: var(--color-bg);
+  --nav-ink: var(--color-bg);
 }
 
 /* Pendant la scène sombre (fond noir puis vidéo) : léger dégradé pour les frames claires */
@@ -45,7 +47,7 @@
 }
 
 .topBar :focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid var(--nav-ink);
   outline-offset: 4px;
 }
 

@@ -20,6 +20,7 @@ function Sidebar() {
   const [needsOpen, setNeedsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [heroP, setHeroP] = useState(null)
+  const [pastHero, setPastHero] = useState(false)
 
   const anchorsBefore = [
     { id: 'home',     label: t('sidebar.nav.home') },
@@ -62,22 +63,33 @@ function Sidebar() {
     return () => observer.disconnect()
   }, [isMainPage])
 
-  // Progression de la scène du hero (accueil) : pilote les couleurs de la barre
-  useEffect(() => subscribeHeroProgress(setHeroP), [])
-
-  // Barre desktop : fond noir dès qu'on quitte le haut de page (hors scène du hero)
+  // Barre desktop : fond noir dès qu'on quitte le haut de page ; sur l'accueil, une fois la scène
+  // du hero (vidéo comprise) entièrement passée sous la barre. Mesuré au scroll, au redimensionnement
+  // et à chaque publication de la progression du hero (la mesure initiale peut précéder la mise en page).
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const measure = () => {
+      setScrolled(window.scrollY > 10)
+      const hero = document.getElementById('home')
+      setPastHero(!!hero && hero.getBoundingClientRect().bottom <= 84)
+    }
+    const unsubscribe = subscribeHeroProgress((p) => {
+      setHeroP(p)
+      measure()
+    })
+    window.addEventListener('scroll', measure, { passive: true })
+    window.addEventListener('resize', measure)
+    return () => {
+      unsubscribe()
+      window.removeEventListener('scroll', measure)
+      window.removeEventListener('resize', measure)
+    }
   }, [])
 
   // Accueil : noir sur le papier (avant que la scène ne publie, on suppose le haut de page),
   // clair pendant la scène, fond noir une fois la scène passée. Ailleurs : fond noir après 10px.
   const onPaper = isMainPage && (heroP === null ? !scrolled : heroP <= 0.12)
-  const overStage = isMainPage && heroP !== null && heroP > 0.12 && heroP < 1
-  const solid = isMainPage && heroP !== null ? heroP >= 1 : scrolled
+  const overStage = isMainPage && heroP !== null && heroP > 0.12 && !pastHero
+  const solid = isMainPage && heroP !== null ? pastHero : scrolled
   const barClass = [styles.topBar, onPaper && styles.onPaper, overStage && styles.overStage, solid && styles.scrolled]
     .filter(Boolean).join(' ')
 
