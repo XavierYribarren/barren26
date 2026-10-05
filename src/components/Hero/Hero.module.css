@@ -9,15 +9,27 @@
   background-color: rgb(1, 2, 2);
 }
 
-.heroBg {
+.video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  opacity: 0.58;
-  color: rgb(255, 255, 255);
+  opacity: 0.9;
+}
+
+/* Dégradé sombre local sous le texte, au lieu d'un voile sur toute la vidéo */
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 65%;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(1, 2, 2, 0.9) 0%, rgba(1, 2, 2, 0.7) 55%, rgba(1, 2, 2, 0) 100%);
 }
 
 .left {
@@ -99,10 +111,6 @@
   color: var(--color-text-secondary);
 }
 
-.mobileVideo {
-  display: none;
-}
-
 @media (max-width: 768px) {
   .hero {
     padding: 2rem 1.5rem;
@@ -112,21 +120,21 @@
 .titleName{
   margin: 0;
 }
-  .heroBg {
+  .hero::after {
     display: none;
   }
   .subtitles{
     margin-top: -2vh;
   }
 
-  .mobileVideo {
-    display: block;
+  .video {
     position: relative;
+    inset: auto;
     z-index: 1;
     width: 100%;
     height: auto;
     max-height: 40dvh;
-    object-fit: cover;
+    opacity: 1;
   }
 
   .headline {

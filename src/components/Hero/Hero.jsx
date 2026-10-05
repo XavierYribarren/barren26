@@ -7,24 +7,15 @@ function Hero() {
 
   return (
     <section id="home" className={styles.hero}>
-      <video
-        className={styles.heroBg}
-        src="/202605181331 (1).mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        aria-hidden="true"
-      />
-
       <div key={lang} className={`${styles.left} langSwap`}>
         <h1 className={styles.titleName}>
           <span>Barren</span>
         </h1>
       </div>
 
+      {/* Une seule vidéo : plein cadre derrière le texte sur desktop, dans le flux sur mobile */}
       <video
-        className={styles.mobileVideo}
+        className={styles.video}
         src="/202605181331 (1).mp4"
         autoPlay
         loop
