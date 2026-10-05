@@ -23,7 +23,7 @@ export const translations = {
     },
     hero: {
       label: 'FREELANCE / WEB DEVELOPMENT',
-      headline: 'Every project\ndeserves the real thing.',
+      headline: 'Every project deserves the real thing.',
       subline: 'I design and build digital products that are clear, fast, and built to last.',
       cta: 'Scroll to explore ↓',
       reelCaption: 'A few projects, in motion.',
@@ -110,7 +110,7 @@ export const translations = {
     },
     hero: {
       label: 'FREELANCE / WEB DÉVELOPPEMENT',
-      headline: "Chaque projet\nmérite d'être bien fait.",
+      headline: "Chaque projet mérite d'être bien fait.",
       subline: 'Je conçois et développe des produits digitaux clairs, rapides et faits pour durer.',
       cta: 'Défiler pour explorer ↓',
       reelCaption: 'Quelques projets, en mouvement.',

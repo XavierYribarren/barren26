@@ -1,10 +1,15 @@
-/* Hero direction A (docs-mockup/direction-A-*.html) : papier, mot BARREN, monolithes X et Y */
+/* Hero direction A (docs-mockup/direction-A-*.html) : papier, mot BARREN, monolithes X et Y,
+   puis transition au scroll vers le showreel */
+
+/* Scène : 3,2 écrans de scroll, le contenu reste collé pendant que p va de 0 à 1 */
 .stage {
   position: relative;
+  height: 320vh;
 }
 
 .sticky {
-  position: relative;
+  position: sticky;
+  top: 0;
   height: 100svh;
   min-height: 700px;
   overflow: hidden;
@@ -12,8 +17,23 @@
   isolation: isolate;
 }
 
+/* Tout ce qui est « sur le papier » */
+.paper {
+  position: absolute;
+  inset: 0;
+}
+
+/* Fond noir qui monte pendant la transition */
+.flood {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--color-bg);
+  opacity: 0;
+}
+
 /* Grain du papier */
-.sticky::after {
+.paper::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -85,11 +105,6 @@
   line-height: inherit;
 }
 
-/* Le découpage insère un <br> (retour à la ligne de la clé i18n) : on laisse text-wrap: balance décider */
-.claim :global(br) {
-  display: none;
-}
-
 .sub {
   font-family: var(--font-body);
   font-weight: 400;
@@ -99,11 +114,52 @@
   color: rgba(13, 13, 13, 0.72);
 }
 
+/* Showreel : s'ouvre depuis le centre, piloté par le scroll */
+.reel {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  margin: 0;
+  clip-path: inset(50% 50%);
+  visibility: hidden;
+  background: #111;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cap {
+  position: absolute;
+  left: 40px;
+  bottom: 36px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  opacity: 0;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
+}
+
 @media (max-width: 768px) {
+  .stage {
+    height: 300vh;
+  }
+
   /* Sous la barre mobile fixe de 60px */
   .sticky {
+    top: 60px;
     height: calc(100svh - 60px);
     min-height: 640px;
+  }
+
+  .cap {
+    left: 22px;
+    bottom: 28px;
   }
 
   .artD {
@@ -140,5 +196,46 @@
   .sub {
     font-size: 15px;
     max-width: 330px;
+  }
+}
+
+/* Sans animation : hero statique, puis la vidéo en simple bloc dessous */
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    height: auto;
+  }
+
+  .sticky {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .paper {
+    position: relative;
+    height: 100svh;
+    min-height: 700px;
+    overflow: hidden;
+  }
+
+  .reel {
+    position: relative;
+    inset: auto;
+    height: 70svh;
+    clip-path: none;
+    visibility: visible;
+  }
+
+  .cap {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .paper {
+    height: calc(100svh - 60px);
+    min-height: 640px;
   }
 }
