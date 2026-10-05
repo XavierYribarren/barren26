@@ -1,177 +1,108 @@
-/* Hero « affiche » : vidéo plein cadre brute, étiquette en aplat noir, BARREN bord à bord coupé par le bas */
-.hero {
+/* Hero direction A (docs-mockup/direction-A-*.html) : papier, mot BARREN, monolithes X et Y */
+.stage {
   position: relative;
-  /* min-height : sur un écran peu haut, le hero s'agrandit au lieu de couper l'étiquette */
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* Haut : place pour la barre de navigation fixe */
-  padding: 8rem 4rem 2.5rem;
-  overflow: clip;
-  background-color: rgb(1, 2, 2);
 }
 
-.video {
+.sticky {
+  position: relative;
+  height: 100svh;
+  min-height: 700px;
+  overflow: hidden;
+  background: var(--color-text-primary);
+  isolation: isolate;
+}
+
+/* Grain du papier */
+.sticky::after {
+  content: '';
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
-/* BARREN : posé en bas, bord à bord. Le blend est sur ce bloc (pas sur le h1) :
-   sinon le z-index de ce bloc isole le titre et l'inversion ne voit pas la vidéo */
-.left {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  mix-blend-mode: difference;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.13;
+  mix-blend-mode: multiply;
   pointer-events: none;
+  z-index: 4;
 }
 
-.titleName {
-  display: block;
-  margin: 0;
-  /* Coupé par le bas de l'écran */
-  transform: translateY(16%);
-}
-
-.titleName > span {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 400;
-  text-transform: uppercase;
-  color: #fff;
-  /* « BARREN » en Archivo Black : 4,507em d'encre, 0,07em d'approche à gauche → touche les deux bords */
-  font-size: calc(100vw / 4.507);
-  margin-left: -0.07em;
-  line-height: 0.8;
-  white-space: nowrap;
-}
-
-/* Étiquette : aplat noir opaque, en haut à gauche */
-.subtitles {
-  position: relative;
+.labelWrap {
+  position: absolute;
+  left: 40px;
+  top: 112px;
   z-index: 3;
-  /* Desktop : l'étiquette en tête (le h1 reste premier dans le HTML) */
-  order: -1;
-  align-self: flex-start;
-  max-width: min(46rem, 100%);
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.5rem 1.75rem 1.75rem;
-  background-color: #000;
 }
 
+/* Le libellé i18n est en capitales : un peu plus petit et espacé que la maquette (14px en bas de casse) */
 .label {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
   font-family: var(--font-body);
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--color-text-secondary);
-  margin-bottom: 1rem;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(13, 13, 13, 0.62);
 }
 
-/* Carré d'accent, marque d'étiquette */
-.label::before {
-  content: '';
-  width: 0.55rem;
-  height: 0.55rem;
-  background-color: var(--color-accent);
+.copy {
+  position: absolute;
+  left: 40px;
+  right: 40px;
+  bottom: 44px;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 48px;
+  color: var(--color-bg);
 }
 
-.headline {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 3.6vw, 3.6rem);
-  line-height: 1.05;
-  font-weight: 400;
-  color: var(--color-text-primary);
-  white-space: pre-line;
-  margin-bottom: 1rem;
-  width: 100%;
+.claim {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  max-width: 640px;
+  text-wrap: balance;
 }
 
-/* Word-split spans preserve line-height */
-.headline :global(span) {
+/* Spans du découpage en mots (intro du Loader) */
+.claim :global(span) {
   line-height: inherit;
 }
 
-.subline {
+.sub {
   font-family: var(--font-body);
-  font-size: clamp(0.875rem, 1.1vw, 1.1rem);
-  line-height: 1.6;
   font-weight: 400;
-  color: var(--color-text-secondary);
+  font-size: 17px;
+  line-height: 1.5;
+  max-width: 370px;
+  color: rgba(13, 13, 13, 0.72);
 }
 
-.scrollHint {
-  position: absolute;
-  z-index: 1;
-  bottom: 2.5rem;
-  right: 4rem;
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--color-text-secondary);
-}
-
-/* Mobile : même déroulé qu'avant (titre, vidéo, texte), sans aplat */
 @media (max-width: 768px) {
-  .hero {
-    padding: 2rem 1.5rem;
-    justify-content: space-evenly;
+  .labelWrap {
+    left: 22px;
+    top: 84px;
   }
 
-  .left {
-    position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
+  .label {
+    font-size: 12px;
   }
 
-  .titleName {
-    transform: none;
+  .copy {
+    left: 22px;
+    right: 22px;
+    bottom: 30px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
   }
 
-  .titleName > span {
-    font-size: calc((100vw - 3rem) / 4.507);
-    line-height: 1;
+  .claim {
+    font-size: 26px;
+    max-width: 330px;
   }
 
-  .subtitles {
-    order: 0;
-    margin-top: -2vh;
-    align-self: stretch;
-    max-width: none;
-    padding: 0;
-    background-color: transparent;
-  }
-
-  .video {
-    position: relative;
-    inset: auto;
-    z-index: 1;
-    width: 100%;
-    height: auto;
-    max-height: 40dvh;
-  }
-
-  .headline {
-    font-size: clamp(3rem, 7vw, 6rem);
-    margin-bottom: 1.5rem;
-    white-space: normal;
-  }
-
-  .scrollHint {
-    right: 1.5rem;
-    bottom: 1.5rem;
+  .sub {
+    font-size: 15px;
+    max-width: 330px;
   }
 }
