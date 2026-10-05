@@ -22,19 +22,47 @@ const deg = MathUtils.degToRad
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 
-// Monolithes 3D (meshes X et Y de XY.glb) : hauteur visée en unités du viewBox (celle des formes de la
-// maquette), étirement horizontal (les lettres du glb sont plus étroites que les barres de la maquette),
-// inclinaison en 3D pour montrer l'épaisseur.
+// Monolithes 3D (meshes X et Y de XY.glb) : étirement horizontal (les lettres du glb sont plus étroites
+// que les formes de la maquette), inclinaison en 3D pour montrer l'épaisseur. La hauteur visée est celle
+// des formes de la maquette pour chaque format (voir shapeHeight).
 const MONO = {
-  x: { node: 'X', height: 466, stretch: 1.6, tilt: [0.22, -0.3] },
-  y: { node: 'Y', height: 497, stretch: 1.6, tilt: [0.2, 0.3] },
+  x: { node: 'X', stretch: 1.6, tilt: [0.22, -0.3] },
+  y: { node: 'Y', stretch: 1.6, tilt: [0.2, 0.3] },
 }
 const MONO_Z = 90
-// Forme des monolithes. 'bars' : les barres de la maquette (rects de ART) en volumes ; se lit
-// nettement comme X et Y et couvre tout l'écran au zoom. 'glb' : les lettres X et Y de XY.glb
-// (police condensée, en sablier vue de face ; laisse des pans visibles pendant le zoom).
-const SHAPE = 'bars'
-const BAR_DEPTH = 64
+// Le X du glb est fait de deux dalles séparées par une fente verticale, aux bords extérieurs en biais :
+// on zoome autour d'un point plein de la dalle gauche (en fraction de la largeur du X) et plus loin que
+// la maquette (×14 / ×12), pour que fente et bords sortent de l'écran avant que le fond noir soit monté.
+const X_ZOOM_ANCHOR = -0.3
+const X_SCALE_MAX = { d: 20, m: 16 }
+
+// Hauteur d'une forme de la maquette : rects (x, y, w, h) tournés de r degrés autour du centre
+function shapeHeight(parts) {
+  let min = Infinity
+  let max = -Infinity
+  for (const { rect: [x, y, w, h], r } of parts) {
+    const c = Math.cos(deg(r))
+    const sn = Math.sin(deg(r))
+    for (const [px, py] of [[x, y], [x + w, y], [x, y + h], [x + w, y + h]]) {
+      const ry = px * sn + py * c
+      min = Math.min(min, ry)
+      max = Math.max(max, ry)
+    }
+  }
+  return max - min
+}
+
+// Échelle et décalage pour poser une lettre du glb debout, centrée, à la hauteur visée
+function fitGlyph(geometry, height, stretch) {
+  geometry.computeBoundingBox()
+  const { min, max } = geometry.boundingBox
+  const s = height / (max.z - min.z)
+  return {
+    offset: [-(min.x + max.x) / 2, -(min.y + max.y) / 2, -(min.z + max.z) / 2],
+    scale: [s * stretch, s, s],
+    width: (max.x - min.x) * s * stretch,
+  }
+}
 
 // Lettres de BARREN en géométries planes, à partir des contours générés (heroWordPaths)
 function letterGeometries(v) {
@@ -85,36 +113,8 @@ function MonolithMaterial() {
   )
 }
 
-// Barres de la maquette : chaque rect (x, y, w, h en y vers le bas) tourné de r autour du centre du monolithe
-function Bars({ parts, groupRef, tiltRef, tilt }) {
-  return (
-    <group ref={groupRef}>
-      <group ref={tiltRef} rotation={[tilt[0], tilt[1], 0]}>
-        {parts.map(({ rect: [x, y, w, h], r }, i) => (
-          <group key={i} rotation={[0, 0, deg(-r)]}>
-            {/* léger décalage en z : les barres qui se croisent ne se disputent pas la même face */}
-            <mesh position={[x + w / 2, -(y + h / 2), i * 0.6]} castShadow renderOrder={1}>
-              <boxGeometry args={[w, h, BAR_DEPTH]} />
-              <MonolithMaterial />
-            </mesh>
-          </group>
-        ))}
-      </group>
-    </group>
-  )
-}
-
-function Monolith({ geometry, mono, groupRef, tiltRef }) {
-  // Lettre centrée sur son origine, debout face à la caméra, à la hauteur visée
-  const { offset, scale } = useMemo(() => {
-    geometry.computeBoundingBox()
-    const { min, max } = geometry.boundingBox
-    const s = mono.height / (max.z - min.z)
-    return {
-      offset: [-(min.x + max.x) / 2, -(min.y + max.y) / 2, -(min.z + max.z) / 2],
-      scale: [s * mono.stretch, s, s],
-    }
-  }, [geometry, mono])
+function Monolith({ geometry, fit, mono, groupRef, tiltRef }) {
+  const { offset, scale } = fit
 
   return (
     <group ref={groupRef}>
@@ -145,6 +145,10 @@ function Scene({ apiRef, progressRef, onReady }) {
   const oy = (size.height - vbH * k) / 2
 
   const letters = useMemo(() => letterGeometries(v), [v])
+  const xFit = useMemo(() => fitGlyph(nodes[MONO.x.node].geometry,
+    shapeHeight(cfg.x.r.map((r) => ({ rect: cfg.x.rect, r }))), MONO.x.stretch), [nodes, cfg])
+  const yFit = useMemo(() => fitGlyph(nodes[MONO.y.node].geometry,
+    shapeHeight(cfg.y.parts), MONO.y.stretch), [nodes, cfg])
   useEffect(() => () => letters.flat().forEach((g) => g.dispose()), [letters])
 
   const xRef = useRef(null)
@@ -159,15 +163,18 @@ function Scene({ apiRef, progressRef, onReady }) {
     apiRef.current = {
       update(p) {
         const e = ease(clamp(p / 0.5))
-        const s = 1 + (cfg.smax - 1) * e
+        const s = 1 + (X_SCALE_MAX[v] - 1) * e
         if (xRef.current) {
-          xRef.current.position.set(cfg.x.tx, -cfg.x.ty, MONO_Z)
+          // Zoom autour d'un point plein du X (voir X_ZOOM_ANCHOR) : centre + (1 - s) × décalage du point
+          xRef.current.position.set(cfg.x.tx + (1 - s) * X_ZOOM_ANCHOR * xFit.width, -cfg.x.ty, MONO_Z)
           // SVG rotate(-5) (y vers le bas) = +5° dans la scène (y vers le haut)
           xRef.current.rotation.z = deg(-cfg.x.rot) * (1 - e)
           xRef.current.scale.setScalar(s)
         }
-        // Le X revient face caméra en grossissant : ses faces latérales ne deviennent pas des plans géants
-        if (xTiltRef.current) xTiltRef.current.rotation.set(MONO.x.tilt[0] * (1 - e), MONO.x.tilt[1] * (1 - e), 0)
+        // Le X se redresse face caméra dès le début du scroll : agrandies, ses faces latérales
+        // deviendraient des pans clairs géants
+        const untilt = 1 - ease(clamp(p / 0.15))
+        if (xTiltRef.current) xTiltRef.current.rotation.set(MONO.x.tilt[0] * untilt, MONO.x.tilt[1] * untilt, 0)
         if (yRef.current) {
           const sy = Math.max(0.0001, 1 - clamp(p / 0.28))
           yRef.current.position.set(cfg.y.tx + 260 * (1 - sy), -cfg.y.ty, MONO_Z)
@@ -184,7 +191,7 @@ function Scene({ apiRef, progressRef, onReady }) {
       },
     }
     apiRef.current.update(progressRef.current)
-  }, [apiRef, progressRef, cfg, invalidate])
+  }, [apiRef, progressRef, cfg, v, xFit, invalidate])
 
   // Prête : deux images plus tard, le premier rendu est à l'écran → on masque le repli SVG
   useEffect(() => {
@@ -234,17 +241,8 @@ function Scene({ apiRef, progressRef, onReady }) {
         ))}
 
         {/* 2. les monolithes : cachent les lettres « derrière » et écrivent le stencil */}
-        {SHAPE === 'bars' ? (
-          <>
-            <Bars parts={cfg.x.r.map((r) => ({ rect: cfg.x.rect, r }))} groupRef={xRef} tiltRef={xTiltRef} tilt={MONO.x.tilt} />
-            <Bars parts={cfg.y.parts} groupRef={yRef} tilt={MONO.y.tilt} />
-          </>
-        ) : (
-          <>
-            <Monolith geometry={nodes[MONO.x.node].geometry} mono={MONO.x} groupRef={xRef} tiltRef={xTiltRef} />
-            <Monolith geometry={nodes[MONO.y.node].geometry} mono={MONO.y} groupRef={yRef} />
-          </>
-        )}
+        <Monolith geometry={nodes[MONO.x.node].geometry} fit={xFit} mono={MONO.x} groupRef={xRef} tiltRef={xTiltRef} />
+        <Monolith geometry={nodes[MONO.y.node].geometry} fit={yFit} mono={MONO.y} groupRef={yRef} />
 
         {/* 3. lettres « devant » en négatif, puis tout le mot en négatif (transition) */}
         {frontList.map(({ l, i }, idx) => (
