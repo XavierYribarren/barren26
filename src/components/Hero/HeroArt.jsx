@@ -118,7 +118,8 @@ function Variant({ v }) {
       <g fill="none" stroke="#4a4a46" strokeWidth="3"><Shapes v={v} cfg={cfg} /></g>
       {/* 4. face avant : cache les lettres « derrière » */}
       <g fill={`url(#hero-face-${v})`}><Shapes v={v} cfg={cfg} /></g>
-      <rect width={w} height={h} fill={`url(#hero-gloss-${v})`} clipPath={`url(#hero-clip-${v})`} />
+      {/* Reflet : déborde du cadre, sinon le X agrandi garde une bande claire limitée au viewBox sur écran large */}
+      <rect x={-w} y={-h} width={3 * w} height={3 * h} fill={`url(#hero-gloss-${v})`} clipPath={`url(#hero-clip-${v})`} />
       {/* 5. lettres « devant » : en négatif là où le monolithe les recouvre */}
       <g data-hero-neg-front clipPath={`url(#hero-clip-${v})`}>
         <Word v={v} cfg={cfg} fill={(line, i) => (line.front.includes(i) ? PAPER : 'none')} />
