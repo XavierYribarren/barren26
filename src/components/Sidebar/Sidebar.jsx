@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslation } from '../../i18n'
+import { scrollToTarget } from '../../lib/smoothScroll'
 import styles from './Sidebar.module.css'
 
 function Sidebar() {
@@ -70,7 +71,7 @@ function Sidebar() {
   function handleLogoClick() {
     setMenuOpen(false)
     if (isMainPage) {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      scrollToTarget(0)
     } else {
       router.push(`/${locale}`)
     }
@@ -80,7 +81,7 @@ function Sidebar() {
     e.preventDefault()
     setMenuOpen(false)
     if (isMainPage) {
-      document.querySelector(`#${id}`)?.scrollIntoView({ behavior: 'smooth' })
+      scrollToTarget(`#${id}`)
     } else {
       router.push(`/${locale}#${id}`)
     }

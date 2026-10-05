@@ -24,6 +24,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Lenis anime le scroll lui-même : le lissage natif ralentirait chacun de ses pas */
+html.lenis {
+  scroll-behavior: auto;
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text-primary);

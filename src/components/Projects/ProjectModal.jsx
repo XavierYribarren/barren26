@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom'
 import { useTranslation } from '../../i18n'
 import SanityImage from '../SanityImage/SanityImage'
 import { modalThemeVars } from '../../lib/theme'
+import { getLenis } from '../../lib/smoothScroll'
 import styles from './ProjectModal.module.css'
 
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])'
@@ -16,9 +17,11 @@ function ProjectModal({ project, onClose }) {
   useEffect(() => {
     returnFocusRef.current = document.activeElement
     document.body.style.overflow = 'hidden'
+    getLenis()?.stop()
     boxRef.current?.querySelector('button')?.focus()
     return () => {
       document.body.style.overflow = ''
+      getLenis()?.start()
       returnFocusRef.current?.focus()
     }
   }, [])
@@ -57,6 +60,7 @@ function ProjectModal({ project, onClose }) {
         className={styles.box}
         ref={boxRef}
         role="dialog"
+        data-lenis-prevent
         aria-modal="true"
         aria-labelledby="modal-title"
         style={themeVars}

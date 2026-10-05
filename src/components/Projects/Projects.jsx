@@ -28,6 +28,8 @@ function Projects({ projects = [] }) {
     // Rien à faire défiler (peu de cartes) : on laisse la page défiler normalement
     if (strip.scrollWidth <= strip.clientWidth) return
     e.preventDefault()
+    // Lenis ne regarde pas defaultPrevented : ce marqueur l'empêche de faire défiler la page en même temps
+    e.lenisStopPropagation = true
     strip.scrollLeft += e.deltaY
   }, [])
 
