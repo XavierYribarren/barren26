@@ -16,6 +16,7 @@ function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeId, setActiveId] = useState('home')
   const [needsOpen, setNeedsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   const anchorsBefore = [
     { id: 'home',     label: t('sidebar.nav.home') },
@@ -58,6 +59,14 @@ function Sidebar() {
     return () => observer.disconnect()
   }, [isMainPage])
 
+  // Barre desktop : fond noir dès qu'on quitte le haut de page
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   function handleLogoClick() {
     setMenuOpen(false)
     if (isMainPage) {
@@ -83,7 +92,7 @@ function Sidebar() {
 
   return (
     <>
-      <header className={styles.topBar} data-nav>
+      <header className={`${styles.topBar} ${scrolled ? styles.scrolled : ''}`} data-nav>
         <button type="button" className={styles.logo} onClick={handleLogoClick}>BARREN</button>
 
         <nav className={styles.nav} aria-label={lang === 'en' ? 'Main navigation' : 'Navigation principale'}>

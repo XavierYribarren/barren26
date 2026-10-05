@@ -11,8 +11,19 @@
   padding: 1.5rem 4rem;
   color: #fff;
   mix-blend-mode: difference;
+  border-bottom: 1px solid transparent;
   /* La barre ne bloque pas les clics sur le contenu dessous, seuls ses éléments sont cliquables */
   pointer-events: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Après le haut de page : fond noir. Le blend difference est coupé, sinon le noir resterait invisible */
+.topBar.scrolled {
+  background-color: var(--color-bg);
+  border-bottom-color: var(--color-border);
+  mix-blend-mode: normal;
+  color: var(--color-text-primary);
+  pointer-events: auto;
 }
 
 .topBar > * {
@@ -293,6 +304,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .topBar,
   .navLink::after,
   .barLangBtn,
   .cta {
