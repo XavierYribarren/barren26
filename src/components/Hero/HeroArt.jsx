@@ -1,4 +1,5 @@
 'use client'
+import { WORD_PATHS } from './heroWordPaths'
 import styles from './Hero.module.css'
 
 // Géométrie reprise telle quelle de docs-mockup/direction-A-monolithe.html.
@@ -6,7 +7,6 @@ import styles from './Hero.module.css'
 export const ART = {
   d: {
     viewBox: [1440, 900],
-    fontSize: 302,
     lines: [{ x: 18.86, y: 565, letters: 'BARREN', front: [2, 5] }],
     blur: 22,
     shadow: [40, 52],
@@ -24,7 +24,6 @@ export const ART = {
   },
   m: {
     viewBox: [390, 844],
-    fontSize: 156,
     lines: [
       { x: 11.08, y: 292, letters: 'BAR', front: [] },
       { x: 11.08, y: 416, letters: 'REN', front: [1, 2] },
@@ -51,21 +50,10 @@ export const yId = (v, i) => `hero-y${v}${i}`
 const PAPER = '#f0ece4'
 const INK = '#0d0d0d'
 
-function Word({ cfg, fill }) {
-  return cfg.lines.map((line) => (
-    <text
-      key={line.y}
-      x={line.x}
-      y={line.y}
-      fontFamily="'Archivo Black', sans-serif"
-      fontSize={cfg.fontSize}
-      style={{ fontKerning: 'none' }}
-    >
-      {[...line.letters].map((letter, i) => (
-        <tspan key={i} fill={fill(line, i)}>{letter}</tspan>
-      ))}
-    </text>
-  ))
+// Le mot en tracés (heroWordPaths), lettre par lettre pour pouvoir colorer les lettres « devant »
+function Word({ v, cfg, fill }) {
+  return cfg.lines.map((line, l) =>
+    WORD_PATHS[v][l].map((d, i) => <path key={`${l}-${i}`} d={d} fill={fill(line, i)} />))
 }
 
 function Shapes({ v, cfg }) {
@@ -120,7 +108,7 @@ function Variant({ v }) {
       </defs>
 
       {/* 1. le mot, derrière tout */}
-      <g fill={INK}><Word cfg={cfg} fill={() => INK} /></g>
+      <g fill={INK}><Word v={v} cfg={cfg} fill={() => INK} /></g>
       {/* 2. ombre portée sur le papier */}
       <g filter={`url(#hero-blur-${v})`} opacity=".34" transform={`translate(${cfg.shadow[0]} ${cfg.shadow[1]})`} fill="#000">
         <Shapes v={v} cfg={cfg} />
@@ -133,11 +121,11 @@ function Variant({ v }) {
       <rect width={w} height={h} fill={`url(#hero-gloss-${v})`} clipPath={`url(#hero-clip-${v})`} />
       {/* 5. lettres « devant » : en négatif là où le monolithe les recouvre */}
       <g data-hero-neg-front clipPath={`url(#hero-clip-${v})`}>
-        <Word cfg={cfg} fill={(line, i) => (line.front.includes(i) ? PAPER : 'none')} />
+        <Word v={v} cfg={cfg} fill={(line, i) => (line.front.includes(i) ? PAPER : 'none')} />
       </g>
       {/* 6. tout le mot en négatif, révélé par la transition au scroll */}
       <g data-hero-neg-all clipPath={`url(#hero-clip-${v})`} style={{ opacity: 0 }}>
-        <Word cfg={cfg} fill={() => PAPER} />
+        <Word v={v} cfg={cfg} fill={() => PAPER} />
       </g>
     </svg>
   )
