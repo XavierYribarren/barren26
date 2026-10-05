@@ -19,22 +19,48 @@ function Hero() {
   const copyRef = useRef(null)
   const reelRef = useRef(null)
   const capRef = useRef(null)
+  const videoRef = useRef(null)
 
   useEffect(() => {
     const stage = stageRef.current
+    const video = videoRef.current
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // Sans animation : la nav suit seulement « sur le papier » ou non
+    // Vidéo : rien d'autre que les métadonnées tant qu'elle n'est pas sur le point d'être vue
+    let wanted = false
+    let stageVisible = true
+    const syncVideo = () => {
+      if (wanted && stageVisible) {
+        if (video.paused) video.play().catch(() => {})
+      } else if (!video.paused) {
+        video.pause()
+      }
+    }
+
+    // Sans animation : la nav suit seulement « sur le papier » ou non ; la vidéo est un bloc sous le hero
     if (reduced) {
       const paper = stage.querySelector('[data-hero-paper]')
       const onScroll = () => setHeroProgress(paper.getBoundingClientRect().bottom > 84 ? 0 : 1)
       onScroll()
       window.addEventListener('scroll', onScroll, { passive: true })
+      const io = new IntersectionObserver(([entry]) => {
+        wanted = entry.isIntersecting
+        syncVideo()
+      }, { rootMargin: '200px 0px' })
+      io.observe(reelRef.current)
       return () => {
         window.removeEventListener('scroll', onScroll)
+        io.disconnect()
         setHeroProgress(null)
       }
     }
+
+    // Scène hors de l'écran (après le hero) : pause
+    const io = new IntersectionObserver(([entry]) => {
+      stageVisible = entry.isIntersecting
+      syncVideo()
+    })
+    io.observe(stage)
 
     const fronts = [...stage.querySelectorAll('[data-hero-neg-front]')]
     const negs = [...stage.querySelectorAll('[data-hero-neg-all]')]
@@ -63,6 +89,10 @@ function Hero() {
       reelRef.current.style.visibility = q > 0 ? 'visible' : 'hidden'
       reelRef.current.style.clipPath = `inset(${(1 - q) * 50}% ${(1 - q) * 50}%)`
       capRef.current.style.opacity = clamp((q - 0.75) / 0.25)
+      // Lecture juste avant l'ouverture (p = .5), pause en revenant sur le papier
+      if (p >= 0.4) wanted = true
+      else if (p < 0.35) wanted = false
+      syncVideo()
       setHeroProgress(p)
     }
 
@@ -81,6 +111,7 @@ function Hero() {
 
     return () => {
       st.kill()
+      io.disconnect()
       setHeroProgress(null)
     }
   }, [])
@@ -106,12 +137,14 @@ function Hero() {
         {/* Showreel : s'ouvre depuis le centre (clip-path piloté par le scroll) */}
         <figure className={styles.reel} ref={reelRef}>
           <video
+            ref={videoRef}
             className={styles.video}
-            src="/202605181331 (1).mp4"
+            src="/showreel.mp4"
+            poster="/showreel-poster.jpg"
+            preload="metadata"
             muted
             loop
             playsInline
-            autoPlay
             aria-hidden="true"
           />
           <figcaption className={styles.cap} ref={capRef}>{t('hero.reelCaption')}</figcaption>
