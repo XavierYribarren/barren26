@@ -24,6 +24,23 @@
   z-index: 4;
 }
 
+/* Mot + monolithes (SVG, voir HeroArt) */
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.art :global(defs rect) {
+  vector-effect: non-scaling-stroke;
+}
+
+.artM {
+  display: none;
+}
+
 .labelWrap {
   position: absolute;
   left: 40px;
@@ -68,6 +85,11 @@
   line-height: inherit;
 }
 
+/* Le découpage insère un <br> (retour à la ligne de la clé i18n) : on laisse text-wrap: balance décider */
+.claim :global(br) {
+  display: none;
+}
+
 .sub {
   font-family: var(--font-body);
   font-weight: 400;
@@ -78,6 +100,20 @@
 }
 
 @media (max-width: 768px) {
+  /* Sous la barre mobile fixe de 60px */
+  .sticky {
+    height: calc(100svh - 60px);
+    min-height: 640px;
+  }
+
+  .artD {
+    display: none;
+  }
+
+  .artM {
+    display: block;
+  }
+
   .labelWrap {
     left: 22px;
     top: 84px;

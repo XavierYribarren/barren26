@@ -1,5 +1,6 @@
 'use client'
 import { useTranslation } from '../../i18n'
+import HeroArt from './HeroArt'
 import styles from './Hero.module.css'
 
 function Hero() {
@@ -9,6 +10,7 @@ function Hero() {
     <section id="home" className={styles.stage}>
       <div className={styles.sticky}>
         <h1 className="sr-only">Barren</h1>
+        <HeroArt />
 
         <div key={lang} className={`${styles.labelWrap} langSwap`}>
           <p className={styles.label} data-hero-label suppressHydrationWarning>{t('hero.label')}</p>
