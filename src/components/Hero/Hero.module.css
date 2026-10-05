@@ -1,10 +1,13 @@
 .hero {
   position: relative;
-  height: 100dvh;
+  /* min-height : sur un écran peu haut, le hero s'agrandit au lieu de couper le texte */
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 4rem;
+  gap: 2rem;
+  /* Haut : place pour la barre de navigation fixe */
+  padding: 8rem 4rem 2.5rem;
   overflow: clip;
   background-color: rgb(1, 2, 2);
 }
@@ -19,35 +22,35 @@
   opacity: 0.9;
 }
 
-/* Dégradé sombre local en haut : la nav (en difference) reste lisible quel que soit le haut de la vidéo */
+/* Dégradé sombre local en haut : protège la nav (en difference) et le texte, posés sur la vidéo */
 .hero::before {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
-  height: 180px;
+  height: 60%;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgba(1, 2, 2, 0.85) 0%, rgba(1, 2, 2, 0.5) 50%, rgba(1, 2, 2, 0) 100%);
+  background: linear-gradient(to bottom, rgba(1, 2, 2, 0.85) 0%, rgba(1, 2, 2, 0.65) 45%, rgba(1, 2, 2, 0) 100%);
 }
 
-/* Dégradé sombre local sous le texte, au lieu d'un voile sur toute la vidéo */
+/* Dégradé plus léger en bas, derrière le titre */
 .hero::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 65%;
+  height: 40%;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(to top, rgba(1, 2, 2, 0.9) 0%, rgba(1, 2, 2, 0.7) 55%, rgba(1, 2, 2, 0) 100%);
+  background: linear-gradient(to top, rgba(1, 2, 2, 0.75) 0%, rgba(1, 2, 2, 0) 100%);
 }
 
 .left {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -60,21 +63,23 @@
   width: 100%;
   padding: 0 0.25em;
   min-height: 0;
-  margin-top: 5%;
   overflow: hidden;
   text-shadow: 1px 1px 15px #111111b7;
   mix-blend-mode: difference;
 }
 
 .titleName > span {
-  /* Plus grand qu'avant, mais borné par la hauteur pour laisser tenir le texte du hero */
-  font-size: clamp(4rem, min(22vw, 40dvh), 26rem);
+  /* En bas du hero, en très grand : presque toute la largeur, borné par la hauteur d'écran */
+  font-size: clamp(4rem, min((100vw - 8rem) / 2.9, 42dvh), 40rem);
   line-height: 1;
 }
 
 .subtitles {
   position: relative;
-  z-index: 1;
+  /* Au-dessus des dégradés : avec order, l'ordre de peinture ne suit plus le HTML */
+  z-index: 2;
+  /* Desktop : le texte au-dessus, « Barren » en bas (le h1 reste premier dans le HTML) */
+  order: -1;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -128,6 +133,7 @@
 @media (max-width: 768px) {
   .hero {
     padding: 2rem 1.5rem;
+    gap: 0;
     justify-content: space-evenly;
     
   }
@@ -139,6 +145,7 @@
     display: none;
   }
   .subtitles{
+    order: 0;
     margin-top: -2vh;
   }
 
