@@ -53,6 +53,17 @@
   z-index: 1;
 }
 
+/* Scène 3D (HeroScene) : remplace le SVG une fois prête */
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.with3d .art {
+  visibility: hidden;
+}
+
 .art :global(defs rect) {
   vector-effect: non-scaling-stroke;
 }

@@ -1,11 +1,15 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTranslation } from '../../i18n'
 import { setHeroProgress } from '../../lib/heroProgress'
 import HeroArt, { ART, xId, yId } from './HeroArt'
 import styles from './Hero.module.css'
+
+// Three.js chargé à part : n'alourdit pas le premier rendu (le SVG s'affiche en attendant)
+const HeroScene = dynamic(() => import('./HeroScene'), { ssr: false })
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
@@ -20,6 +24,15 @@ function Hero() {
   const reelRef = useRef(null)
   const capRef = useRef(null)
   const videoRef = useRef(null)
+  const sceneApi = useRef(null)
+  const progressRef = useRef(0)
+  const scene3dRef = useRef(false)
+  const [scene3d, setScene3d] = useState(false)
+
+  const onSceneReady = useCallback(() => {
+    scene3dRef.current = true
+    setScene3d(true)
+  }, [])
 
   useEffect(() => {
     const stage = stageRef.current
@@ -68,8 +81,11 @@ function Hero() {
 
     // Valeurs reprises de docs-mockup/direction-A-transition.html (fonction update)
     const render = (p) => {
+      progressRef.current = p
+      sceneApi.current?.update(p)
       const e = ease(clamp(p / 0.5))
-      for (const v of ['d', 'm']) {
+      // Le SVG n'est plus visible une fois la 3D prête : inutile de le transformer
+      if (!scene3dRef.current) for (const v of ['d', 'm']) {
         const c = ART[v]
         const s = 1 + (c.smax - 1) * e
         c.x.r.forEach((r, i) =>
@@ -78,9 +94,11 @@ function Hero() {
         c.y.parts.forEach((part, i) =>
           setT(yId(v, i), `translate(${c.y.tx + 260 * (1 - sy)} ${c.y.ty}) rotate(${c.y.rot}) scale(${sy}) rotate(${part.r})`))
       }
-      const negOpacity = clamp((p - 0.06) / 0.22) * (1 - clamp((p - 0.44) / 0.1))
-      negs.forEach((n) => { n.style.opacity = negOpacity })
-      fronts.forEach((n) => { n.style.opacity = 1 - clamp((p - 0.44) / 0.1) })
+      if (!scene3dRef.current) {
+        const negOpacity = clamp((p - 0.06) / 0.22) * (1 - clamp((p - 0.44) / 0.1))
+        negs.forEach((n) => { n.style.opacity = negOpacity })
+        fronts.forEach((n) => { n.style.opacity = 1 - clamp((p - 0.44) / 0.1) })
+      }
       floodRef.current.style.opacity = clamp((p - 0.22) / 0.26)
       const fade = clamp(1 - p / 0.2)
       labelRef.current.style.opacity = fade
@@ -119,10 +137,11 @@ function Hero() {
   return (
     <section id="home" className={styles.stage} ref={stageRef}>
       <div className={styles.sticky}>
-        <div className={styles.paper} data-hero-paper>
+        <div className={`${styles.paper} ${scene3d ? styles.with3d : ''}`} data-hero-paper>
           <div className={styles.flood} ref={floodRef} />
           <h1 className="sr-only">Barren</h1>
           <HeroArt />
+          <HeroScene apiRef={sceneApi} progressRef={progressRef} onReady={onSceneReady} />
 
           <div key={lang} className={`${styles.labelWrap} langSwap`} ref={labelRef}>
             <p className={styles.label} data-hero-label suppressHydrationWarning>{t('hero.label')}</p>
