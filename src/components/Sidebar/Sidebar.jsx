@@ -28,6 +28,14 @@ function Sidebar() {
     { id: 'contact', label: t('sidebar.nav.contact') },
   ]
 
+  // Barre desktop : liens d'ancres seuls, le reste vit dans le menu mobile et la page
+  const desktopAnchors = [
+    { id: 'services', label: t('sidebar.nav.services') },
+    { id: 'projects', label: t('sidebar.nav.projects') },
+    { id: 'about',    label: t('sidebar.nav.about') },
+    { id: 'contact',  label: t('sidebar.nav.contact') },
+  ]
+
   const needsLinks = [
     { label: t('sidebar.nav.siteWeb'), path: 'site-web' },
     { label: t('sidebar.nav.webApp'),  path: 'web-app' },
@@ -75,54 +83,11 @@ function Sidebar() {
 
   return (
     <>
-      <aside className={styles.sidebar} data-sidebar>
-        <div className={styles.top}>
-          <button type="button" className={styles.logo} onClick={handleLogoClick}>BARREN</button>
-          <p key={lang} className={`${styles.tagline} langSwap`}>{t('sidebar.tagline')}</p>
-        </div>
+      <header className={styles.topBar} data-nav>
+        <button type="button" className={styles.logo} onClick={handleLogoClick}>BARREN</button>
 
         <nav className={styles.nav} aria-label={lang === 'en' ? 'Main navigation' : 'Navigation principale'}>
-          {anchorsBefore.map(({ id, label }) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              className={`${styles.navLink} ${!isNeedsActive && activeId === id ? styles.active : ''}`}
-              onClick={(e) => handleAnchorClick(e, id)}
-              aria-current={!isNeedsActive && activeId === id ? 'true' : undefined}
-            >
-              <span key={lang} className="langSwap">{label}</span>
-            </a>
-          ))}
-
-          {/* ── Votre besoin ── */}
-          <div className={styles.navGroup}>
-            <button
-              type="button"
-              className={`${styles.navLink} ${styles.navGroupBtn} ${isNeedsActive ? styles.active : ''}`}
-              onClick={() => setNeedsOpen(o => !o)}
-              aria-expanded={needsOpen}
-              aria-controls="needs-submenu"
-            >
-              <span key={lang} className="langSwap">{t('sidebar.nav.needs')}</span>
-              <span className={`${styles.navArrow} ${needsOpen ? styles.navArrowOpen : ''}`} aria-hidden="true">›</span>
-            </button>
-            {needsOpen && (
-              <div id="needs-submenu" className={styles.navSub}>
-                {needsLinks.map(({ label, path }) => (
-                  <Link
-                    key={path}
-                    href={`/${locale}/${path}`}
-                    className={`${styles.navSubLink} ${subPath === path ? styles.active : ''}`}
-                    aria-current={subPath === path ? 'page' : undefined}
-                  >
-                    <span key={lang} className="langSwap">{label}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {anchorsAfter.map(({ id, label }) => (
+          {desktopAnchors.map(({ id, label }) => (
             <a
               key={id}
               href={`#${id}`}
@@ -135,11 +100,11 @@ function Sidebar() {
           ))}
         </nav>
 
-        <div className={styles.langSwitcher}>
-          {['en', 'fr'].map((l) => (
+        <div className={styles.barLang}>
+          {['fr', 'en'].map((l) => (
             <button
               key={l}
-              className={`${styles.langBtn} ${locale === l ? styles.langActive : ''}`}
+              className={`${styles.barLangBtn} ${locale === l ? styles.barLangActive : ''}`}
               onClick={() => switchLang(l)}
               aria-label={l === 'en' ? 'Switch to English' : 'Passer en français'}
               aria-pressed={locale === l}
@@ -149,12 +114,10 @@ function Sidebar() {
           ))}
         </div>
 
-        <div className={styles.footer}>
-          <a href="mailto:xavier.yribarren@gmail.com" className={styles.email}>
-            xavier.yribarren@gmail.com
-          </a>
-        </div>
-      </aside>
+        <a href="#contact" className={styles.cta} onClick={(e) => handleAnchorClick(e, 'contact')}>
+          <span key={lang} className="langSwap">{t('sidebar.nav.cta')}</span>
+        </a>
+      </header>
 
       {/* Mobile top bar */}
       <header className={styles.mobileBar}>

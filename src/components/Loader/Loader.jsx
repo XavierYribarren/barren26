@@ -9,12 +9,12 @@ export default function Loader() {
   const wordsRef   = useRef([])
   const [hidden, setHidden] = useState(false)
 
-  // Avant le premier paint : cacher sidebar + hero elements
+  // Avant le premier paint : cacher la barre de navigation + hero elements
   useLayoutEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    const sidebar = document.querySelector('[data-sidebar]')
-    if (sidebar) gsap.set(sidebar, { x: '-100%' })
+    const nav = document.querySelector('[data-nav]')
+    if (nav) gsap.set(nav, { y: '-100%' })
 
     gsap.set('[data-hero-label]',   { opacity: 0 })
     gsap.set('[data-hero-subline]', { opacity: 0, y: 12 })
@@ -30,7 +30,7 @@ export default function Loader() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
-    const sidebar = document.querySelector('[data-sidebar]')
+    const nav = document.querySelector('[data-nav]')
 
     Promise.all([
       new Promise(r => setTimeout(r, 700)),
@@ -42,7 +42,7 @@ export default function Loader() {
         ease: 'power2.out',
         onComplete: () => {
           setHidden(true)
-          runIntro(sidebar, wordsRef.current)
+          runIntro(nav, wordsRef.current)
         },
       })
     })
@@ -60,10 +60,10 @@ export default function Loader() {
   )
 }
 
-function runIntro(sidebar, words) {
+function runIntro(nav, words) {
   const tl = gsap.timeline()
 
-  if (sidebar) tl.to(sidebar, { x: '0%', duration: 1, ease: 'expo.out' }, 0)
+  if (nav) tl.to(nav, { y: '0%', duration: 1, ease: 'expo.out' }, 0)
 
   if (words.length) {
     tl.to(words, { y: '0%', duration: 0.9, ease: 'expo.out', stagger: 0.1 }, 0.15)

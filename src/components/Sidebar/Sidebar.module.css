@@ -1,48 +1,45 @@
-.sidebar {
+/* Barre desktop : transparente, en difference pour rester lisible sur la vidéo comme sur les sections sombres */
+.topBar {
   position: fixed;
   top: 0;
   left: 0;
-  width: var(--sidebar-width);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 2.5rem 2rem;
-  border-right: 1px solid var(--color-border);
-  background-color: var(--color-bg);
+  right: 0;
   z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 1.5rem 4rem;
+  color: #fff;
+  mix-blend-mode: difference;
+  /* La barre ne bloque pas les clics sur le contenu dessous, seuls ses éléments sont cliquables */
+  pointer-events: none;
 }
 
-.top {
-  margin-bottom: auto;
-  padding-bottom: 2rem;
+.topBar > * {
+  pointer-events: auto;
+}
+
+/* Le contour global (accent) serait déformé par le blend : blanc, il s'inverse et reste toujours contrasté */
+.topBar :focus-visible {
+  outline-color: #fff;
 }
 
 .logo {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   letter-spacing: 0.08em;
-  color: var(--color-text-primary);
-  margin-bottom: 0.35rem;
+  color: inherit;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
-  text-align: left;
-}
-
-.tagline {
-  font-family: var(--font-body);
-  font-size: 0.65rem;
-  color: var(--color-text-secondary);
-  letter-spacing: 0.06em;
 }
 
 .nav {
   display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  flex: 1;
-  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-left: auto;
 }
 
 .navLink {
@@ -50,116 +47,71 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-text-secondary);
-  transition: color 0.2s ease;
+  color: inherit;
   position: relative;
-  width: fit-content;
 }
 
 .navLink::after {
   content: '';
   position: absolute;
-  bottom: -2px;
+  bottom: -4px;
   left: 0;
   width: 0;
   height: 1px;
-  background-color: var(--color-accent);
+  background-color: currentColor;
   transition: width 0.3s ease;
 }
 
-.navLink:hover {
-  color: var(--color-text-primary);
-}
-
-.navLink:hover::after {
+.navLink:hover::after,
+.navLink.active::after {
   width: 100%;
 }
 
-.navLink.active {
-  color: var(--color-accent);
+.barLang {
+  display: flex;
+  gap: 0.75rem;
 }
 
-/* ── Needs dropdown ── */
-.navGroup {
-  display: flex;
-  flex-direction: column;
-}
-
-.navGroupBtn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
+.barLangBtn {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
-  width: 100%;
-  text-align: left;
-}
-
-.navArrow {
-  font-size: 1rem;
-  line-height: 1;
-  color: var(--color-text-secondary);
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.navArrowOpen {
-  transform: rotate(90deg);
-}
-
-.navSub {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  padding-left: 0.75rem;
-  margin-top: 0.85rem;
-  border-left: 1px solid var(--color-border);
-}
-
-.navSubLink {
   font-family: var(--font-body);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: inherit;
+  opacity: 0.55;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+.barLangBtn:hover,
+.barLangActive {
+  opacity: 1;
+}
+
+.barLangActive {
+  cursor: default;
+}
+
+.cta {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-text-secondary);
-  transition: color 0.2s ease;
-  position: relative;
-  width: fit-content;
+  color: inherit;
+  border: 1px solid currentColor;
+  padding: 0.6rem 1.1rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.navSubLink::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background-color: var(--color-accent);
-  transition: width 0.3s ease;
+.cta:hover {
+  background-color: #fff;
+  color: #000;
 }
 
-.navSubLink:hover {
-  color: var(--color-text-primary);
-}
-
-.navSubLink:hover::after {
-  width: 100%;
-}
-
-.navSubLink.active {
-  color: var(--color-accent);
-}
-
-/* Language switcher */
-.langSwitcher {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 2rem;
-  margin-bottom: 1.5rem;
-}
-
+/* Langue : boutons du menu mobile */
 .langBtn {
   background: none;
   border: none;
@@ -180,20 +132,6 @@
 .langActive {
   color: var(--color-text-primary);
   cursor: default;
-}
-
-.footer {
-  padding-top: 0.5rem;
-}
-
-.email {
-  font-size: 0.7rem;
-  color: var(--color-text-secondary);
-  transition: color 0.2s ease;
-}
-
-.email:hover {
-  color: var(--color-accent);
 }
 
 /* Mobile top bar */
@@ -347,6 +285,14 @@
 }
 
 @media (max-width: 768px) {
-  .sidebar { display: none; }
+  .topBar { display: none; }
   .mobileBar { display: flex; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLink::after,
+  .barLangBtn,
+  .cta {
+    transition: none;
+  }
 }

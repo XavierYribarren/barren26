@@ -5,7 +5,6 @@
 }
 
 .main {
-  margin-left: var(--sidebar-width);
   overflow-x: clip;
   position: relative;
   z-index: 5;
@@ -13,7 +12,6 @@
 
 @media (max-width: 768px) {
   .main {
-    margin-left: 0;
     margin-top: 60px;
   }
 }
