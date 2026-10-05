@@ -4,6 +4,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslation } from '../../i18n'
 import { scrollToTarget } from '../../lib/smoothScroll'
+import { subscribeHeroProgress } from '../../lib/heroProgress'
 import styles from './Sidebar.module.css'
 
 function Sidebar() {
@@ -18,6 +19,7 @@ function Sidebar() {
   const [activeId, setActiveId] = useState('home')
   const [needsOpen, setNeedsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [heroP, setHeroP] = useState(null)
 
   const anchorsBefore = [
     { id: 'home',     label: t('sidebar.nav.home') },
@@ -60,13 +62,24 @@ function Sidebar() {
     return () => observer.disconnect()
   }, [isMainPage])
 
-  // Barre desktop : fond noir dès qu'on quitte le haut de page
+  // Progression de la scène du hero (accueil) : pilote les couleurs de la barre
+  useEffect(() => subscribeHeroProgress(setHeroP), [])
+
+  // Barre desktop : fond noir dès qu'on quitte le haut de page (hors scène du hero)
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Accueil : noir sur le papier (avant que la scène ne publie, on suppose le haut de page),
+  // clair pendant la scène, fond noir une fois la scène passée. Ailleurs : fond noir après 10px.
+  const onPaper = isMainPage && (heroP === null ? !scrolled : heroP <= 0.12)
+  const overStage = isMainPage && heroP !== null && heroP > 0.12 && heroP < 1
+  const solid = isMainPage && heroP !== null ? heroP >= 1 : scrolled
+  const barClass = [styles.topBar, onPaper && styles.onPaper, overStage && styles.overStage, solid && styles.scrolled]
+    .filter(Boolean).join(' ')
 
   function handleLogoClick() {
     setMenuOpen(false)
@@ -93,7 +106,7 @@ function Sidebar() {
 
   return (
     <>
-      <header className={`${styles.topBar} ${scrolled ? styles.scrolled : ''}`} data-nav>
+      <header className={barClass} data-nav>
         <button type="button" className={styles.logo} onClick={handleLogoClick}>BARREN</button>
 
         <nav className={styles.nav} aria-label={lang === 'en' ? 'Main navigation' : 'Navigation principale'}>

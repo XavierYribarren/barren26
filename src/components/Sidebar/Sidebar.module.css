@@ -1,44 +1,58 @@
-/* Barre desktop : transparente, en difference pour rester lisible sur la vidéo comme sur les sections sombres */
+/* Barre desktop (maquette direction A) : couleurs pilotées par la scène du hero.
+   Par défaut : texte clair sur le site sombre. .onPaper : noir sur le papier du hero. */
 .topBar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
+  height: 84px;
   display: flex;
   align-items: center;
-  gap: 2.5rem;
-  padding: 1.5rem 4rem;
-  color: #fff;
-  mix-blend-mode: difference;
-  border-bottom: 1px solid transparent;
-  /* La barre ne bloque pas les clics sur le contenu dessous, seuls ses éléments sont cliquables */
-  pointer-events: none;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Après le haut de page : fond noir. Le blend difference est coupé, sinon le noir resterait invisible */
-.topBar.scrolled {
-  background-color: var(--color-bg);
-  border-bottom-color: var(--color-border);
-  mix-blend-mode: normal;
+  gap: 32px;
+  padding: 0 40px;
   color: var(--color-text-primary);
-  pointer-events: auto;
+  border-bottom: 1px solid transparent;
+  /* La barre transparente ne bloque pas les clics dessous, seuls ses éléments sont cliquables */
+  pointer-events: none;
+  transition: color 0.25s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .topBar > * {
   pointer-events: auto;
 }
 
-/* Le contour global (accent) serait déformé par le blend : blanc, il s'inverse et reste toujours contrasté */
+/* Sur le papier du hero (p ≤ .12) */
+.topBar.onPaper {
+  color: var(--color-bg);
+}
+
+/* Pendant la scène sombre (fond noir puis vidéo) : léger dégradé pour les frames claires */
+.topBar.overStage::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -48px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(13, 13, 13, 0.6), rgba(13, 13, 13, 0));
+}
+
+/* Une fois la scène passée (ou hors accueil, après 10px de scroll) : fond noir */
+.topBar.scrolled {
+  background-color: var(--color-bg);
+  border-bottom-color: var(--color-border);
+  pointer-events: auto;
+}
+
 .topBar :focus-visible {
-  outline-color: #fff;
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
 }
 
 .logo {
   font-family: var(--font-display);
-  font-size: 1.4rem;
-  letter-spacing: 0.08em;
+  font-size: 20px;
+  letter-spacing: 0.02em;
   color: inherit;
   background: none;
   border: none;
@@ -49,16 +63,14 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 32px;
   margin-left: auto;
 }
 
 .navLink {
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 14px;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
   color: inherit;
   position: relative;
 }
@@ -81,20 +93,19 @@
 
 .barLang {
   display: flex;
-  gap: 0.75rem;
+  gap: 8px;
 }
 
+/* Langue inactive : 0.6 (et non 0.45 comme la maquette) pour garder 4.5:1 sur le papier comme sur le noir */
 .barLangBtn {
   background: none;
   border: none;
   cursor: pointer;
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: inherit;
-  opacity: 0.55;
+  opacity: 0.6;
   padding: 0;
   transition: opacity 0.2s ease;
 }
@@ -108,21 +119,25 @@
   cursor: default;
 }
 
+/* CTA plein : beige sur le site sombre, noir sur le papier */
 .cta {
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 14px;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: inherit;
-  border: 1px solid currentColor;
-  padding: 0.6rem 1.1rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  padding: 12px 20px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.onPaper .cta {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
 }
 
 .cta:hover {
-  background-color: #fff;
-  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* Langue : boutons du menu mobile */
