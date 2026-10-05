@@ -1,24 +1,14 @@
 'use client'
 import { useRef, useEffect, Suspense } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { Model } from './XY'
 import styles from './Background.module.css'
 import { Stage } from '@react-three/drei'
 
+// La rotation au scroll est gérée dans XY.jsx
 function XYModel({ scroll }) {
-  const groupRef = useRef()
-  const smooth = useRef(0)
-
-  useFrame(() => {
-    smooth.current += (scroll.current - smooth.current) * 0.05
-    if (groupRef.current) {
-      // groupRef.current.rotation.x = smooth.current * 0.8
-      // groupRef.current.rotation.y = smooth.current * 1.5
-    }
-  })
-
   return (
-    <group ref={groupRef}>
+    <group>
       <Model scroll={scroll} />
     </group>
   )
