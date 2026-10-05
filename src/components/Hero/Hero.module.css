@@ -19,6 +19,19 @@
   opacity: 0.9;
 }
 
+/* Dégradé sombre local en haut : la nav (en difference) reste lisible quel que soit le haut de la vidéo */
+.hero::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 180px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(1, 2, 2, 0.85) 0%, rgba(1, 2, 2, 0.5) 50%, rgba(1, 2, 2, 0) 100%);
+}
+
 /* Dégradé sombre local sous le texte, au lieu d'un voile sur toute la vidéo */
 .hero::after {
   content: '';
@@ -47,14 +60,15 @@
   width: 100%;
   padding: 0 0.25em;
   min-height: 0;
-  margin-top: 10%;
+  margin-top: 5%;
   overflow: hidden;
   text-shadow: 1px 1px 15px #111111b7;
   mix-blend-mode: difference;
 }
 
 .titleName > span {
-  font-size: clamp(4rem, 18vw, 18rem);
+  /* Plus grand qu'avant, mais borné par la hauteur pour laisser tenir le texte du hero */
+  font-size: clamp(4rem, min(22vw, 40dvh), 26rem);
   line-height: 1;
 }
 
@@ -120,6 +134,7 @@
 .titleName{
   margin: 0;
 }
+  .hero::before,
   .hero::after {
     display: none;
   }
