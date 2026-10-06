@@ -112,24 +112,27 @@ function Variant({ v }) {
 
       {/* 1. le mot, derrière tout */}
       <g fill={INK}><Word v={v} cfg={cfg} fill={() => INK} /></g>
-      {/* 2. ombre portée sur le papier */}
-      <g filter={`url(#hero-blur-${v})`} opacity=".34" transform={`translate(${cfg.shadow[0]} ${cfg.shadow[1]})`} fill="#000">
-        <Shapes v={v} cfg={cfg} />
-      </g>
-      {/* 3. épaisseur du monolithe */}
-      <g fill="#1b1b1b" transform={`translate(${cfg.thickness[0]} ${cfg.thickness[1]})`}><Shapes v={v} cfg={cfg} /></g>
-      <g fill="none" stroke="#4a4a46" strokeWidth="3"><Shapes v={v} cfg={cfg} /></g>
-      {/* 4. face avant : cache les lettres « derrière » */}
-      <g fill={`url(#hero-face-${v})`}><Shapes v={v} cfg={cfg} /></g>
-      {/* Reflet : déborde du cadre, sinon le X agrandi garde une bande claire limitée au viewBox sur écran large */}
-      <rect x={-w} y={-h} width={3 * w} height={3 * h} fill={`url(#hero-gloss-${v})`} clipPath={`url(#hero-clip-${v})`} />
-      {/* 5. lettres « devant » : en négatif là où le monolithe les recouvre */}
-      <g data-hero-neg-front clipPath={`url(#hero-clip-${v})`}>
-        <Word v={v} cfg={cfg} fill={(line, i) => (line.front.includes(i) ? PAPER : 'none')} />
-      </g>
-      {/* 6. tout le mot en négatif, révélé par la transition au scroll */}
-      <g data-hero-neg-all clipPath={`url(#hero-clip-${v})`} style={{ opacity: 0 }}>
-        <Word v={v} cfg={cfg} fill={() => PAPER} />
+      {/* Monolithes (couches 2 à 6) : masqués tant que la scène 3D est attendue, voir Hero */}
+      <g data-mono>
+        {/* 2. ombre portée sur le papier */}
+        <g filter={`url(#hero-blur-${v})`} opacity=".34" transform={`translate(${cfg.shadow[0]} ${cfg.shadow[1]})`} fill="#000">
+          <Shapes v={v} cfg={cfg} />
+        </g>
+        {/* 3. épaisseur du monolithe */}
+        <g fill="#1b1b1b" transform={`translate(${cfg.thickness[0]} ${cfg.thickness[1]})`}><Shapes v={v} cfg={cfg} /></g>
+        <g fill="none" stroke="#4a4a46" strokeWidth="3"><Shapes v={v} cfg={cfg} /></g>
+        {/* 4. face avant : cache les lettres « derrière » */}
+        <g fill={`url(#hero-face-${v})`}><Shapes v={v} cfg={cfg} /></g>
+        {/* Reflet : déborde du cadre, sinon le X agrandi garde une bande claire limitée au viewBox sur écran large */}
+        <rect x={-w} y={-h} width={3 * w} height={3 * h} fill={`url(#hero-gloss-${v})`} clipPath={`url(#hero-clip-${v})`} />
+        {/* 5. lettres « devant » : en négatif là où le monolithe les recouvre */}
+        <g data-hero-neg-front clipPath={`url(#hero-clip-${v})`}>
+          <Word v={v} cfg={cfg} fill={(line, i) => (line.front.includes(i) ? PAPER : 'none')} />
+        </g>
+        {/* 6. tout le mot en négatif, révélé par la transition au scroll */}
+        <g data-hero-neg-all clipPath={`url(#hero-clip-${v})`} style={{ opacity: 0 }}>
+          <Word v={v} cfg={cfg} fill={() => PAPER} />
+        </g>
       </g>
     </svg>
   )

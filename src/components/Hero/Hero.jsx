@@ -5,6 +5,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTranslation } from '../../i18n'
 import { setHeroProgress } from '../../lib/heroProgress'
+import { markHeroReady } from '../../lib/heroReady'
 import HeroArt, { ART, xId, yId } from './HeroArt'
 import styles from './Hero.module.css'
 
@@ -27,12 +28,25 @@ function Hero() {
   const sceneApi = useRef(null)
   const progressRef = useRef(0)
   const scene3dRef = useRef(false)
-  const [scene3d, setScene3d] = useState(false)
+  // 'pending' : monolithes masqués, en attente de la 3D ; '3d' : scène prête ; 'svg' : repli
+  const [art, setArt] = useState('pending')
 
   const onSceneReady = useCallback(() => {
     scene3dRef.current = true
-    setScene3d(true)
+    setArt('3d')
+    markHeroReady()
   }, [])
+
+  const onSceneFallback = useCallback(() => {
+    setArt((a) => (a === 'pending' ? 'svg' : a))
+    markHeroReady()
+  }, [])
+
+  // Filet de sécurité : si la 3D n'est pas là après 4 s, on affiche le repli SVG
+  useEffect(() => {
+    const t = setTimeout(onSceneFallback, 4000)
+    return () => clearTimeout(t)
+  }, [onSceneFallback])
 
   useEffect(() => {
     const stage = stageRef.current
@@ -149,11 +163,14 @@ function Hero() {
   return (
     <section id="home" className={styles.stage} ref={stageRef}>
       <div className={styles.sticky}>
-        <div className={`${styles.paper} ${scene3d ? styles.with3d : ''}`} data-hero-paper>
+        <div
+          className={`${styles.paper} ${art === '3d' ? styles.with3d : ''} ${art === 'pending' ? styles.artPending : ''}`}
+          data-hero-paper
+        >
           <div className={styles.flood} ref={floodRef} />
           <h1 className="sr-only">Barren</h1>
           <HeroArt />
-          <HeroScene apiRef={sceneApi} progressRef={progressRef} onReady={onSceneReady} />
+          <HeroScene apiRef={sceneApi} progressRef={progressRef} onReady={onSceneReady} onFallback={onSceneFallback} />
 
           <div key={lang} className={`${styles.labelWrap} langSwap`} ref={labelRef}>
             <p className={styles.label} data-hero-label suppressHydrationWarning>{t('hero.label')}</p>

@@ -185,9 +185,12 @@ function Scene({ apiRef, progressRef, onReady }) {
   )
 }
 
-export default function HeroScene({ apiRef, progressRef, onReady }) {
-  // Sans WebGL 2, rien n'est rendu : le SVG du hero reste affiché
+export default function HeroScene({ apiRef, progressRef, onReady, onFallback }) {
+  // Sans WebGL 2, rien n'est rendu : le hero passe au repli SVG
   const [supported] = useState(() => !!document.createElement('canvas').getContext('webgl2'))
+  useEffect(() => {
+    if (!supported) onFallback()
+  }, [supported, onFallback])
   if (!supported) return null
 
   return (

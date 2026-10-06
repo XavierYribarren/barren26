@@ -64,6 +64,11 @@
   visibility: hidden;
 }
 
+/* En attente de la 3D : le mot seul, sans les monolithes SVG de repli */
+.artPending .art :global([data-mono]) {
+  visibility: hidden;
+}
+
 .art :global(defs rect) {
   vector-effect: non-scaling-stroke;
 }
