@@ -56,7 +56,7 @@ export default function Loader() {
   if (hidden) return null
 
   return (
-    <div ref={overlayRef} className={styles.overlay}>
+    <div ref={overlayRef} className={styles.overlay} data-loader>
       <span className={styles.logo}>BARREN</span>
       <div className={styles.track}>
         <div className={styles.fill} />

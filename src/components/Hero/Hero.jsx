@@ -34,11 +34,17 @@ function Hero() {
   const scene3dRef = useRef(false)
   // 'pending' : monolithes masqués, en attente de la 3D ; '3d' : scène prête ; 'svg' : repli
   const [art, setArt] = useState('pending')
+  // Fondu de la 3D seulement si la page est déjà visible ; sous le loader, affichage immédiat (sinon,
+  // pendant le retrait du loader, on verrait le mot SVG à travers des monolithes à moitié transparents)
+  const [fadeIn, setFadeIn] = useState(false)
 
   const onSceneReady = useCallback(() => {
+    const loaderUp = !!document.querySelector('[data-loader]')
     scene3dRef.current = true
+    setFadeIn(!loaderUp)
     setArt('3d')
-    markHeroReady()
+    // Le loader ne se retire qu'une fois la 3D à l'écran (deux images plus tard)
+    requestAnimationFrame(() => requestAnimationFrame(markHeroReady))
   }, [])
 
   const onSceneFallback = useCallback(() => {
@@ -172,7 +178,12 @@ function Hero() {
     <section id="home" className={styles.stage} ref={stageRef}>
       <div className={styles.sticky}>
         <div
-          className={`${styles.paper} ${art === '3d' ? styles.with3d : ''} ${art === 'pending' ? styles.artPending : ''}`}
+          className={[
+            styles.paper,
+            art === '3d' && styles.with3d,
+            art === '3d' && fadeIn && styles.fadeIn,
+            art === 'pending' && styles.artPending,
+          ].filter(Boolean).join(' ')}
           data-hero-paper
         >
           <div className={styles.flood} ref={floodRef} />
