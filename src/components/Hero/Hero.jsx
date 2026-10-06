@@ -105,7 +105,19 @@ function Hero() {
       copyRef.current.style.opacity = fade
       const q = ease(clamp((p - 0.5) / 0.42))
       reelRef.current.style.visibility = q > 0 ? 'visible' : 'hidden'
-      reelRef.current.style.clipPath = `inset(${(1 - q) * 50}% ${(1 - q) * 50}%)`
+      if (isMobile()) {
+        // Mobile (portrait) : la vidéo 16:9 est montrée entière ; le cadre s'ouvre jusqu'à une bande
+        // pleine largeur au ratio de la vidéo, centrée, au lieu du plein écran
+        const reel = reelRef.current
+        const band = Math.max(0, (reel.offsetHeight - (reel.offsetWidth * 9) / 16) / 2)
+        const half = reel.offsetHeight / 2
+        const top = (1 - q) * half + q * band
+        // 56px de plus en bas : la légende, posée sous la bande, reste dans le cadre
+        const bottom = (1 - q) * half + q * Math.max(0, band - 56)
+        reel.style.clipPath = `inset(${top}px ${(1 - q) * 50}% ${bottom}px)`
+      } else {
+        reelRef.current.style.clipPath = `inset(${(1 - q) * 50}% ${(1 - q) * 50}%)`
+      }
       capRef.current.style.opacity = clamp((q - 0.75) / 0.25)
       // Lecture juste avant l'ouverture (p = .5), pause en revenant sur le papier
       if (p >= 0.4) wanted = true

@@ -168,9 +168,21 @@
     min-height: 640px;
   }
 
+  /* Vidéo entière (16:9) dans la bande ouverte au centre ; le noir autour prolonge la transition */
+  .reel {
+    background: var(--color-bg);
+  }
+
+  .video {
+    object-fit: contain;
+  }
+
+  /* Légende sous la bande vidéo */
   .cap {
     left: 22px;
-    bottom: 28px;
+    top: calc(50% + 28.125vw + 16px);
+    bottom: auto;
+    text-shadow: none;
   }
 
   .artD {
@@ -248,5 +260,17 @@
   .paper {
     height: calc(100svh - 60px);
     min-height: 640px;
+  }
+
+  /* Bloc vidéo au ratio 16:9, légende dessous */
+  .reel {
+    height: auto;
+    aspect-ratio: 16 / 9;
+    overflow: visible;
+    margin-bottom: 56px;
+  }
+
+  .cap {
+    top: calc(100% + 16px);
   }
 }
