@@ -7,12 +7,13 @@ import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
 import { ART } from './HeroArt'
 import { WORD_PATHS } from './heroWordPaths'
 import {
-  INK, PAPER, deg, clamp, ease, MONO, X_ZOOM_ANCHOR, fitGlyph, Monolith, SceneLights,
+  INK, PAPER, deg, clamp, ease, MONO, coverScale, anchorOffset, fitGlyph, Monolith, SceneLights,
 } from '../Monolith/monolith3d'
 import styles from './Hero.module.css'
 
 const MONO_Z = 90
-const X_SCALE_MAX = { d: 20, m: 16 }
+// Sur mobile, monolithes plus fins : étirés ×1,15 au lieu de ×1,6 (relatif : 0,72)
+const MOBILE_SX = 0.72
 
 // Hauteur d'une forme de la maquette : rects (x, y, w, h) tournés de r degrés autour du centre
 function shapeHeight(parts) {
@@ -76,10 +77,14 @@ function Scene({ apiRef, progressRef, onReady }) {
   const oy = (size.height - vbH * k) / 2
 
   const letters = useMemo(() => letterGeometries(v), [v])
-  const xFit = useMemo(() => fitGlyph(nodes[MONO.x.node].geometry,
-    shapeHeight(cfg.x.r.map((r) => ({ rect: cfg.x.rect, r }))), MONO.x.stretch), [nodes, cfg])
+  const xHeight = useMemo(() => shapeHeight(cfg.x.r.map((r) => ({ rect: cfg.x.rect, r }))), [cfg])
+  const sx = v === 'm' ? MOBILE_SX : 1
+  const xFit = useMemo(() => fitGlyph(nodes[MONO.x.node].geometry, xHeight, MONO.x.stretch * sx),
+    [nodes, xHeight, sx])
+  // Échelle finale : de quoi couvrir tout l'écran (en unités du viewBox), quelle que soit sa taille
+  const xScaleMax = coverScale(size.width / k / 2, size.height / k / 2, xHeight, sx)
   const yFit = useMemo(() => fitGlyph(nodes[MONO.y.node].geometry,
-    shapeHeight(cfg.y.parts), MONO.y.stretch), [nodes, cfg])
+    shapeHeight(cfg.y.parts), MONO.y.stretch * sx), [nodes, cfg, sx])
   useEffect(() => () => letters.flat().forEach((g) => g.dispose()), [letters])
 
   const xRef = useRef(null)
@@ -93,13 +98,21 @@ function Scene({ apiRef, progressRef, onReady }) {
   useLayoutEffect(() => {
     apiRef.current = {
       update(p) {
-        const e = ease(clamp(p / 0.5))
-        const s = 1 + (X_SCALE_MAX[v] - 1) * e
         if (xRef.current) {
-          // Zoom autour d'un point plein du X (voir X_ZOOM_ANCHOR) : centre + (1 - s) × décalage du point
-          xRef.current.position.set(cfg.x.tx + (1 - s) * X_ZOOM_ANCHOR * xFit.width, -cfg.x.ty, MONO_Z)
-          // SVG rotate(-5) (y vers le bas) = +5° dans la scène (y vers le haut)
-          xRef.current.rotation.z = deg(-cfg.x.rot) * (1 - e)
+          // Plus rapide que la maquette (p ∈ [0, .4] au lieu de [0, .5]) : l'écran est entièrement couvert
+          // dès p ≈ .3, quand le fond noir commence à monter
+          const ex = ease(clamp(p / 0.4))
+          const s = 1 + (xScaleMax - 1) * ex
+          // SVG rotate(-5) (y vers le bas) = +5° dans la scène (y vers le haut), qui revient à 0
+          const theta = deg(-cfg.x.rot) * (1 - ex)
+          // Le point plein du X (X_COVER) glisse vers le centre de l'écran (un peu en avance sur le zoom)
+          const ec = ease(clamp(p / 0.35))
+          const [a0x, a0y] = anchorOffset(xHeight, deg(-cfg.x.rot), sx)
+          const px = cfg.x.tx + a0x + (vbW / 2 - (cfg.x.tx + a0x)) * ec
+          const py = -cfg.x.ty + a0y + (-vbH / 2 - (-cfg.x.ty + a0y)) * ec
+          const [ax, ay] = anchorOffset(xHeight * s, theta, sx)
+          xRef.current.position.set(px - ax, py - ay, MONO_Z)
+          xRef.current.rotation.z = theta
           xRef.current.scale.setScalar(s)
         }
         // Le X se redresse face caméra dès le début du scroll : agrandies, ses faces latérales
@@ -122,7 +135,7 @@ function Scene({ apiRef, progressRef, onReady }) {
       },
     }
     apiRef.current.update(progressRef.current)
-  }, [apiRef, progressRef, cfg, v, xFit, invalidate])
+  }, [apiRef, progressRef, cfg, xHeight, xScaleMax, sx, vbW, vbH, invalidate])
 
   // Prête : deux images plus tard, le premier rendu est à l'écran → on masque le repli SVG
   useEffect(() => {

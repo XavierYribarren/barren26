@@ -18,10 +18,32 @@ export const MONO = {
   y: { node: 'Y', stretch: 1.6, tilt: [0.2, 0.3] },
 }
 
-// Le X du glb est fait de deux dalles séparées par une fente verticale, aux bords extérieurs en biais :
-// on zoome autour d'un point plein de la dalle gauche (en fraction de la largeur du X) et plus loin que
-// la maquette (×14 / ×12), pour que fente et bords sortent de l'écran avant que le fond noir soit monté.
-export const X_ZOOM_ANCHOR = -0.3
+// Zoom du X jusqu'à couvrir l'écran. Silhouette de face du X (étiré ×1,6) analysée une fois depuis XY.glb :
+// le point le plus « plein » est dans la dalle droite, partie basse (la fente centrale et les bords en
+// sablier sont ailleurs). Coordonnées en fractions de la hauteur du X, depuis son centre, y vers le haut.
+// rects : demi-largeur et demi-hauteur du plus grand rectangle plein centré sur ce point, par format.
+export const X_COVER = {
+  anchor: [0.1478, -0.28],
+  rects: [[0.099, 0.22], [0.117, 0.195], [0.1213, 0.1517], [0.1233, 0.1233], [0.1257, 0.0967],
+    [0.128, 0.08], [0.13, 0.065], [0.132, 0.055]],
+}
+
+// Échelle à partir de laquelle le X (hauteur h), son point plein centré sur l'écran, couvre une vue
+// de demi-dimensions halfW × halfH (mêmes unités que h). Marge de 10 %. sx : étirement horizontal
+// relatif à celui de l'analyse (MONO.x.stretch).
+export function coverScale(halfW, halfH, h, sx = 1) {
+  const need = Math.min(...X_COVER.rects.map(([rw, rh]) => Math.max(halfW / (rw * sx * h), halfH / (rh * h))))
+  return need * 1.1
+}
+
+// Position du point plein (relative au centre du X) pour une hauteur h et une rotation θ (radians)
+export function anchorOffset(h, theta, sx = 1) {
+  const ax = X_COVER.anchor[0] * sx
+  const ay = X_COVER.anchor[1]
+  const c = Math.cos(theta)
+  const sn = Math.sin(theta)
+  return [(ax * c - ay * sn) * h, (ax * sn + ay * c) * h]
+}
 
 // Échelle et décalage pour poser une lettre du glb debout, centrée, à la hauteur visée
 export function fitGlyph(geometry, height, stretch) {

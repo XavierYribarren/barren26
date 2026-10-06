@@ -22,23 +22,26 @@ export const ART = {
       ],
     },
   },
+  // Mobile : monolithes plus fins, nettement plus hauts que les capitales, chacun sur une lettre qui passe
+  // en négatif (papier sur noir, la lettre reste lisible) : X sur le A (1re ligne), Y sur le N (2e ligne),
+  // en diagonale sans se toucher.
   m: {
     viewBox: [390, 844],
     lines: [
-      { x: 11.08, y: 292, letters: 'BAR', front: [] },
-      { x: 11.08, y: 416, letters: 'REN', front: [1, 2] },
+      { x: 11.08, y: 292, letters: 'BAR', front: [1] },
+      { x: 11.08, y: 416, letters: 'REN', front: [2] },
     ],
-    blur: 12,
-    shadow: [24, 32],
-    thickness: [8, 7],
+    blur: 9,
+    shadow: [14, 18],
+    thickness: [5, 4],
     smax: 12,
-    x: { tx: 104, ty: 486, rot: -5, rect: [-36, -130, 72, 260], r: [36, -36] },
+    x: { tx: 193, ty: 238, rot: -5, rect: [-28, -100, 55, 200], r: [36, -36] },
     y: {
-      tx: 292, ty: 500, rot: 4,
+      tx: 313, ty: 364, rot: 4,
       parts: [
-        { rect: [-36, -10, 72, 150], r: 0 },
-        { rect: [-36, -140, 72, 156], r: 32 },
-        { rect: [-36, -140, 72, 156], r: -32 },
+        { rect: [-25, -7, 50, 108], r: 0 },
+        { rect: [-25, -100, 50, 110], r: 32 },
+        { rect: [-25, -100, 50, 110], r: -32 },
       ],
     },
   },
