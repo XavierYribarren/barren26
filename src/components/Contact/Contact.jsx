@@ -7,7 +7,7 @@ import { splitWords } from '../../utils/splitWords'
 import { useTranslation } from '../../i18n'
 import styles from './Contact.module.css'
 
-// Retour du X en 3D (Three.js chargé à part)
+// Retour du X et du Y en 3D (Three.js chargé à part)
 const ContactX = dynamic(() => import('./ContactX'), { ssr: false })
 
 function Contact() {
@@ -15,7 +15,8 @@ function Contact() {
   const sectionRef  = useRef(null)
   const headlineRef = useRef(null)
   const restRef     = useRef(null)
-  const slotRef     = useRef(null)
+  const xSlotRef    = useRef(null)
+  const ySlotRef    = useRef(null)
   const floodRef    = useRef(null)
   const [xReady, setXReady] = useState(false)
   const onXReady = useCallback(() => setXReady(true), [])
@@ -46,7 +47,7 @@ function Contact() {
   return (
     <section id="contact" className={styles.contact} ref={sectionRef} data-x-ready={xReady || undefined}>
       <div className={styles.flood} ref={floodRef} />
-      <ContactX sectionRef={sectionRef} slotRef={slotRef} floodRef={floodRef} onReady={onXReady} />
+      <ContactX sectionRef={sectionRef} xSlotRef={xSlotRef} ySlotRef={ySlotRef} floodRef={floodRef} onReady={onXReady} />
 
       <div className={styles.text}>
         {/* headline kept outside key wrapper so the headlineRef stays stable for splitWords */}
@@ -67,8 +68,11 @@ function Contact() {
         </div>
       </div>
 
-      {/* Place du X une fois revenu à sa taille (dessiné par ContactX) */}
-      <div className={styles.slot} ref={slotRef} aria-hidden="true" />
+      {/* Places du X et du Y une fois revenus à leur taille (dessinés par ContactX) */}
+      <div className={styles.slot} aria-hidden="true">
+        <div className={styles.slotX} ref={xSlotRef} />
+        <div className={styles.slotY} ref={ySlotRef} />
+      </div>
 
       <p key={`footer-${lang}`} className={`${styles.copy} langSwap`}>{t('contact.footer')}</p>
     </section>

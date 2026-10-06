@@ -6,7 +6,7 @@
   min-height: 100svh;
   padding: 9rem 4rem 2rem;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-rows: 1fr auto;
   column-gap: 4rem;
   align-items: center;
@@ -52,13 +52,26 @@
   align-items: flex-start;
 }
 
-/* Place réservée au X revenu à sa taille (ratio de la lettre du glb étirée) */
+/* Places réservées au X et au Y revenus à leur taille (ratios des lettres du glb étirées ×1,6 ;
+   le Y est un peu plus haut que le X, comme dans le hero) */
 .slot {
+  --xh: min(48svh, 420px);
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
-  height: min(58svh, 520px);
-  aspect-ratio: 0.6;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--xh) * 0.14);
+}
+
+.slotX {
+  height: var(--xh);
+  aspect-ratio: 0.604;
+}
+
+.slotY {
+  height: calc(var(--xh) * 1.066);
+  aspect-ratio: 0.608;
 }
 
 .headline {
@@ -165,10 +178,10 @@
   }
 
   .slot {
+    --xh: 150px;
     grid-column: 1;
     grid-row: 1;
     justify-self: end;
-    height: 180px;
   }
 
   .text {

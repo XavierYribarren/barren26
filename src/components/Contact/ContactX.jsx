@@ -4,53 +4,89 @@ import { Canvas, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { MONO, X_ZOOM_ANCHOR, fitGlyph, Monolith, SceneLights, clamp, deg, ease } from '../Monolith/monolith3d'
+import {
+  MONO, coverScale, anchorOffset, fitGlyph, Monolith, SceneLights, clamp, deg, ease,
+} from '../Monolith/monolith3d'
 import styles from './Contact.module.css'
 
-// Retour du X : le geste inverse du hero. En entrant, la section est noire (fond floodRef) et le X géant ;
-// il rétrécit jusqu'à sa place à côté du titre pendant que le noir s'efface et découvre le papier.
-const SCALE_START = 26
-const ROTATION = 5
+// Retour du X et du Y : le geste inverse du hero. En entrant, la section est noire (fond floodRef) et le X
+// la couvre entièrement ; il rétrécit jusqu'à sa place à côté du titre pendant que le noir s'efface et
+// découvre le papier. Le Y arrive ensuite depuis la droite, comme il était parti dans le hero.
+const X_ROT = 5
+const Y_ROT = -4
 
-function Scene({ slotRef, apiRef, progressRef, onReady }) {
+const floodOpacity = (q) => 1 - clamp((q - 0.45) / 0.4)
+
+// Centre d'un emplacement du DOM, en coordonnées de la scène (origine au centre du canvas, y vers le haut)
+function slotCenter(el, canvas, size) {
+  const r = el.getBoundingClientRect()
+  return {
+    x: r.left - canvas.left + r.width / 2 - size.width / 2,
+    y: size.height / 2 - (r.top - canvas.top + r.height / 2),
+    h: r.height,
+  }
+}
+
+function Scene({ xSlotRef, ySlotRef, apiRef, progressRef, onReady }) {
   const { nodes } = useGLTF('/XY.glb')
   const size = useThree((s) => s.size)
   const gl = useThree((s) => s.gl)
   const invalidate = useThree((s) => s.invalidate)
   const xRef = useRef(null)
-  const tiltRef = useRef(null)
+  const xTiltRef = useRef(null)
+  const yRef = useRef(null)
+  const yTiltRef = useRef(null)
   const shadowRef = useRef(null)
 
-  // Lettre posée pour une hauteur de 1 : la hauteur réelle vient de la réservation dans le DOM
-  const unit = useMemo(() => fitGlyph(nodes[MONO.x.node].geometry, 1, MONO.x.stretch), [nodes])
+  // Lettres posées pour une hauteur de 1 : la hauteur réelle vient des emplacements du DOM
+  const xUnit = useMemo(() => fitGlyph(nodes[MONO.x.node].geometry, 1, MONO.x.stretch), [nodes])
+  const yUnit = useMemo(() => fitGlyph(nodes[MONO.y.node].geometry, 1, MONO.y.stretch), [nodes])
 
   useLayoutEffect(() => {
     apiRef.current = {
       update(q) {
         const canvas = gl.domElement.getBoundingClientRect()
-        const slot = slotRef.current?.getBoundingClientRect()
-        if (!slot || !xRef.current) return
-        const h = slot.height
-        const cx = slot.left - canvas.left + slot.width / 2 - size.width / 2
-        const cy = size.height / 2 - (slot.top - canvas.top + slot.height / 2)
-        const s = 1 + (SCALE_START - 1) * (1 - ease(q))
-        // Pivot sur un point plein de la dalle gauche (voir X_ZOOM_ANCHOR) : la fente ne passe jamais à l'écran
-        xRef.current.position.set(cx + (1 - s) * X_ZOOM_ANCHOR * unit.width * h, cy, 0)
-        xRef.current.rotation.z = deg(ROTATION)
-        xRef.current.scale.setScalar(h * s)
-        // L'inclinaison (épaisseur visible) n'arrive qu'en fin de course, une fois le X à taille normale
+        if (!xSlotRef.current || !ySlotRef.current || !xRef.current) return
+        const X = slotCenter(xSlotRef.current, canvas, size)
+        const Y = slotCenter(ySlotRef.current, canvas, size)
+
+        // X : de « couvre tout le canvas » (q = 0) à sa place (q = 1) ; son point plein (X_COVER) glisse
+        // du centre du canvas vers sa position finale
+        const e = ease(q)
+        const sStart = coverScale(size.width / 2, size.height / 2, X.h)
+        const s = 1 + (sStart - 1) * (1 - e)
+        const theta = deg(X_ROT) * e
+        const [f0x, f0y] = anchorOffset(X.h, deg(X_ROT))
+        const px = (X.x + f0x) * e
+        const py = (X.y + f0y) * e
+        const [ax, ay] = anchorOffset(X.h * s, theta)
+        xRef.current.position.set(px - ax, py - ay, 0)
+        xRef.current.rotation.z = theta
+        xRef.current.scale.setScalar(X.h * s)
+
+        // Y : arrive depuis la droite en grandissant, en fin de course (inverse du hero)
+        const sy = Math.max(0.0001, ease(clamp((q - 0.55) / 0.45)))
+        if (yRef.current) {
+          yRef.current.position.set(Y.x + 0.55 * Y.h * (1 - sy), Y.y, 0)
+          yRef.current.rotation.z = deg(Y_ROT)
+          yRef.current.scale.setScalar(Y.h * sy)
+        }
+
+        // Inclinaison (épaisseur visible) seulement en fin de course, une fois les lettres à leur taille
         const t = clamp((q - 0.8) / 0.2)
-        tiltRef.current?.rotation.set(MONO.x.tilt[0] * t, MONO.x.tilt[1] * t, 0)
+        xTiltRef.current?.rotation.set(MONO.x.tilt[0] * t, MONO.x.tilt[1] * t, 0)
+        yTiltRef.current?.rotation.set(MONO.y.tilt[0] * t, MONO.y.tilt[1] * t, 0)
+
         if (shadowRef.current) {
           shadowRef.current.visible = q > 0.5
-          // Distance au plan proportionnelle au X : l'ombre garde le même décalage relatif à toutes les tailles
-          shadowRef.current.position.z = -0.35 * h
+          // Distance au plan proportionnelle aux lettres : même décalage relatif à toutes les tailles
+          shadowRef.current.position.z = -0.35 * X.h
         }
         invalidate()
       },
     }
     apiRef.current.update(progressRef.current)
-  }, [apiRef, progressRef, slotRef, gl, size, unit, invalidate])
+  }, [apiRef, progressRef, xSlotRef, ySlotRef, gl, size, invalidate])
 
   useEffect(() => {
     let raf2
@@ -65,22 +101,21 @@ function Scene({ slotRef, apiRef, progressRef, onReady }) {
         <planeGeometry args={[size.width * 2, size.height * 2]} />
         <shadowMaterial transparent opacity={0.34} />
       </mesh>
-      <Monolith geometry={nodes[MONO.x.node].geometry} fit={unit} mono={MONO.x} groupRef={xRef} tiltRef={tiltRef} />
+      <Monolith geometry={nodes[MONO.x.node].geometry} fit={xUnit} mono={MONO.x} groupRef={xRef} tiltRef={xTiltRef} />
+      <Monolith geometry={nodes[MONO.y.node].geometry} fit={yUnit} mono={MONO.y} groupRef={yRef} tiltRef={yTiltRef} />
     </>
   )
 }
 
-const floodOpacity = (q) => 1 - clamp((q - 0.45) / 0.4)
-
-export default function ContactX({ sectionRef, slotRef, floodRef, onReady }) {
-  // Sans WebGL 2, rien n'est rendu : la section reste sur papier, sans le X
+export default function ContactX({ sectionRef, xSlotRef, ySlotRef, floodRef, onReady }) {
+  // Sans WebGL 2, rien n'est rendu : la section reste sur papier, sans les lettres
   const [supported] = useState(() => !!document.createElement('canvas').getContext('webgl2'))
   const apiRef = useRef(null)
   const progressRef = useRef(0)
 
   useEffect(() => {
     if (!supported) return
-    // Sans animation : le X directement à sa place
+    // Sans animation : X et Y directement à leur place
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       progressRef.current = 1
       apiRef.current?.update(1)
@@ -122,7 +157,7 @@ export default function ContactX({ sectionRef, slotRef, floodRef, onReady }) {
         gl={{ alpha: true, antialias: true }}
       >
         <Suspense fallback={null}>
-          <Scene slotRef={slotRef} apiRef={apiRef} progressRef={progressRef} onReady={onReady} />
+          <Scene xSlotRef={xSlotRef} ySlotRef={ySlotRef} apiRef={apiRef} progressRef={progressRef} onReady={onReady} />
         </Suspense>
       </Canvas>
     </div>
