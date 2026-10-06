@@ -27,6 +27,10 @@ function Projects({ projects = [] }) {
     const strip = stripRef.current
     // Rien à faire défiler (peu de cartes) : on laisse la page défiler normalement
     if (strip.scrollWidth <= strip.clientWidth) return
+    // Bande arrivée au bout dans le sens du geste (fin en descendant, début en remontant) :
+    // la molette rend la main au défilement vertical de la page
+    const max = strip.scrollWidth - strip.clientWidth
+    if ((e.deltaY > 0 && strip.scrollLeft >= max - 1) || (e.deltaY < 0 && strip.scrollLeft <= 0)) return
     e.preventDefault()
     // Lenis ne regarde pas defaultPrevented : ce marqueur l'empêche de faire défiler la page en même temps
     e.lenisStopPropagation = true
