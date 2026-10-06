@@ -33,12 +33,13 @@ export default function Loader() {
 
     const nav = document.querySelector('[data-nav]')
 
-    // Accueil : on attend aussi les lettres définitives du hero (scène 3D), 4,5 s au plus
+    // Accueil : on attend aussi les lettres définitives du hero (scène 3D), 8 s au plus ; au-delà, la
+    // page s'affiche avec le mot seul et les lettres 3D apparaissent en fondu dès qu'elles sont prêtes
     const hasHero = !!document.querySelector('[data-hero-paper]')
     Promise.all([
       new Promise(r => setTimeout(r, 700)),
       document.fonts.ready,
-      hasHero ? Promise.race([heroReady, new Promise(r => setTimeout(r, 4500))]) : null,
+      hasHero ? Promise.race([heroReady, new Promise(r => setTimeout(r, 8000))]) : null,
     ]).then(() => {
       gsap.to(overlayRef.current, {
         opacity: 0,

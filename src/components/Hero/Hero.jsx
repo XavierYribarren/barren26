@@ -1,6 +1,7 @@
 'use client'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
+import { preload } from 'react-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTranslation } from '../../i18n'
@@ -9,8 +10,11 @@ import { markHeroReady } from '../../lib/heroReady'
 import HeroArt, { ART, xId, yId } from './HeroArt'
 import styles from './Hero.module.css'
 
-// Three.js chargé à part : n'alourdit pas le premier rendu (le SVG s'affiche en attendant)
-const HeroScene = dynamic(() => import('./HeroScene'), { ssr: false })
+// Three.js chargé à part, mais dès l'évaluation de ce module côté client (pendant le loader), sans
+// attendre le montage du hero
+const loadHeroScene = () => import('./HeroScene')
+const HeroScene = dynamic(loadHeroScene, { ssr: false })
+if (typeof window !== 'undefined') loadHeroScene()
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
@@ -42,9 +46,10 @@ function Hero() {
     markHeroReady()
   }, [])
 
-  // Filet de sécurité : si la 3D n'est pas là après 4 s, on affiche le repli SVG
+  // Filet de sécurité : sans 3D au bout de 15 s (échec de chargement), on affiche le repli SVG.
+  // D'ici là le mot reste seul : jamais de barres SVG remplacées ensuite par les lettres 3D.
   useEffect(() => {
-    const t = setTimeout(onSceneFallback, 4000)
+    const t = setTimeout(onSceneFallback, 15000)
     return () => clearTimeout(t)
   }, [onSceneFallback])
 
@@ -159,6 +164,9 @@ function Hero() {
       setHeroProgress(null)
     }
   }, [])
+
+  // Le modèle des lettres X et Y, préchargé dès le HTML (même mode que le fetch de three.js)
+  preload('/XY.glb', { as: 'fetch', crossOrigin: 'anonymous' })
 
   return (
     <section id="home" className={styles.stage} ref={stageRef}>

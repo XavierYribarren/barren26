@@ -53,15 +53,23 @@
   z-index: 1;
 }
 
-/* Scène 3D (HeroScene) : remplace le SVG une fois prête */
+/* Scène 3D (HeroScene) : apparaît en fondu une fois prête, par-dessus le mot SVG (identique), qui
+   n'est masqué qu'à la fin du fondu */
 .scene {
   position: absolute;
   inset: 0;
   z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.with3d .scene {
+  opacity: 1;
 }
 
 .with3d .art {
   visibility: hidden;
+  transition: visibility 0s 0.5s;
 }
 
 /* En attente de la 3D : le mot seul, sans les monolithes SVG de repli */
@@ -229,6 +237,11 @@
 
 /* Sans animation : hero statique, puis la vidéo en simple bloc dessous */
 @media (prefers-reduced-motion: reduce) {
+  .scene,
+  .with3d .art {
+    transition: none;
+  }
+
   .stage {
     height: auto;
   }
