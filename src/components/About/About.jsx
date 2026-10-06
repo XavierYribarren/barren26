@@ -65,7 +65,9 @@ function About() {
         </div>
         <div className={styles.imageWrapper}>
           <img
-            src="/IMG_linkedin.png"
+            src="/portrait.webp"
+            loading="lazy"
+            decoding="async"
             alt="Barren"
             className={styles.image}
             ref={imageRef}

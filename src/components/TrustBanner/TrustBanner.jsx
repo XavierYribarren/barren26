@@ -6,7 +6,7 @@ const clients = [
   { name: 'CNRS',          logo: '/logos/Cnrs-logo.svg.png' },
   { name: 'Pave Team',     logo: '/logos/pavelogo.png' },
   { name: 'IFRC',          logo: '/logos/ifrc_logo.png' },
-  { name: 'Coralie Colin', logo: '/logos/coraliecolinlogo8.png' },
+  { name: 'Coralie Colin', logo: '/logos/coraliecolin.webp' },
     { name: 'INSA', logo: '/logos/insalogo.png' },
 ]
 
