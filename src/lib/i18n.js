@@ -26,7 +26,6 @@ export const translations = {
       headline: 'Every project deserves the real thing.',
       subline: 'I design and build digital products that are clear, fast, and built to last.',
       cta: 'Scroll to explore ↓',
-      reelCaption: 'A few projects, in motion.',
     },
     services: {
       sectionLabel: 'What I do',
@@ -113,7 +112,6 @@ export const translations = {
       headline: "Chaque projet mérite d'être bien fait.",
       subline: 'Je conçois et développe des produits digitaux clairs, rapides et faits pour durer.',
       cta: 'Défiler pour explorer ↓',
-      reelCaption: 'Quelques projets, en mouvement.',
     },
     services: {
       sectionLabel: 'Ce que je fais',

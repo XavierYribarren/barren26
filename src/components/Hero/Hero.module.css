@@ -166,18 +166,6 @@
   object-fit: cover;
 }
 
-.cap {
-  position: absolute;
-  left: 40px;
-  bottom: 36px;
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  opacity: 0;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.6);
-}
-
 @media (max-width: 768px) {
   /* Scène plus courte que sur desktop (scroll moins long) ; svh : pas de saut quand la barre du
      navigateur apparaît ou disparaît */
@@ -199,14 +187,6 @@
 
   .video {
     object-fit: contain;
-  }
-
-  /* Légende sous la bande vidéo */
-  .cap {
-    left: 22px;
-    top: calc(50% + 28.125vw + 16px);
-    bottom: auto;
-    text-shadow: none;
   }
 
   .artD {
@@ -275,10 +255,6 @@
     clip-path: none;
     visibility: visible;
   }
-
-  .cap {
-    opacity: 1;
-  }
 }
 
 @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
@@ -287,15 +263,9 @@
     min-height: 480px;
   }
 
-  /* Bloc vidéo au ratio 16:9, légende dessous */
+  /* Bloc vidéo au ratio 16:9 */
   .reel {
     height: auto;
     aspect-ratio: 16 / 9;
-    overflow: visible;
-    margin-bottom: 56px;
-  }
-
-  .cap {
-    top: calc(100% + 16px);
   }
 }

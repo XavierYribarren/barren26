@@ -27,7 +27,6 @@ function Hero() {
   const labelRef = useRef(null)
   const copyRef = useRef(null)
   const reelRef = useRef(null)
-  const capRef = useRef(null)
   const videoRef = useRef(null)
   const sceneApi = useRef(null)
   const progressRef = useRef(0)
@@ -181,14 +180,11 @@ function Hero() {
         const reel = reelRef.current
         const band = Math.max(0, (reel.offsetHeight - (reel.offsetWidth * 9) / 16) / 2)
         const half = reel.offsetHeight / 2
-        const top = (1 - q) * half + q * band
-        // 56px de plus en bas : la légende, posée sous la bande, reste dans le cadre
-        const bottom = (1 - q) * half + q * Math.max(0, band - 56)
-        reel.style.clipPath = `inset(${top}px ${(1 - q) * 50}% ${bottom}px)`
+        const edge = (1 - q) * half + q * band
+        reel.style.clipPath = `inset(${edge}px ${(1 - q) * 50}%)`
       } else {
         reelRef.current.style.clipPath = `inset(${(1 - q) * 50}% ${(1 - q) * 50}%)`
       }
-      capRef.current.style.opacity = clamp((q - 0.75) / 0.25)
       // Lecture juste avant l'ouverture (p = .5), pause en revenant sur le papier
       if (p >= 0.4) wanted = true
       else if (p < 0.35) wanted = false
@@ -265,7 +261,6 @@ function Hero() {
             playsInline
             aria-hidden="true"
           />
-          <figcaption className={styles.cap} ref={capRef}>{t('hero.reelCaption')}</figcaption>
         </figure>
       </div>
     </section>
