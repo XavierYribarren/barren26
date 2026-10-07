@@ -26,7 +26,7 @@ export const translations = {
       headline: 'Every project deserves the real thing.',
       subline: 'I design and build digital products that are clear, fast, and built to last.',
       cta: 'Scroll to explore ↓',
-      interlude: { title: 'Developer, prototyper, creative', hint: 'A video of a few projects' },
+      interlude: { title: 'Developer, prototyper, creative' },
     },
     services: {
       sectionLabel: 'What I do',
@@ -113,7 +113,7 @@ export const translations = {
       headline: "Chaque projet mérite d'être bien fait.",
       subline: 'Je conçois et développe des produits digitaux clairs, rapides et faits pour durer.',
       cta: 'Défiler pour explorer ↓',
-      interlude: { title: 'Développeur, prototypeur, créatif', hint: 'Une vidéo de quelques projets' },
+      interlude: { title: 'Développeur, prototypeur, créatif' },
     },
     services: {
       sectionLabel: 'Ce que je fais',

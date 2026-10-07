@@ -153,7 +153,12 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 22px;
+  width: max-content;
+  max-width: calc(100% - 44px);
+  text-align: center;
+  transform: translateX(-50%);
   opacity: 0;
   pointer-events: none;
   color: var(--color-text-primary);
@@ -162,24 +167,16 @@
 
 .interludeTitle {
   font-family: var(--font-body);
-  font-size: 28px;
+  font-size: 40px;
   font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-}
-
-.interludeHint {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 400;
-  color: rgba(240, 236, 228, 0.65);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  text-wrap: balance;
 }
 
 .interludeArrow {
   flex-shrink: 0;
+  color: rgba(240, 236, 228, 0.65);
   animation: interludeArrow 1.6s ease-in-out infinite;
 }
 
@@ -234,12 +231,12 @@
     display: none;
   }
 
-  .interludeTitle {
-    font-size: 22px;
+  .interlude {
+    gap: 16px;
   }
 
-  .interludeHint {
-    font-size: 13px;
+  .interludeTitle {
+    font-size: 28px;
   }
 
   .artM {

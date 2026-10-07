@@ -151,7 +151,7 @@ function Hero() {
 
     // Valeurs reprises de docs-mockup/direction-A-transition.html (fonction update)
     const isMobile = () => window.matchMedia('(max-width: 768px)').matches
-    // Interlude sous le mot (phase noire) : aligné sur le bord gauche de BARREN, sous sa base. Mesuré sur
+    // Interlude sous le mot (phase noire) : centré sur BARREN, sous sa base. Mesuré sur
     // le mot SVG visible, qui a exactement le même cadrage que la scène 3D (même viewBox, même k/ox/oy)
     const interlude = interludeRef.current
     const placeInterlude = () => {
@@ -159,10 +159,8 @@ function Hero() {
       const word = [...stage.querySelectorAll('[data-word]')].find((w) => w.getBoundingClientRect().width > 0)
       if (!word) return
       const box = word.getBoundingClientRect()
-      const mobile = isMobile()
-      const gap = mobile ? 28 : 40
-      // Mobile : même marge gauche que les autres textes du hero (22px) ; desktop : bord gauche du mot
-      interlude.style.left = mobile ? '22px' : `${box.left - paperBox.left}px`
+      const gap = isMobile() ? 28 : 40
+      interlude.style.left = `${box.left - paperBox.left + box.width / 2}px`
       interlude.style.top = `${box.bottom - paperBox.top + gap}px`
     }
     let interludeShown = false
@@ -207,7 +205,7 @@ function Hero() {
       const iIn = clamp((p - 0.28) / 0.06)
       const iOpacity = iIn * (1 - clamp((p - 0.42) / 0.06))
       interlude.style.opacity = iOpacity
-      interlude.style.transform = `translateY(${8 * (1 - iIn)}px)`
+      interlude.style.transform = `translate(-50%, ${8 * (1 - iIn)}px)`
       if ((iOpacity > 0) !== interludeShown) {
         interludeShown = iOpacity > 0
         interlude.setAttribute('aria-hidden', String(!interludeShown))
@@ -266,12 +264,9 @@ function Hero() {
           {/* Interlude de la phase noire, sous le mot (position et opacité pilotées par render) */}
           <div key={`${lang}-interlude`} className={styles.interlude} ref={interludeRef} aria-hidden="true">
             <p className={styles.interludeTitle}>{t('hero.interlude.title')}</p>
-            <p className={styles.interludeHint}>
-              {t('hero.interlude.hint')}
-              <svg className={styles.interludeArrow} viewBox="0 0 14 14" width="14" height="14" aria-hidden="true" focusable="false">
-                <path d="M7 1.5v10M2.5 7.5 7 12l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </p>
+            <svg className={styles.interludeArrow} viewBox="0 0 14 14" width="18" height="18" aria-hidden="true" focusable="false">
+              <path d="M7 1.5v10M2.5 7.5 7 12l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
           <h1 className="sr-only">Barren</h1>
           <HeroArt />
