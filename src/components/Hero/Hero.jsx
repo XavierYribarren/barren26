@@ -28,6 +28,7 @@ function Hero() {
   const copyRef = useRef(null)
   const reelRef = useRef(null)
   const videoRef = useRef(null)
+  const interludeRef = useRef(null)
   const sceneApi = useRef(null)
   const progressRef = useRef(0)
   const scene3dRef = useRef(false)
@@ -149,6 +150,23 @@ function Hero() {
     const setT = (id, tr) => document.getElementById(id)?.setAttribute('transform', tr)
 
     // Valeurs reprises de docs-mockup/direction-A-transition.html (fonction update)
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches
+    // Interlude sous le mot (phase noire) : aligné sur le bord gauche de BARREN, sous sa base. Mesuré sur
+    // le mot SVG visible, qui a exactement le même cadrage que la scène 3D (même viewBox, même k/ox/oy)
+    const interlude = interludeRef.current
+    const placeInterlude = () => {
+      const paperBox = stage.querySelector('[data-hero-paper]').getBoundingClientRect()
+      const word = [...stage.querySelectorAll('[data-word]')].find((w) => w.getBoundingClientRect().width > 0)
+      if (!word) return
+      const box = word.getBoundingClientRect()
+      const mobile = isMobile()
+      const gap = mobile ? 28 : 40
+      // Mobile : même marge gauche que les autres textes du hero (22px) ; desktop : bord gauche du mot
+      interlude.style.left = mobile ? '22px' : `${box.left - paperBox.left}px`
+      interlude.style.top = `${box.bottom - paperBox.top + gap}px`
+    }
+    let interludeShown = false
+
     const render = (p) => {
       progressRef.current = p
       sceneApi.current?.update(p)
@@ -185,6 +203,15 @@ function Hero() {
       } else {
         reelRef.current.style.clipPath = `inset(${(1 - q) * 50}% ${(1 - q) * 50}%)`
       }
+      // Interlude : 0 → 1 sur p ∈ [.28, .34] (en remontant de 8px), 1 → 0 sur p ∈ [.42, .48]
+      const iIn = clamp((p - 0.28) / 0.06)
+      const iOpacity = iIn * (1 - clamp((p - 0.42) / 0.06))
+      interlude.style.opacity = iOpacity
+      interlude.style.transform = `translateY(${8 * (1 - iIn)}px)`
+      if ((iOpacity > 0) !== interludeShown) {
+        interludeShown = iOpacity > 0
+        interlude.setAttribute('aria-hidden', String(!interludeShown))
+      }
       // Lecture juste avant l'ouverture (p = .5), pause en revenant sur le papier
       if (p >= 0.4) wanted = true
       else if (p < 0.35) wanted = false
@@ -193,7 +220,6 @@ function Hero() {
     }
 
     gsap.registerPlugin(ScrollTrigger)
-    const isMobile = () => window.matchMedia('(max-width: 768px)').matches
     const st = ScrollTrigger.create({
       trigger: stage,
       // Mobile : la scène commence sous la barre fixe de 60px
@@ -201,12 +227,20 @@ function Hero() {
       end: 'bottom bottom',
       invalidateOnRefresh: true,
       onUpdate: (self) => render(self.progress),
-      onRefresh: (self) => render(self.progress),
+      onRefresh: (self) => {
+        placeInterlude()
+        render(self.progress)
+      },
     })
     render(st.progress)
 
+    placeInterlude()
+    const ro = new ResizeObserver(placeInterlude)
+    ro.observe(stage.querySelector('[data-hero-paper]'))
+
     return () => {
       st.kill()
+      ro.disconnect()
       io.disconnect()
       setHeroProgress(null)
     }
@@ -228,6 +262,17 @@ function Hero() {
           data-hero-paper
         >
           <div className={styles.flood} ref={floodRef} />
+
+          {/* Interlude de la phase noire, sous le mot (position et opacité pilotées par render) */}
+          <div key={`${lang}-interlude`} className={styles.interlude} ref={interludeRef} aria-hidden="true">
+            <p className={styles.interludeTitle}>{t('hero.interlude.title')}</p>
+            <p className={styles.interludeHint}>
+              {t('hero.interlude.hint')}
+              <svg className={styles.interludeArrow} viewBox="0 0 14 14" width="14" height="14" aria-hidden="true" focusable="false">
+                <path d="M7 1.5v10M2.5 7.5 7 12l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </p>
+          </div>
           <h1 className="sr-only">Barren</h1>
           <HeroArt />
           <HeroScene

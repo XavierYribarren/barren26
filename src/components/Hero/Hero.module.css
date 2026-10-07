@@ -147,6 +147,47 @@
   color: rgba(13, 13, 13, 0.72);
 }
 
+/* Interlude de la phase noire, sous le mot (left/top/opacité posés par Hero) */
+.interlude {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  color: var(--color-text-primary);
+  will-change: opacity, transform;
+}
+
+.interludeTitle {
+  font-family: var(--font-body);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.interludeHint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(240, 236, 228, 0.65);
+}
+
+.interludeArrow {
+  flex-shrink: 0;
+  animation: interludeArrow 1.6s ease-in-out infinite;
+}
+
+@keyframes interludeArrow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
 /* Showreel : s'ouvre depuis le centre, piloté par le scroll */
 .reel {
   position: absolute;
@@ -193,6 +234,14 @@
     display: none;
   }
 
+  .interludeTitle {
+    font-size: 22px;
+  }
+
+  .interludeHint {
+    font-size: 13px;
+  }
+
   .artM {
     display: block;
   }
@@ -229,6 +278,11 @@
 
 /* Sans animation : hero statique, puis la vidéo en simple bloc dessous */
 @media (prefers-reduced-motion: reduce) {
+  /* Pas de phase noire, donc pas d'interlude */
+  .interlude {
+    display: none;
+  }
+
   .stage {
     height: auto;
   }
