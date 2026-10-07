@@ -27,6 +27,8 @@ export const ART = {
   // en diagonale sans se toucher.
   m: {
     viewBox: [390, 844],
+    // Composition descendue de 85 unités pour être centrée entre le label et l'accroche
+    offsetY: 85,
     lines: [
       { x: 11.08, y: 292, letters: 'BAR', front: [1] },
       { x: 11.08, y: 416, letters: 'REN', front: [2] },
@@ -71,7 +73,7 @@ function Variant({ v }) {
   return (
     <svg
       className={`${styles.art} ${v === 'd' ? styles.artD : styles.artM}`}
-      viewBox={`0 0 ${w} ${h}`}
+      viewBox={`0 ${-(cfg.offsetY || 0)} ${w} ${h}`}
       preserveAspectRatio="xMidYMid meet"
       aria-hidden="true"
       focusable="false"

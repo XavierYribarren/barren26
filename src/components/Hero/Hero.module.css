@@ -176,15 +176,17 @@
 }
 
 @media (max-width: 768px) {
+  /* Scène plus courte que sur desktop (scroll moins long) ; svh : pas de saut quand la barre du
+     navigateur apparaît ou disparaît */
   .stage {
-    height: 300vh;
+    height: 220svh;
   }
 
-  /* Sous la barre mobile fixe de 60px */
+  /* Sous la barre mobile fixe de 60px, à la hauteur réellement visible (dvh) */
   .sticky {
     top: 60px;
-    height: calc(100svh - 60px);
-    min-height: 640px;
+    height: calc(100dvh - 60px);
+    min-height: 480px;
   }
 
   /* Vidéo entière (16:9) dans la bande ouverte au centre ; le noir autour prolonge la transition */
@@ -224,7 +226,8 @@
   .copy {
     left: 22px;
     right: 22px;
-    bottom: 30px;
+    /* Remontée selon la hauteur visible, au-dessus de la zone de sécurité du bas (iPhone) */
+    bottom: calc(6dvh + env(safe-area-inset-bottom, 0px));
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
@@ -282,8 +285,8 @@
 
 @media (max-width: 768px) and (prefers-reduced-motion: reduce) {
   .paper {
-    height: calc(100svh - 60px);
-    min-height: 640px;
+    height: calc(100dvh - 60px);
+    min-height: 480px;
   }
 
   /* Bloc vidéo au ratio 16:9, légende dessous */

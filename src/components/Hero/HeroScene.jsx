@@ -75,6 +75,8 @@ function Scene({ apiRef, progressRef, onReady }) {
   const k = Math.min(size.width / vbW, size.height / vbH)
   const ox = (size.width - vbW * k) / 2
   const oy = (size.height - vbH * k) / 2
+  // Décalage vertical de la composition (mobile), comme le viewBox du SVG
+  const offY = cfg.offsetY || 0
 
   const letters = useMemo(() => letterGeometries(v), [v])
   const xHeight = useMemo(() => shapeHeight(cfg.x.r.map((r) => ({ rect: cfg.x.rect, r }))), [cfg])
@@ -101,15 +103,17 @@ function Scene({ apiRef, progressRef, onReady }) {
         if (xRef.current) {
           // Plus rapide que la maquette (p ∈ [0, .4] au lieu de [0, .5]) : l'écran est entièrement couvert
           // dès p ≈ .3, quand le fond noir commence à monter
-          const ex = ease(clamp(p / 0.4))
+          // Mobile : le X réagit dès le premier geste (départ rapide) au lieu de l'ease-in-out
+          const zoomEase = v === 'm' ? (t) => 1 - Math.pow(1 - t, 3) : ease
+          const ex = zoomEase(clamp(p / 0.4))
           const s = 1 + (xScaleMax - 1) * ex
           // SVG rotate(-5) (y vers le bas) = +5° dans la scène (y vers le haut), qui revient à 0
           const theta = deg(-cfg.x.rot) * (1 - ex)
           // Le point plein du X (X_COVER) glisse vers le centre de l'écran (un peu en avance sur le zoom)
-          const ec = ease(clamp(p / 0.35))
+          const ec = zoomEase(clamp(p / 0.35))
           const [a0x, a0y] = anchorOffset(xHeight, deg(-cfg.x.rot), sx)
           const px = cfg.x.tx + a0x + (vbW / 2 - (cfg.x.tx + a0x)) * ec
-          const py = -cfg.x.ty + a0y + (-vbH / 2 - (-cfg.x.ty + a0y)) * ec
+          const py = -cfg.x.ty + a0y + (offY - vbH / 2 - (-cfg.x.ty + a0y)) * ec
           const [ax, ay] = anchorOffset(xHeight * s, theta, sx)
           xRef.current.position.set(px - ax, py - ay, MONO_Z)
           xRef.current.rotation.z = theta
@@ -135,7 +139,7 @@ function Scene({ apiRef, progressRef, onReady }) {
       },
     }
     apiRef.current.update(progressRef.current)
-  }, [apiRef, progressRef, cfg, xHeight, xScaleMax, sx, vbW, vbH, invalidate])
+  }, [apiRef, progressRef, cfg, v, offY, xHeight, xScaleMax, sx, vbW, vbH, invalidate])
 
   // Prête : deux images plus tard, le premier rendu est à l'écran → on masque le repli SVG
   useEffect(() => {
@@ -151,7 +155,7 @@ function Scene({ apiRef, progressRef, onReady }) {
       <SceneLights />
 
       {/* Repère du viewBox : origine en haut à gauche du cadre, y vers le haut, unités du viewBox */}
-      <group position={[ox - size.width / 2, size.height / 2 - oy, 0]} scale={k}>
+      <group position={[ox - size.width / 2, size.height / 2 - oy - offY * k, 0]} scale={k}>
         {/* Ombre portée sur le papier (plan transparent derrière le mot) */}
         <mesh ref={shadowRef} position={[vbW / 2, -vbH / 2, -60]} receiveShadow>
           <planeGeometry args={[vbW * 3, vbH * 3]} />
