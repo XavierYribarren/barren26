@@ -113,7 +113,7 @@ function Variant({ v }) {
       </defs>
 
       {/* 1. le mot, derrière tout */}
-      <g fill={INK}><Word v={v} cfg={cfg} fill={() => INK} /></g>
+      <g fill={INK} data-word><Word v={v} cfg={cfg} fill={() => INK} /></g>
       {/* Monolithes (couches 2 à 6) : masqués tant que la scène 3D est attendue, voir Hero */}
       <g data-mono>
         {/* 2. ombre portée sur le papier */}

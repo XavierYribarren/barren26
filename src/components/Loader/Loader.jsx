@@ -2,7 +2,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { splitWords } from '../../utils/splitWords'
-import { heroReady } from '../../lib/heroReady'
+import { heroReady, markHeroIntro } from '../../lib/heroReady'
 import styles from './Loader.module.css'
 
 export default function Loader() {
@@ -33,13 +33,13 @@ export default function Loader() {
 
     const nav = document.querySelector('[data-nav]')
 
-    // Accueil : on attend aussi les lettres définitives du hero (scène 3D), 8 s au plus ; au-delà, la
-    // page s'affiche avec le mot seul et les lettres 3D apparaissent en fondu dès qu'elles sont prêtes
+    // Accueil : on attend un peu les lettres 3D (2,5 s au plus) ; si elles arrivent après, leur entrée
+    // par les côtés fait partie de l'intro, le retard ne se voit pas
     const hasHero = !!document.querySelector('[data-hero-paper]')
     Promise.all([
       new Promise(r => setTimeout(r, 700)),
       document.fonts.ready,
-      hasHero ? Promise.race([heroReady, new Promise(r => setTimeout(r, 8000))]) : null,
+      hasHero ? Promise.race([heroReady, new Promise(r => setTimeout(r, 2500))]) : null,
     ]).then(() => {
       gsap.to(overlayRef.current, {
         opacity: 0,
@@ -66,6 +66,7 @@ export default function Loader() {
 }
 
 function runIntro(nav, words) {
+  markHeroIntro()
   const tl = gsap.timeline()
 
   if (nav) tl.to(nav, { y: '0%', duration: 1, ease: 'expo.out' }, 0)

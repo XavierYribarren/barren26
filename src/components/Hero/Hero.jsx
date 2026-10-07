@@ -6,7 +6,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTranslation } from '../../i18n'
 import { setHeroProgress } from '../../lib/heroProgress'
-import { markHeroReady } from '../../lib/heroReady'
+import { markHeroReady, heroIntro } from '../../lib/heroReady'
 import HeroArt, { ART, xId, yId } from './HeroArt'
 import styles from './Hero.module.css'
 
@@ -32,25 +32,70 @@ function Hero() {
   const sceneApi = useRef(null)
   const progressRef = useRef(0)
   const scene3dRef = useRef(false)
+  const paperRef = useRef(null)
   // 'pending' : monolithes masqués, en attente de la 3D ; '3d' : scène prête ; 'svg' : repli
   const [art, setArt] = useState('pending')
-  // Fondu de la 3D seulement si la page est déjà visible ; sous le loader, affichage immédiat (sinon,
-  // pendant le retrait du loader, on verrait le mot SVG à travers des monolithes à moitié transparents)
-  const [fadeIn, setFadeIn] = useState(false)
+
+  // Intro du landing : le mot devient opaque, puis X et Y entrent par les côtés (word, monoX, monoY ∈ [0, 1])
+  const introRef = useRef({ word: 0, monoX: 0, monoY: 0 })
+  const introCtl = useRef({ started: false, scene: false, monos: false })
+  const applyIntro = useCallback(() => {
+    sceneApi.current?.setIntro(introRef.current)
+    paperRef.current?.style.setProperty('--hero-word', introRef.current.word)
+  }, [])
+  // Les lettres entrent quand l'intro a commencé ET que la scène est prête (si la 3D arrive en retard,
+  // son entrée par les côtés fait partie de l'intro)
+  const startMonos = useCallback(() => {
+    const c = introCtl.current
+    if (!c.started || !c.scene || c.monos) return
+    c.monos = true
+    gsap.timeline({ onUpdate: applyIntro })
+      .to(introRef.current, { monoX: 1, duration: 1.6, ease: 'expo.out' }, 0.35)
+      .to(introRef.current, { monoY: 1, duration: 1.6, ease: 'expo.out' }, 0.5)
+  }, [applyIntro])
 
   const onSceneReady = useCallback(() => {
-    const loaderUp = !!document.querySelector('[data-loader]')
     scene3dRef.current = true
-    setFadeIn(!loaderUp)
     setArt('3d')
+    introCtl.current.scene = true
+    startMonos()
     // Le loader ne se retire qu'une fois la 3D à l'écran (deux images plus tard)
     requestAnimationFrame(() => requestAnimationFrame(markHeroReady))
-  }, [])
+  }, [startMonos])
 
   const onSceneFallback = useCallback(() => {
     setArt((a) => (a === 'pending' ? 'svg' : a))
+    introCtl.current.scene = true
+    startMonos()
     markHeroReady()
-  }, [])
+  }, [startMonos])
+
+  useEffect(() => {
+    const intro = introRef.current
+    const finish = () => {
+      Object.assign(intro, { word: 1, monoX: 1, monoY: 1 })
+      introCtl.current.monos = true
+      applyIntro()
+    }
+    // Sans animation : tout est en place d'emblée
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      finish()
+      return
+    }
+    let alive = true
+    heroIntro.then(() => {
+      if (!alive) return
+      introCtl.current.started = true
+      // Page rechargée plus bas : pas d'intro
+      if (progressRef.current > 0.02) {
+        finish()
+        return
+      }
+      gsap.to(intro, { word: 1, duration: 0.9, ease: 'power2.out', onUpdate: applyIntro })
+      startMonos()
+    })
+    return () => { alive = false }
+  }, [applyIntro, startMonos])
 
   // Filet de sécurité : sans 3D au bout de 15 s (échec de chargement), on affiche le repli SVG.
   // D'ici là le mot reste seul : jamais de barres SVG remplacées ensuite par les lettres 3D.
@@ -181,15 +226,21 @@ function Hero() {
           className={[
             styles.paper,
             art === '3d' && styles.with3d,
-            art === '3d' && fadeIn && styles.fadeIn,
             art === 'pending' && styles.artPending,
           ].filter(Boolean).join(' ')}
+          ref={paperRef}
           data-hero-paper
         >
           <div className={styles.flood} ref={floodRef} />
           <h1 className="sr-only">Barren</h1>
           <HeroArt />
-          <HeroScene apiRef={sceneApi} progressRef={progressRef} onReady={onSceneReady} onFallback={onSceneFallback} />
+          <HeroScene
+            apiRef={sceneApi}
+            progressRef={progressRef}
+            introRef={introRef}
+            onReady={onSceneReady}
+            onFallback={onSceneFallback}
+          />
 
           <div key={lang} className={`${styles.labelWrap} langSwap`} ref={labelRef}>
             <p className={styles.label} data-hero-label suppressHydrationWarning>{t('hero.label')}</p>

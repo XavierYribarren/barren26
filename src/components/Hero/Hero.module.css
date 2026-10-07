@@ -53,8 +53,8 @@
   z-index: 1;
 }
 
-/* Scène 3D (HeroScene) : remplace le SVG une fois prête. Sous le loader : d'un coup. Si elle arrive après
-   le loader (.fadeIn) : en fondu par-dessus le mot SVG (identique), masqué seulement à la fin du fondu */
+/* Scène 3D (HeroScene) : remplace le SVG d'un coup une fois prête ; mot identique, et les lettres
+   arrivent par les côtés (intro), donc le changement ne se voit pas */
 .scene {
   position: absolute;
   inset: 0;
@@ -70,12 +70,15 @@
   visibility: hidden;
 }
 
-.fadeIn .scene {
-  transition: opacity 0.5s ease;
+/* Mot SVG : opacité pilotée par l'intro (--hero-word, posée par Hero) ; masqué au départ, sauf sans animation */
+.art :global([data-word]) {
+  opacity: var(--hero-word, 1);
 }
 
-.fadeIn .art {
-  transition: visibility 0s 0.5s;
+@media (prefers-reduced-motion: no-preference) {
+  .paper {
+    --hero-word: 0;
+  }
 }
 
 /* En attente de la 3D : le mot seul, sans les monolithes SVG de repli */
@@ -179,7 +182,7 @@
   /* Scène plus courte que sur desktop (scroll moins long) ; svh : pas de saut quand la barre du
      navigateur apparaît ou disparaît */
   .stage {
-    height: 220svh;
+    height: 260svh;
   }
 
   /* Sous la barre mobile fixe de 60px, à la hauteur réellement visible (dvh) */
@@ -246,11 +249,6 @@
 
 /* Sans animation : hero statique, puis la vidéo en simple bloc dessous */
 @media (prefers-reduced-motion: reduce) {
-  .fadeIn .scene,
-  .fadeIn .art {
-    transition: none;
-  }
-
   .stage {
     height: auto;
   }

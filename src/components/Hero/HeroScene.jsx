@@ -63,7 +63,7 @@ function NegativeMaterial({ materialRef, opacity = 1 }) {
   )
 }
 
-function Scene({ apiRef, progressRef, onReady }) {
+function Scene({ apiRef, progressRef, introRef, onReady }) {
   const { nodes } = useGLTF('/XY.glb')
   const size = useThree((s) => s.size)
   const invalidate = useThree((s) => s.invalidate)
@@ -92,54 +92,111 @@ function Scene({ apiRef, progressRef, onReady }) {
   const xRef = useRef(null)
   const yRef = useRef(null)
   const xTiltRef = useRef(null)
+  const yTiltRef = useRef(null)
   const shadowRef = useRef(null)
+  const words = useRef([])
   const fronts = useRef([])
   const negs = useRef([])
+  // État piloté de l'extérieur : progression du scroll (p) et intro du landing (word, monoX, monoY ∈ [0, 1])
+  const state = useRef({ p: 0, word: 0, monoX: 0, monoY: 0, time: 0 })
 
   // Valeurs reprises de docs-mockup/direction-A-transition.html, transposées en 3D
   useLayoutEffect(() => {
+    const st = state.current
+    // Reprend la progression et l'intro en cours (montage tardif de la scène, ou changement de format)
+    Object.assign(st, { p: progressRef.current }, introRef.current)
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    // Bords visibles de l'écran, en unités du viewBox : point de départ des lettres hors champ
+    const leftEdge = -ox / k
+    const rightEdge = vbW + ox / k
+    const distX = cfg.x.tx - leftEdge + xFit.width
+    const distY = rightEdge - cfg.y.tx + yFit.width
+    // Flottement : très léger, plus petit sur mobile
+    const amp = v === 'm' ? 4 : 7
+
+    const render = () => {
+      const { p, word, monoX, monoY, time } = st
+      // Flottement, qui s'efface dès que le scroll commence
+      const f = reduced ? 0 : 1 - clamp(p / 0.05)
+      const floatX = Math.sin(time * 0.8) * amp * f
+      const floatY = Math.sin(time * 0.8 + 2.1) * amp * f
+      const swayX = deg(0.7) * Math.sin(time * 0.6 + 1) * f
+      const swayY = deg(0.7) * Math.sin(time * 0.55 + 3) * f
+
+      if (xRef.current) {
+        // Plus rapide que la maquette (p ∈ [0, .4] au lieu de [0, .5]) : l'écran est entièrement couvert
+        // dès p ≈ .3. Mobile : départ en douceur mais sans temps mort (sinus) au lieu de l'ease cubique
+        const zoomEase = v === 'm' ? (t) => (1 - Math.cos(Math.PI * t)) / 2 : ease
+        const ex = zoomEase(clamp(p / 0.4))
+        const s = 1 + (xScaleMax - 1) * ex
+        // SVG rotate(-5) (y vers le bas) = +5° dans la scène (y vers le haut), qui revient à 0
+        const theta = deg(-cfg.x.rot) * (1 - ex) + swayX + deg(14) * (1 - monoX)
+        // Le point plein du X (X_COVER) glisse vers le centre de l'écran (un peu en avance sur le zoom)
+        const ec = zoomEase(clamp(p / 0.35))
+        const [a0x, a0y] = anchorOffset(xHeight, deg(-cfg.x.rot), sx)
+        const px = cfg.x.tx + a0x + (vbW / 2 - (cfg.x.tx + a0x)) * ec
+        const py = -cfg.x.ty + a0y + (offY - vbH / 2 - (-cfg.x.ty + a0y)) * ec
+        const [ax, ay] = anchorOffset(xHeight * s, theta, sx)
+        // Entrée par la gauche
+        xRef.current.position.set(px - ax - distX * (1 - monoX), py - ay + floatX, MONO_Z)
+        xRef.current.rotation.z = theta
+        xRef.current.scale.setScalar(s)
+      }
+      // Le X se redresse face caméra dès le début du scroll : agrandies, ses faces latérales
+      // deviendraient des pans clairs géants
+      const untilt = 1 - ease(clamp(p / 0.15))
+      const breathe = 0.05 * Math.sin(time * 0.5) * f
+      if (xTiltRef.current) xTiltRef.current.rotation.set(MONO.x.tilt[0] * untilt, (MONO.x.tilt[1] + breathe) * untilt, 0)
+      if (yTiltRef.current) yTiltRef.current.rotation.set(MONO.y.tilt[0], MONO.y.tilt[1] - breathe, 0)
+      if (yRef.current) {
+        const sy = Math.max(0.0001, 1 - clamp(p / 0.28))
+        // Entrée par la droite
+        yRef.current.position.set(cfg.y.tx + 260 * (1 - sy) + distY * (1 - monoY), -cfg.y.ty + floatY, MONO_Z)
+        yRef.current.rotation.z = deg(-cfg.y.rot) + swayY - deg(14) * (1 - monoY)
+        yRef.current.scale.setScalar(sy)
+      }
+      words.current.forEach((m) => { if (m) m.opacity = word })
+      const negOpacity = clamp((p - 0.06) / 0.22) * (1 - clamp((p - 0.44) / 0.1))
+      negs.current.forEach((m) => { if (m) m.opacity = negOpacity })
+      const frontOpacity = (1 - clamp((p - 0.44) / 0.1)) * word
+      fronts.current.forEach((m) => { if (m) m.opacity = frontOpacity })
+      // L'ombre n'a plus de papier où tomber une fois le fond noir monté
+      if (shadowRef.current) shadowRef.current.visible = p < 0.5
+      invalidate()
+    }
+
+    // Boucle du flottement : seulement en haut de page, onglet visible, sans reduced-motion
+    let raf = null
+    const tick = (now) => {
+      st.time = now / 1000
+      render()
+      raf = !reduced && st.p < 0.05 && !document.hidden ? requestAnimationFrame(tick) : null
+    }
+    const ensureLoop = () => {
+      if (!raf && !reduced && st.p < 0.05 && !document.hidden) raf = requestAnimationFrame(tick)
+    }
+    document.addEventListener('visibilitychange', ensureLoop)
+
     apiRef.current = {
       update(p) {
-        if (xRef.current) {
-          // Plus rapide que la maquette (p ∈ [0, .4] au lieu de [0, .5]) : l'écran est entièrement couvert
-          // dès p ≈ .3, quand le fond noir commence à monter
-          // Mobile : le X réagit dès le premier geste (départ rapide) au lieu de l'ease-in-out
-          const zoomEase = v === 'm' ? (t) => 1 - Math.pow(1 - t, 3) : ease
-          const ex = zoomEase(clamp(p / 0.4))
-          const s = 1 + (xScaleMax - 1) * ex
-          // SVG rotate(-5) (y vers le bas) = +5° dans la scène (y vers le haut), qui revient à 0
-          const theta = deg(-cfg.x.rot) * (1 - ex)
-          // Le point plein du X (X_COVER) glisse vers le centre de l'écran (un peu en avance sur le zoom)
-          const ec = zoomEase(clamp(p / 0.35))
-          const [a0x, a0y] = anchorOffset(xHeight, deg(-cfg.x.rot), sx)
-          const px = cfg.x.tx + a0x + (vbW / 2 - (cfg.x.tx + a0x)) * ec
-          const py = -cfg.x.ty + a0y + (offY - vbH / 2 - (-cfg.x.ty + a0y)) * ec
-          const [ax, ay] = anchorOffset(xHeight * s, theta, sx)
-          xRef.current.position.set(px - ax, py - ay, MONO_Z)
-          xRef.current.rotation.z = theta
-          xRef.current.scale.setScalar(s)
-        }
-        // Le X se redresse face caméra dès le début du scroll : agrandies, ses faces latérales
-        // deviendraient des pans clairs géants
-        const untilt = 1 - ease(clamp(p / 0.15))
-        if (xTiltRef.current) xTiltRef.current.rotation.set(MONO.x.tilt[0] * untilt, MONO.x.tilt[1] * untilt, 0)
-        if (yRef.current) {
-          const sy = Math.max(0.0001, 1 - clamp(p / 0.28))
-          yRef.current.position.set(cfg.y.tx + 260 * (1 - sy), -cfg.y.ty, MONO_Z)
-          yRef.current.rotation.z = deg(-cfg.y.rot)
-          yRef.current.scale.setScalar(sy)
-        }
-        const negOpacity = clamp((p - 0.06) / 0.22) * (1 - clamp((p - 0.44) / 0.1))
-        negs.current.forEach((m) => { if (m) m.opacity = negOpacity })
-        const frontOpacity = 1 - clamp((p - 0.44) / 0.1)
-        fronts.current.forEach((m) => { if (m) m.opacity = frontOpacity })
-        // L'ombre n'a plus de papier où tomber une fois le fond noir monté
-        if (shadowRef.current) shadowRef.current.visible = p < 0.5
-        invalidate()
+        st.p = p
+        render()
+        ensureLoop()
+      },
+      setIntro({ word, monoX, monoY }) {
+        st.word = word
+        st.monoX = monoX
+        st.monoY = monoY
+        render()
       },
     }
-    apiRef.current.update(progressRef.current)
-  }, [apiRef, progressRef, cfg, v, offY, xHeight, xScaleMax, sx, vbW, vbH, invalidate])
+    render()
+    ensureLoop()
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      document.removeEventListener('visibilitychange', ensureLoop)
+    }
+  }, [apiRef, progressRef, introRef, cfg, v, ox, k, offY, xHeight, xFit, yFit, xScaleMax, sx, vbW, vbH, invalidate])
 
   // Prête : deux images plus tard, le premier rendu est à l'écran → on masque le repli SVG
   useEffect(() => {
@@ -165,13 +222,20 @@ function Scene({ apiRef, progressRef, onReady }) {
         {/* 1. le mot */}
         {letters.flat().map((g, i) => (
           <mesh key={`w${i}`} geometry={g} renderOrder={0}>
-            <meshBasicMaterial color={INK} side={DoubleSide} toneMapped={false} />
+            <meshBasicMaterial
+              ref={(m) => { words.current[i] = m }}
+              color={INK}
+              side={DoubleSide}
+              toneMapped={false}
+              transparent
+              opacity={0}
+            />
           </mesh>
         ))}
 
         {/* 2. les monolithes : cachent les lettres « derrière » et écrivent le stencil */}
         <Monolith geometry={nodes[MONO.x.node].geometry} fit={xFit} mono={MONO.x} groupRef={xRef} tiltRef={xTiltRef} />
-        <Monolith geometry={nodes[MONO.y.node].geometry} fit={yFit} mono={MONO.y} groupRef={yRef} />
+        <Monolith geometry={nodes[MONO.y.node].geometry} fit={yFit} mono={MONO.y} groupRef={yRef} tiltRef={yTiltRef} />
 
         {/* 3. lettres « devant » en négatif, puis tout le mot en négatif (transition) */}
         {frontList.map(({ l, i }, idx) => (
@@ -189,7 +253,7 @@ function Scene({ apiRef, progressRef, onReady }) {
   )
 }
 
-export default function HeroScene({ apiRef, progressRef, onReady, onFallback }) {
+export default function HeroScene({ apiRef, progressRef, introRef, onReady, onFallback }) {
   // Sans WebGL 2, rien n'est rendu : le hero passe au repli SVG
   const [supported] = useState(() => !!document.createElement('canvas').getContext('webgl2'))
   useEffect(() => {
@@ -209,7 +273,7 @@ export default function HeroScene({ apiRef, progressRef, onReady, onFallback }) 
         gl={{ alpha: true, stencil: true, antialias: true }}
       >
         <Suspense fallback={null}>
-          <Scene apiRef={apiRef} progressRef={progressRef} onReady={onReady} />
+          <Scene apiRef={apiRef} progressRef={progressRef} introRef={introRef} onReady={onReady} />
         </Suspense>
       </Canvas>
     </div>

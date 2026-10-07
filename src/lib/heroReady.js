@@ -1,5 +1,10 @@
-// Le hero signale quand ses lettres définitives sont affichées (scène 3D prête, ou repli SVG décidé).
-// Le Loader de la page d'accueil attend ce signal avant de se retirer.
-let resolve
-export const heroReady = new Promise((r) => { resolve = r })
-export const markHeroReady = () => resolve()
+// Coordination du landing entre le Loader et le hero.
+// heroReady : les lettres définitives du hero sont prêtes (scène 3D, ou repli SVG décidé).
+// heroIntro : le Loader a commencé l'intro (il s'est retiré) ; le hero lance alors sa propre entrée.
+let resolveReady
+export const heroReady = new Promise((r) => { resolveReady = r })
+export const markHeroReady = () => resolveReady()
+
+let resolveIntro
+export const heroIntro = new Promise((r) => { resolveIntro = r })
+export const markHeroIntro = () => resolveIntro()
