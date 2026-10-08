@@ -35,10 +35,46 @@
   max-width: 780px;
   width: 100%;
   max-height: 90vh;
-  overflow-y: auto;
-  /* Arrivé au bout, le défilement ne passe pas à la page */
-  overscroll-behavior: contain;
+  /* Visuels et en-tête fixes, seul le texte défile (.info) */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   animation: slideUp 0.35s ease forwards;
+}
+
+.top {
+  flex: none;
+}
+
+/* Navigation entre projets, en haut à gauche, sur la scène */
+.pager {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  background: var(--stage-bg, var(--color-bg));
+  color: var(--stage-ink, var(--color-text-secondary));
+  border-radius: 2px;
+  padding: 0 var(--space-1);
+}
+
+.pagerBtn {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+}
+
+.pagerCount {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Sur la scène : couleurs de la scène, lisible quelle que soit la capture dessous */
@@ -103,6 +139,11 @@
 
 /* Texte */
 .info {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  /* Arrivé au bout, le défilement ne passe pas à la page */
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -110,6 +151,7 @@
 }
 
 .header {
+  padding: var(--space-4) var(--space-6) 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -167,6 +209,8 @@
   color: var(--color-text-primary);
   max-width: 60ch;
   margin: 0;
+  text-align: justify;
+  hyphens: auto;
 }
 
 .highlights {
@@ -277,9 +321,17 @@
     padding: var(--space-4) var(--space-4) var(--space-5);
   }
 
+  /* En-tête centré au-dessus du texte */
   .header {
+    padding: var(--space-4) var(--space-4) 0;
     flex-direction: column;
+    align-items: center;
     gap: var(--space-3);
+    text-align: center;
+  }
+
+  .titleGroup {
+    align-items: center;
   }
 
   .name {
@@ -321,5 +373,27 @@
 
   .close {
     transition: none;
+  }
+}
+
+/* Écran peu haut : la partie fixe mangerait l'écran, toute la modale défile */
+@media (max-height: 600px) {
+  .box {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .info {
+    flex: none;
+    overflow: visible;
+  }
+
+  /* La croix reste à l'écran pendant le défilement de la modale */
+  .close {
+    position: sticky;
+    top: var(--space-3);
+    align-self: flex-end;
+    flex: none;
+    margin: var(--space-3) var(--space-3) -2.75rem 0;
   }
 }

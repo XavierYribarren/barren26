@@ -60,7 +60,7 @@ export const translations = {
     projects: {
       sectionLabel: 'Selected work',
       cta: 'More work available on request →',
-      modal: { role: 'Role', stack: 'Stack', visit: 'Visit site →', highlights: 'Designed for the salon' },
+      modal: { role: 'Role', stack: 'Stack', visit: 'Visit site →', highlights: 'What it brings' },
       filter: { label: 'Filter projects by type', all: 'All' },
     },
     about: {
@@ -147,7 +147,7 @@ export const translations = {
     projects: {
       sectionLabel: 'Projets sélectionnés',
       cta: "D'autres projets disponibles sur demande →",
-      modal: { role: 'Rôle', stack: 'Stack', visit: 'Voir le site →', highlights: 'Pensé pour le salon' },
+      modal: { role: 'Rôle', stack: 'Stack', visit: 'Voir le site →', highlights: 'Ce que ça apporte' },
       filter: { label: 'Filtrer les projets par type', all: 'Tous' },
     },
     about: {

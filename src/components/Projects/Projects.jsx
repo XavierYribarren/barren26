@@ -132,7 +132,21 @@ function Projects({ projects = [] }) {
         </a>
       </div>
 
-      {active && <ProjectModal project={active} onClose={() => setActive(null)} />}
+      {active && (() => {
+        // Navigation dans les projets du filtre actif, en boucle
+        const n = visible.length
+        const i = Math.max(0, visible.findIndex((p) => p.id === active.id))
+        const go = (d) => () => setActive(visible[(i + d + n) % n])
+        return (
+          <ProjectModal
+            project={active}
+            onClose={() => setActive(null)}
+            onPrev={n > 1 ? go(-1) : null}
+            onNext={n > 1 ? go(1) : null}
+            position={[i + 1, n]}
+          />
+        )
+      })()}
     </section>
   )
 }
