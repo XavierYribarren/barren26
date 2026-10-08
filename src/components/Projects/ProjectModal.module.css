@@ -36,6 +36,8 @@
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
+  /* Arrivé au bout, le défilement ne passe pas à la page */
+  overscroll-behavior: contain;
   animation: slideUp 0.35s ease forwards;
 }
 
@@ -287,9 +289,12 @@
 
 /* Écran étroit : mobile sous le desktop, points forts sur une colonne */
 @media (max-width: 640px) {
+  /* Comme la carte : la capture desktop en pleine largeur, la mobile qui la chevauche en bas à droite
+     et déborde un peu (place réservée par le padding du bas) */
   .withMobile {
-    flex-direction: column;
-    align-items: flex-start;
+    position: relative;
+    display: block;
+    padding-bottom: 2.5rem;
   }
 
   .withMobile .shot {
@@ -297,8 +302,10 @@
   }
 
   .withMobile .mobShot {
-    flex: none;
-    width: 40%;
+    position: absolute;
+    right: var(--space-2);
+    bottom: var(--space-2);
+    width: 24%;
   }
 
   .highlightGrid {

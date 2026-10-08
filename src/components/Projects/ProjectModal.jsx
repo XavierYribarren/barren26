@@ -16,11 +16,19 @@ function ProjectModal({ project, onClose }) {
 
   useEffect(() => {
     returnFocusRef.current = document.activeElement
+    // Seule la modale défile : la page est bloquée sur <html> (le vrai conteneur de défilement) et
+    // <body> ; la largeur de la barre de défilement est compensée pour que la page ne bouge pas
+    const html = document.documentElement
+    const scrollbar = window.innerWidth - html.clientWidth
+    html.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
+    if (scrollbar > 0) document.body.style.paddingRight = `${scrollbar}px`
     getLenis()?.stop()
     boxRef.current?.querySelector('button')?.focus()
     return () => {
+      html.style.overflow = ''
       document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
       getLenis()?.start()
       returnFocusRef.current?.focus()
     }
