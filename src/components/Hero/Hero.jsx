@@ -29,6 +29,7 @@ function Hero() {
   const reelRef = useRef(null)
   const videoRef = useRef(null)
   const interludeRef = useRef(null)
+  const arrowRef = useRef(null)
   const sceneApi = useRef(null)
   const progressRef = useRef(0)
   const scene3dRef = useRef(false)
@@ -154,6 +155,7 @@ function Hero() {
     // Interlude sous le mot (phase noire) : centré sur BARREN, sous sa base. Mesuré sur
     // le mot SVG visible, qui a exactement le même cadrage que la scène 3D (même viewBox, même k/ox/oy)
     const interlude = interludeRef.current
+    const arrow = arrowRef.current
     const placeInterlude = () => {
       const paperBox = stage.querySelector('[data-hero-paper]').getBoundingClientRect()
       const word = [...stage.querySelectorAll('[data-word]')].find((w) => w.getBoundingClientRect().width > 0)
@@ -161,6 +163,7 @@ function Hero() {
       const box = word.getBoundingClientRect()
       const gap = isMobile() ? 28 : 40
       interlude.style.left = `${box.left - paperBox.left + box.width / 2}px`
+      arrow.style.left = interlude.style.left
       interlude.style.top = `${box.bottom - paperBox.top + gap}px`
     }
     let interludeShown = false
@@ -206,9 +209,11 @@ function Hero() {
       const iOpacity = iIn * (1 - clamp((p - 0.42) / 0.06))
       interlude.style.opacity = iOpacity
       interlude.style.transform = `translate(-50%, ${8 * (1 - iIn)}px)`
+      arrow.style.opacity = iOpacity
       if ((iOpacity > 0) !== interludeShown) {
         interludeShown = iOpacity > 0
         interlude.setAttribute('aria-hidden', String(!interludeShown))
+        arrow.setAttribute('aria-hidden', 'true')
       }
       // Lecture juste avant l'ouverture (p = .5), pause en revenant sur le papier
       if (p >= 0.4) wanted = true
@@ -264,7 +269,10 @@ function Hero() {
           {/* Interlude de la phase noire, sous le mot (position et opacité pilotées par render) */}
           <div key={`${lang}-interlude`} className={styles.interlude} ref={interludeRef} aria-hidden="true">
             <p className={styles.interludeTitle}>{t('hero.interlude.title')}</p>
-            <svg className={styles.interludeArrow} viewBox="0 0 14 14" width="18" height="18" aria-hidden="true" focusable="false">
+          </div>
+          {/* Flèche de l'interlude, en bas de l'écran (même opacité que le titre) */}
+          <div className={styles.interludeArrowWrap} ref={arrowRef} aria-hidden="true">
+            <svg className={styles.interludeArrow} viewBox="0 0 14 14" width="18" height="18" focusable="false">
               <path d="M7 1.5v10M2.5 7.5 7 12l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
