@@ -18,6 +18,8 @@ function ProjectModal({ project, onClose, onPrev, onNext, position }) {
   const returnFocusRef = useRef(null)
   const touchRef = useRef(null)
   const slideRef = useRef(null)
+  // slideRef : enveloppe de la boîte, c'est toute la modale qui glisse (l'animation CSS d'ouverture de la
+  // boîte écraserait un transform posé sur la boîte elle-même)
   // Sens du dernier changement (1 : suivant, -1 : précédent) pour faire entrer le nouveau projet
   const enterDir = useRef(0)
   const busy = useRef(false)
@@ -25,17 +27,22 @@ function ProjectModal({ project, onClose, onPrev, onNext, position }) {
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const goRef = useRef(null)
 
-  // Change de projet en faisant sortir le contenu sur le côté (depuis sa position actuelle si on swipe)
+  // Rotation légère qui suit le déplacement, comme une carte qu'on fait glisser
+  const tilt = (x) => Math.max(-6, Math.min(6, x * 0.02))
+
+  // Change de projet en faisant sortir la modale sur le côté (depuis sa position actuelle si on swipe)
   const go = (dir) => {
     const change = dir > 0 ? onNext : onPrev
     if (!change || busy.current) return
     if (reduced() || !slideRef.current) { change(); return }
     busy.current = true
     enterDir.current = dir
+    const out = -dir * (window.innerWidth + slideRef.current.offsetWidth) / 2
     gsap.to(slideRef.current, {
-      x: -dir * slideRef.current.offsetWidth * 0.35,
+      x: out,
+      rotation: tilt(out),
       opacity: 0,
-      duration: 0.18,
+      duration: 0.22,
       ease: 'power2.in',
       onComplete: change,
     })
@@ -51,9 +58,10 @@ function ProjectModal({ project, onClose, onPrev, onNext, position }) {
     const dir = enterDir.current
     enterDir.current = 0
     if (!el || !dir) return
+    const from = dir * (window.innerWidth + el.offsetWidth) / 2
     gsap.fromTo(el,
-      { x: dir * el.offsetWidth * 0.35, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.32, ease: 'power3.out', onComplete: () => { busy.current = false } })
+      { x: from, rotation: tilt(from), opacity: 0 },
+      { x: 0, rotation: 0, opacity: 1, duration: 0.42, ease: 'power3.out', onComplete: () => { busy.current = false } })
   }, [project.id])
 
   // Swipe horizontal (tactile) : le contenu suit le doigt, puis part ou revient en place
@@ -74,7 +82,7 @@ function ProjectModal({ project, onClose, onPrev, onNext, position }) {
     // Sans projet voisin de ce côté, résistance
     const can = dx < 0 ? onNext : onPrev
     const x = can ? dx : dx * 0.25
-    gsap.set(slideRef.current, { x, opacity: 1 - Math.min(Math.abs(x) / slideRef.current.offsetWidth, 1) * 0.6 })
+    gsap.set(slideRef.current, { x, rotation: tilt(x), opacity: 1 - Math.min(Math.abs(x) / slideRef.current.offsetWidth, 1) * 0.4 })
   }
   const onTouchEnd = (e) => {
     const t = touchRef.current
@@ -87,7 +95,7 @@ function ProjectModal({ project, onClose, onPrev, onNext, position }) {
     const dir = dx < 0 ? 1 : -1
     if (swipe && (dir > 0 ? onNext : onPrev)) { go(dir); return }
     // Geste trop court : retour en place
-    if (slideRef.current) gsap.to(slideRef.current, { x: 0, opacity: 1, duration: 0.25, ease: 'power2.out' })
+    if (slideRef.current) gsap.to(slideRef.current, { x: 0, rotation: 0, opacity: 1, duration: 0.3, ease: 'back.out(1.4)' })
   }
 
   useEffect(() => {
@@ -144,32 +152,31 @@ function ProjectModal({ project, onClose, onPrev, onNext, position }) {
 
   return createPortal(
     <div className={styles.overlay} onClick={onClose} role="presentation">
-      <div
-        className={styles.box}
-        ref={boxRef}
-        role="dialog"
-        data-lenis-prevent
-        aria-modal="true"
-        aria-labelledby="modal-title"
-        style={themeVars}
-        onClick={(e) => e.stopPropagation()}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-      >
-        <button className={styles.close} onClick={onClose} aria-label={closeLabel}>✕</button>
+      <div className={styles.swipe} ref={slideRef}>
+        <div
+          className={styles.box}
+          ref={boxRef}
+          role="dialog"
+          data-lenis-prevent
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          style={themeVars}
+          onClick={(e) => e.stopPropagation()}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          <button className={styles.close} onClick={onClose} aria-label={closeLabel}>✕</button>
 
-        {/* Navigation entre projets (aussi au swipe et aux flèches du clavier) */}
-        {onPrev && onNext && (
-          <div className={styles.pager}>
-            <button type="button" className={styles.pagerBtn} onClick={() => go(-1)} aria-label={prevLabel}>‹</button>
-            <span className={styles.pagerCount} aria-live="polite">{position[0]} / {position[1]}</span>
-            <button type="button" className={styles.pagerBtn} onClick={() => go(1)} aria-label={nextLabel}>›</button>
-          </div>
-        )}
+          {/* Navigation entre projets (aussi au swipe et aux flèches du clavier) */}
+          {onPrev && onNext && (
+            <div className={styles.pager}>
+              <button type="button" className={styles.pagerBtn} onClick={() => go(-1)} aria-label={prevLabel}>‹</button>
+              <span className={styles.pagerCount} aria-live="polite">{position[0]} / {position[1]}</span>
+              <button type="button" className={styles.pagerBtn} onClick={() => go(1)} aria-label={nextLabel}>›</button>
+            </div>
+          )}
 
-        {/* Contenu du projet : glisse lors des changements de projet */}
-        <div className={styles.slide} ref={slideRef}>
           {/* Partie fixe : visuels et en-tête */}
           <div className={styles.top}>
 

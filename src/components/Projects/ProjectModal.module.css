@@ -42,12 +42,12 @@
   animation: slideUp 0.35s ease forwards;
 }
 
-/* Contenu glissant (visuels, en-tête, texte) : reprend la mise en colonne de la boîte */
-.slide {
-  flex: 1 1 auto;
-  min-height: 0;
+/* Enveloppe de la boîte : c'est elle qui glisse lors des changements de projet */
+.swipe {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 780px;
   will-change: transform, opacity;
 }
 
@@ -390,10 +390,6 @@
   .box {
     overflow-y: auto;
     overscroll-behavior: contain;
-  }
-
-  .slide {
-    flex: none;
   }
 
   .info {
