@@ -13,6 +13,17 @@
 }
 
 /* Tag filter — same typography as .category, accent on the active tag */
+.counter {
+  display: none;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+  text-align: right;
+  margin-top: -0.5rem;
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -179,13 +190,51 @@
     padding: 5rem 1.5rem;
   }
 
+  /* Filtres sur une ligne qui défile, jusqu'aux bords de l'écran */
+  .filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding: 0 1.5rem;
+    scroll-padding-inline: 1.5rem;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter {
+    flex: none;
+  }
+
+  /* Carrousel : une carte à la fois (85 % de la largeur), la suivante qui dépasse, arrêt net sur chacune */
   .strip {
     cursor: default;
+    gap: 1rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding: 0 1.5rem 1.5rem;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.5rem;
+    scrollbar-width: none;
+  }
+
+  .strip::-webkit-scrollbar {
+    display: none;
   }
 
   .card {
-    flex: 0 0 220px;
+    flex: 0 0 85%;
     scroll-snap-align: start;
+  }
+
+  .mobile {
+    width: 20%;
+  }
+
+  .counter {
+    display: block;
   }
 }

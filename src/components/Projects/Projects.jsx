@@ -15,6 +15,8 @@ function Projects({ projects = [] }) {
   const labelRef    = useRef(null)
   const stripRef    = useRef(null)
   const [active, setActive] = useState(null)
+  // Carrousel mobile : carte affichée (pour le compteur « 1 / 10 »)
+  const [slide, setSlide] = useState(0)
   const [tagFilter, setTagFilter] = useState(null)
   const isFirstFilter = useRef(true)
 
@@ -105,7 +107,17 @@ function Projects({ projects = [] }) {
         </div>
       )}
 
-      <div className={styles.strip} ref={stripRef}>
+      <div
+        className={styles.strip}
+        ref={stripRef}
+        onScroll={(e) => {
+          const s = e.currentTarget
+          const first = s.children[0]
+          if (!first) return
+          const step = first.offsetWidth + parseFloat(getComputedStyle(s).columnGap || 0)
+          setSlide(Math.min(s.children.length - 1, Math.round(s.scrollLeft / step)))
+        }}
+      >
         {visible.map((p) => (
           <div
             key={p.id}
@@ -117,14 +129,21 @@ function Projects({ projects = [] }) {
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(p) } }}
           >
             <div className={styles.imageWrap}>
-              <SanityImage className={styles.image} image={p.deskImage} alt={p.name} sizes="(max-width: 768px) 220px, 320px" fit="contain" />
-              {p.mobImage && <SanityImage className={styles.mobile} image={p.mobImage} alt={`${p.name} mobile`} sizes="(max-width: 768px) 50px, 72px" />}
+              <SanityImage className={styles.image} image={p.deskImage} alt={p.name} sizes="(max-width: 768px) 85vw, 320px" fit="contain" />
+              {p.mobImage && <SanityImage className={styles.mobile} image={p.mobImage} alt={`${p.name} mobile`} sizes="(max-width: 768px) 20vw, 72px" />}
             </div>
             <h3 className={styles.name}>{p.name}</h3>
             <span className={styles.category}>{p.category}</span>
           </div>
         ))}
       </div>
+
+      {/* Mobile : position dans le carrousel */}
+      {visible.length > 1 && (
+        <p className={styles.counter} aria-hidden="true">
+          {Math.min(slide, visible.length - 1) + 1} / {visible.length}
+        </p>
+      )}
 
       <div className={styles.viewAll}>
         <a href="#" className={styles.viewAllLink}>
